@@ -27,7 +27,8 @@ public class PlayerFire : MonoBehaviour
             GameObject bomb = Instantiate(bombFactory);
             bomb.transform.position = firePosition.transform.position;
             Rigidbody rb = bomb.GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward*throwPower, ForceMode.Impulse);
+            Vector3 newDirection = Quaternion.AngleAxis(-30, transform.right) * transform.forward;
+            rb.AddForce(newDirection*throwPower, ForceMode.Impulse);
         }
     }
 }
