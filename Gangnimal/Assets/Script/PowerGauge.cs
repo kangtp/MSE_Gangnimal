@@ -6,16 +6,17 @@ using UnityEngine.UI;
 public class PowerGage : MonoBehaviour
 {
     private float clickTime = 0;
-    private float powerValue = 0;
+    public float powerValue = 0;
     private bool isClick = false;
     private float maxClickTime = 1f;
     private bool timeUp = true;
+    static public PowerGage instance;
 
     public Slider powerSlider;
     // Start is called before the first frame update
     void Start()
     {
-        
+        instance = this;
     }
 
     // Update is called once per frame
