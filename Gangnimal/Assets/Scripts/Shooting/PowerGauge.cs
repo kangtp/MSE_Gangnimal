@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PowerGage : MonoBehaviour
+public class PowerGauge : MonoBehaviour
 {
     private float clickTime = 0;
-    public float powerValue = 0;
+    public float powerValue;
     private bool isClick = false;
     private float maxClickTime = 1f;
     private bool timeUp = true;
-    static public PowerGage instance;
 
     public Slider powerSlider;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        instance = this;
+  
     }
 
     // Update is called once per frame
@@ -30,6 +29,7 @@ public class PowerGage : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            PlayerFire.instance.Shooting(powerValue);
             isClick = false;
             Debug.Log("Release");
         }
@@ -64,5 +64,10 @@ public class PowerGage : MonoBehaviour
             powerValue = clickTime / maxClickTime;
             powerSlider.value = powerValue;
         }
+    }
+
+    public float getPowerValue()
+    {
+        return powerValue;
     }
 }

@@ -9,26 +9,21 @@ public class PlayerFire : MonoBehaviour
     public GameObject firePosition;
     public GameObject bombFactory;
 
+    public static PlayerFire instance;
 
     public float throwPower = 15f;
-    
 
-    void Start()
-    {
-        
+    private void Start() {
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Shooting(float power)
     {
-        if(Input.GetMouseButtonUp(0))
-        {
-            throwPower = PowerGage.instance.powerValue * 30f;
-            GameObject bomb = Instantiate(bombFactory);
-            bomb.transform.position = firePosition.transform.position;
-            Rigidbody rb = bomb.GetComponent<Rigidbody>();
-            Vector3 newDirection = Quaternion.AngleAxis(-30, transform.right) * transform.forward;
-            rb.AddForce(newDirection*throwPower, ForceMode.Impulse);
-        }
+        throwPower = power * 30f;
+        GameObject bomb = Instantiate(bombFactory);
+        bomb.transform.position = firePosition.transform.position;
+        Rigidbody rb = bomb.GetComponent<Rigidbody>();
+        Vector3 newDirection = Quaternion.AngleAxis(-30, transform.right) * transform.forward;
+        rb.AddForce(newDirection*throwPower, ForceMode.Impulse);
     }
 }
