@@ -14,6 +14,7 @@ public class ThirdPersonMovement : MonoBehaviour
     Vector2 movement;
     public float walkSpeed;
     public float sprintSpeed;
+    public int turnspeed;
     float truespeed;
 
     public float jumpHeight;
@@ -37,6 +38,9 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(transform.position,.1f,1);
         anim.SetBool("isGround",isGrounded);
+
+        BodyTurn();
+        
         if(isGrounded&&velocity.y<0)
         {
             velocity.y= -2;
@@ -90,5 +94,10 @@ public class ThirdPersonMovement : MonoBehaviour
         controller.Move(velocity*Time.deltaTime);
 
 
+    }
+    public void BodyTurn()
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up, mouseX * turnspeed * Time.deltaTime);
     }
 }
