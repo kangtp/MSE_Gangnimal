@@ -11,7 +11,8 @@ public class PlayerFire : MonoBehaviour
 
 
     public float throwPower = 15f;
-    
+
+    PlayerInfo playerInfo;
 
     void Start()
     {
@@ -24,6 +25,18 @@ public class PlayerFire : MonoBehaviour
         if(Input.GetMouseButtonUp(0))
         {
             throwPower = PowerGage.instance.powerValue * 30f;
+
+            /*playerInfo = GameObject.Find("Player").GetComponent<PlayerInfo>();
+            
+            for(int i = 0; i < 3; i++)
+            {
+                if(playerInfo.hasWeapons[i] == true)
+                {
+
+                }
+
+            }*/
+
             GameObject bomb = Instantiate(bombFactory);
             bomb.transform.position = firePosition.transform.position;
             Rigidbody rb = bomb.GetComponent<Rigidbody>();
