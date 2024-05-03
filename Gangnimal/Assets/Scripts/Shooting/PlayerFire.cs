@@ -19,11 +19,29 @@ public class PlayerFire : MonoBehaviour
 
     public void Shooting(float power)
     {
+<<<<<<< Updated upstream
         throwPower = power * 30f;
         GameObject bomb = Instantiate(bombFactory);
         bomb.transform.position = firePosition.transform.position;
         Rigidbody rb = bomb.GetComponent<Rigidbody>();
         Vector3 newDirection = Quaternion.AngleAxis(-30, transform.right) * transform.forward;
         rb.AddForce(newDirection*throwPower, ForceMode.Impulse);
+=======
+        DrawParabola();
+        if (Input.GetMouseButtonUp(0))
+        {
+            
+            
+            
+            GameObject bomb = Instantiate(bombFactory);
+            bomb.transform.position = firePosition.transform.position;
+            Rigidbody rb = bomb.GetComponent<Rigidbody>();
+            Vector3 throwDirection = firePosition.transform.forward.normalized;
+            rb.AddForce(throwDirection * throwPower*powerGage.powerValue, ForceMode.Impulse);
+            lineRenderer.enabled=false;
+            
+        }
+        
+>>>>>>> Stashed changes
     }
 }
