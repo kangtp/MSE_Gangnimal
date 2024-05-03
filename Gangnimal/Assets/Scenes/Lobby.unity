@@ -1053,12 +1053,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1042173719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e267b1abe632c4640a92c9461b11411c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc160741c1f9f42dfa7bc609208c1477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heartbeatTimer: 0
-  lobbyUpdateTimer: 0
-  PlayerName: 
 --- !u!4 &1042173721
 Transform:
   m_ObjectHideFlags: 0
@@ -1083,10 +1080,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1042173719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d68040de35de747c2852d59c768a014b, type: 3}
+  m_Script: {fileID: 11500000, guid: a89caac1502a447e19695e2a589b8699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myLog: 
 --- !u!1 &1330156691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1256,7 +1252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 283}
+  m_AnchoredPosition: {x: 0, y: 96}
   m_SizeDelta: {x: 409.5051, y: 76.7822}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1431283834
