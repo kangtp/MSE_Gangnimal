@@ -8,27 +8,66 @@ public class PlayerFire : MonoBehaviour
 
     public GameObject firePosition;
     public GameObject bombFactory;
-
-
-    public float throwPower = 15f;
+    public PowerGage powerGage;
+    public static PlayerFire instance;
+    public float throwPower;
     
 
-    void Start()
-    {
-        
+    //line
+    [SerializeField]
+    public LineRenderer lineRenderer;
+    public int numofDot;
+    public float timeInterval;
+    public float maxTime;
+
+    private void Start() {
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+   void Update()
     {
-        if(Input.GetMouseButtonUp(0))
+        DrawParabola();
+        if (Input.GetMouseButtonUp(0))
         {
-            throwPower = PowerGage.instance.powerValue * 30f;
+            
+            
+            
             GameObject bomb = Instantiate(bombFactory);
             bomb.transform.position = firePosition.transform.position;
             Rigidbody rb = bomb.GetComponent<Rigidbody>();
-            Vector3 newDirection = Quaternion.AngleAxis(-30, transform.right) * transform.forward;
-            rb.AddForce(newDirection*throwPower, ForceMode.Impulse);
+
+            Vector3 throwDirection = firePosition.transform.forward.normalized;
+            rb.AddForce(throwDirection * throwPower*powerGage.powerValue, ForceMode.Impulse);
+            lineRenderer.enabled=false;
+            
+        }
+        
+    }
+   
+    
+    void DrawParabola()
+    {
+         lineRenderer.enabled=true;
+        Vector3[] points = new Vector3[numofDot];
+        Vector3 startPosition = firePosition.transform.position;
+        Vector3 startVelocity = throwPower * firePosition.transform.forward;
+
+        
+        float timeInterval = maxTime / numofDot;
+        for (int i = 0; i < numofDot; i++)
+        {
+            float t = i * timeInterval;
+            points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
+        }
+
+        
+        lineRenderer.positionCount = numofDot;
+        lineRenderer.SetPositions(points);
+        for(int i=0;i<numofDot;i++)
+        {
+            lineRenderer.SetPosition(i,points[i]);
         }
     }
+
+
 }

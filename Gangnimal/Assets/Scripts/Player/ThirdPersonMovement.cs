@@ -38,8 +38,8 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(transform.position,.1f,1);
         anim.SetBool("isGround",isGrounded);
-        float mouseX = Input.GetAxis("Mouse X");
-        transform.Rotate(Vector3.up * turnspeed * mouseX * Time.deltaTime);
+        float h = turnspeed * Input.GetAxis("Mouse X");
+        transform.Rotate(0, h, 0);
         if(isGrounded&&velocity.y<0)
         {
             velocity.y= -2;
@@ -58,7 +58,8 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         anim.transform.localPosition = Vector3.zero;
         anim.transform.localEulerAngles = Vector3.zero;
-        movement= new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        
+        movement= new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         Vector3 direction = new Vector3(movement.x,0,movement.y).normalized;
 
         if(direction.magnitude>=0.1f)
@@ -89,7 +90,7 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             velocity.y +=(gravity*10)*Time.deltaTime;
         }
-       
+        
         controller.Move(velocity*Time.deltaTime);
 
 

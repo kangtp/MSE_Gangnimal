@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class PowerGage : MonoBehaviour
     private float maxClickTime = 1f;
     private bool timeUp = true;
     static public PowerGage instance;
+    public Transform fire;
 
     public Slider powerSlider;
     // Start is called before the first frame update
@@ -47,22 +49,40 @@ public class PowerGage : MonoBehaviour
             if (timeUp)
             {
                 clickTime += Time.deltaTime;
+                fire.Rotate(clickTime*-40*Time.deltaTime,0,0);
             }
             else
             {
                 clickTime -= Time.deltaTime;
+                fire.Rotate(clickTime*40*Time.deltaTime,0,0);
             }
             //Debug.Log(clickTime);
         }
         else
         {
-            clickTime = 0;
+
+            
+            StartCoroutine(WaitSecond());
+            fire.Rotate(clickTime*30*Time.deltaTime,0,0);
+            StartCoroutine(Wait());
         }
 
         if(powerSlider != null)
         {
             powerValue = clickTime / maxClickTime;
             powerSlider.value = powerValue;
+            Debug.Log(powerSlider.value);
         }
+    }
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(0.3f);
+        Vector3 currentRotation = fire.transform.rotation.eulerAngles;
+        fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
+    }
+    IEnumerator WaitSecond()
+    {
+        yield return new WaitForSeconds(0.5f);
+        clickTime = 0;
     }
 }
