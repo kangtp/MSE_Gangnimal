@@ -13,7 +13,8 @@ public class MainUIButton : MonoBehaviour
 
     public void OptionButton()
     {
-        //option window
+        GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("OptionUI").gameObject.SetActive(true);
     }
     public void ExitButton()
     {
