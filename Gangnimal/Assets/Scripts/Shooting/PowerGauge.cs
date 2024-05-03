@@ -6,16 +6,18 @@ using UnityEngine.UI;
 public class PowerGauge : MonoBehaviour
 {
     private float clickTime = 0;
-    public float powerValue;
+    public float powerValue = 0;
     private bool isClick = false;
     private float maxClickTime = 1f;
     private bool timeUp = true;
+    static public PowerGauge instance;
+    public Transform fire;
 
     public Slider powerSlider;
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-  
+        instance = this;
     }
 
     // Update is called once per frame
@@ -29,7 +31,6 @@ public class PowerGauge : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            PlayerFire.instance.Shooting(powerValue);
             isClick = false;
             Debug.Log("Release");
         }
@@ -47,27 +48,41 @@ public class PowerGauge : MonoBehaviour
             if (timeUp)
             {
                 clickTime += Time.deltaTime;
+                fire.Rotate(clickTime*-40*Time.deltaTime,0,0);
             }
             else
             {
                 clickTime -= Time.deltaTime;
+                fire.Rotate(clickTime*40*Time.deltaTime,0,0);
             }
             //Debug.Log(clickTime);
         }
         else
         {
-            clickTime = 0;
+
+            
+            StartCoroutine(WaitSecond());
+            fire.Rotate(clickTime*30*Time.deltaTime,0,0);
+            StartCoroutine(Wait());
         }
 
         if(powerSlider != null)
         {
             powerValue = clickTime / maxClickTime;
             powerSlider.value = powerValue;
+            Debug.Log(powerSlider.value);
         }
     }
-
-    public float getPowerValue()
+    IEnumerator Wait()
     {
-        return powerValue;
+        yield return new WaitForSeconds(0.3f);
+        Vector3 currentRotation = fire.transform.rotation.eulerAngles;
+        fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
     }
+    IEnumerator WaitSecond()
+    {
+        yield return new WaitForSeconds(0.5f);
+        clickTime = 0;
+    }
+
 }
