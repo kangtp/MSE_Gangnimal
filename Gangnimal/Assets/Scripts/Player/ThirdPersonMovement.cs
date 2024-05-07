@@ -36,6 +36,10 @@ public class ThirdPersonMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PlayerMove3rd();
+    }
+    public void PlayerMove3rd()
+    {
         isGrounded = Physics.CheckSphere(transform.position,.1f,1);
         anim.SetBool("isGround",isGrounded);
         float h = turnspeed * Input.GetAxis("Mouse X");
@@ -92,7 +96,5 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         
         controller.Move(velocity*Time.deltaTime);
-
-
     }
 }

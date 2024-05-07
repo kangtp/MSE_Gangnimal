@@ -24,6 +24,21 @@ public class PowerGage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ChargingGage();
+    }
+    IEnumerator Wait_Change()
+    {
+        yield return new WaitForSeconds(0.3f);
+        Vector3 currentRotation = fire.transform.rotation.eulerAngles;
+        fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
+    }
+    IEnumerator ResetClickTime()
+    {
+        yield return new WaitForSeconds(0.5f);
+        clickTime = 0;
+    }
+    void ChargingGage()
+    {
         if(Input.GetMouseButtonDown(0))
         {
             isClick = true;
@@ -49,22 +64,20 @@ public class PowerGage : MonoBehaviour
             if (timeUp)
             {
                 clickTime += Time.deltaTime;
-                fire.Rotate(clickTime*-40*Time.deltaTime,0,0);
+                fire.Rotate(clickTime*-60*Time.deltaTime,0,0);
             }
             else
             {
                 clickTime -= Time.deltaTime;
-                fire.Rotate(clickTime*40*Time.deltaTime,0,0);
+                fire.Rotate(clickTime*60*Time.deltaTime,0,0);
             }
             //Debug.Log(clickTime);
         }
         else
         {
-
-            
-            StartCoroutine(WaitSecond());
+            StartCoroutine(ResetClickTime());
             fire.Rotate(clickTime*30*Time.deltaTime,0,0);
-            StartCoroutine(Wait());
+            StartCoroutine(Wait_Change());
         }
 
         if(powerSlider != null)
@@ -73,16 +86,5 @@ public class PowerGage : MonoBehaviour
             powerSlider.value = powerValue;
             Debug.Log(powerSlider.value);
         }
-    }
-    IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(0.3f);
-        Vector3 currentRotation = fire.transform.rotation.eulerAngles;
-        fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
-    }
-    IEnumerator WaitSecond()
-    {
-        yield return new WaitForSeconds(0.5f);
-        clickTime = 0;
     }
 }

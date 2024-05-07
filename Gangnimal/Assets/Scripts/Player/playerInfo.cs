@@ -37,7 +37,6 @@ public class PlayerInfo : MonoBehaviour
         destroyWeapon();
     }
 
-    //발사 시 무기 삭제
     void destroyWeapon()
     {
         if (Input.GetMouseButtonUp(0) && hasWeapons[weaponIndex])
