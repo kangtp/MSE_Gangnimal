@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.VisualScripting;
 
 
 public class PlayerInfo : MonoBehaviour
@@ -75,7 +76,7 @@ public class PlayerInfo : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             
-            GameObject bomb = null;
+            GameObject bomb=null;
             
             if (weaponIndex != -1 && hasWeapons[weaponIndex]) bomb = Instantiate(bullets[weaponIndex]);
 
@@ -124,11 +125,11 @@ public class PlayerInfo : MonoBehaviour
 
         if(other.tag == "Item")
         {
-            if (other.name == "Shield")
+            if (other.name == "Shield(Clone)")
             {
                 haveShield = true;
             }
-            if (other.name == "Healpack")
+            if (other.name == "Healpack(Clone)")
             {
                 myHP += 10;
                 myHP = Math.Clamp(myHP, 0, 100);
