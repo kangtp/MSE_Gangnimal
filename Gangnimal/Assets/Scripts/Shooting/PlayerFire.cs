@@ -47,18 +47,13 @@ public class PlayerFire : MonoBehaviour
         
         lineRenderer.positionCount = numofDot;
         lineRenderer.SetPositions(points);
-        for(int i=0;i<numofDot;i++)
-        {
-            lineRenderer.SetPosition(i,points[i]);
-        }
+        
     }
     void ShootingBullet()
     {
         DrawParabola();
         if (Input.GetMouseButtonUp(0))
         {
-            
-            
             
             GameObject bomb = Instantiate(bombFactory);
             bomb.transform.position = firePosition.transform.position;

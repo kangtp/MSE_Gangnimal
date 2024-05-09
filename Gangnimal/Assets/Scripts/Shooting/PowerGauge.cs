@@ -11,14 +11,13 @@ public class PowerGage : MonoBehaviour
     private bool isClick = false;
     private float maxClickTime = 1f;
     private bool timeUp = true;
-    static public PowerGage instance;
     public Transform fire;
 
     public Slider powerSlider;
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
+        
     }
 
     // Update is called once per frame
