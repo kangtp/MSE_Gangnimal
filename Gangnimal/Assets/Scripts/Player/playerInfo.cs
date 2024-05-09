@@ -12,6 +12,10 @@ public class PlayerInfo : MonoBehaviour
 
     public GameObject[] weapons;
     public bool[] hasWeapons;
+    public GameObject[] bullets;
+    //public static PlayerInfo instance;
+    public PowerGage powerGage;
+
 
     //public gameObject myWeapon;
 
@@ -22,11 +26,24 @@ public class PlayerInfo : MonoBehaviour
 
     GameObject nearObject;
 
+    
+    //line
+    [SerializeField]
+    public LineRenderer lineRenderer;
+    public int numofDot;
+    public float timeInterval;
+    public float maxTime;
+
+    public GameObject firePosition;
+    //public GameObject bombFactory;
+
+
+    public float throwPower;
+
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -34,19 +51,70 @@ public class PlayerInfo : MonoBehaviour
     {
         GetInput();
         Interaction();
-        destroyWeapon();
+
+        ShootingBullet();
     }
 
     //발사 시 무기 삭제
     void destroyWeapon()
     {
-        if (Input.GetMouseButtonUp(0) && hasWeapons[weaponIndex])
+        if (weaponIndex != -1 && hasWeapons[weaponIndex])
         {
+            //WaitCoroutine(2.0f);
+
             hasWeapons[weaponIndex] = false;
             weapons[weaponIndex].SetActive(false);
         }
 
     }
+
+    void ShootingBullet()
+    {
+        DrawParabola();
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            
+            GameObject bomb = null;
+            
+            if (weaponIndex != -1 && hasWeapons[weaponIndex]) bomb = Instantiate(bullets[weaponIndex]);
+
+
+            //bomb = Instantiate(bombFactory);
+            bomb.transform.position = firePosition.transform.position;
+            Rigidbody rb = bomb.GetComponent<Rigidbody>();
+            Vector3 throwDirection = firePosition.transform.forward.normalized;
+            rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+            lineRenderer.enabled = false;
+
+
+            destroyWeapon();
+        }
+
+    }
+
+
+    void DrawParabola()
+    {
+        lineRenderer.enabled = true;
+        Vector3[] points = new Vector3[numofDot];
+        Vector3 startPosition = firePosition.transform.position;
+        Vector3 startVelocity = throwPower * firePosition.transform.forward;
+
+
+        float timeInterval = maxTime / numofDot;
+        for (int i = 0; i < numofDot; i++)
+        {
+            float t = i * timeInterval;
+            points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
+        }
+
+
+        lineRenderer.positionCount = numofDot;
+        lineRenderer.SetPositions(points);
+
+    }
+
 
 
 
@@ -107,20 +175,15 @@ public class PlayerInfo : MonoBehaviour
                 Item item = nearObject.GetComponent<Item> ();
                 weaponIndex = item.value;
 
-                if (hasWeapons[0])
+
+                for(int i = 0; i < 3; i++)
                 {
-                    hasWeapons[0] = false;
-                    weapons[0].SetActive(false);
-                }
-                else if (hasWeapons[1])
-                {
-                    hasWeapons[1] = false;
-                    weapons[1].SetActive(false);
-                }
-                else if (hasWeapons[2])
-                {
-                    hasWeapons[2] = false;
-                    weapons[2].SetActive(false);
+                    if (hasWeapons[i])
+                    {
+                        hasWeapons[i] = false;
+                        weapons[i].SetActive(false);
+                    }
+
                 }
 
                 hasWeapons[weaponIndex] = true;
@@ -131,5 +194,9 @@ public class PlayerInfo : MonoBehaviour
         }
     }
 
-
+    IEnumerator WaitCoroutine(float t)
+    {
+        //Debug.Log("MySecondCoroutine;" + t);
+        yield return new WaitForSeconds(t);
+    }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,6 @@ public class PlayerFire : MonoBehaviour
 
     public float throwPower = 15f;
 
-    PlayerInfo playerInfo;
 
     void Start()
     {
@@ -26,17 +25,6 @@ public class PlayerFire : MonoBehaviour
         {
             throwPower = PowerGage.instance.powerValue * 30f;
 
-            /*playerInfo = GameObject.Find("Player").GetComponent<PlayerInfo>();
-            
-            for(int i = 0; i < 3; i++)
-            {
-                if(playerInfo.hasWeapons[i] == true)
-                {
-
-                }
-
-            }*/
-
             GameObject bomb = Instantiate(bombFactory);
             bomb.transform.position = firePosition.transform.position;
             Rigidbody rb = bomb.GetComponent<Rigidbody>();
@@ -45,3 +33,4 @@ public class PlayerFire : MonoBehaviour
         }
     }
 }
+*/
