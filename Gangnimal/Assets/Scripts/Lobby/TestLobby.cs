@@ -4,6 +4,7 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class TestLobby : MonoBehaviour
@@ -14,8 +15,11 @@ public class TestLobby : MonoBehaviour
     private float heartbeatTimer;
     private float lobbyUpdateTimer;
     private string PlayerName;
+
+    private bool enableStart;
     private void Start()
     {
+        enableStart = false;
         start();
     }
     private async void start()
@@ -145,6 +149,7 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Joined Lobby with code" + lobbyCode);
 
             PrintPlayers(JoinLobby);
+
         }
         catch (LobbyServiceException e)
         {
@@ -193,6 +198,22 @@ public class TestLobby : MonoBehaviour
         {
             Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
         }
+    }
+
+    public void StartGame(){
+
+        if(joinedlobby != null){
+            int count = 0;
+        foreach (Player player in joinedlobby.Players)
+        {
+            count++;
+        }
+
+        if(count == 2){
+            SceneManager.LoadScene("ForestScene");
+        }
+        }
+
     }
 
     private async void UpdateGameMode(string map) {
