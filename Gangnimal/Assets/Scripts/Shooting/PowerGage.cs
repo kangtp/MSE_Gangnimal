@@ -83,7 +83,6 @@ public class PowerGage : MonoBehaviour
         {
             powerValue = clickTime / maxClickTime;
             powerSlider.value = powerValue;
-            Debug.Log(powerSlider.value);
         }
     }
 }
