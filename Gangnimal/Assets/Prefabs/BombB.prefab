@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6319510873924235226}
   - component: {fileID: 6333784494240614467}
   - component: {fileID: 4838007434041573281}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BombB
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 7178313436499744748}
   - component: {fileID: 5809239468403473920}
   - component: {fileID: 81192425182746539}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Old_timer_bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 6560098514302465810}
   - component: {fileID: 732185540059866980}
   - component: {fileID: 1892803989128338190}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: old_timer_bomb_glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}

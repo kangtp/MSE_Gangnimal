@@ -55,7 +55,7 @@ public class PlayerInfo : MonoBehaviour
         ShootingBullet();
     }
 
-    //¹ß»ç ½Ã ¹«±â »èÁ¦
+    //ï¿½ß»ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     void destroyWeapon()
     {
         if (weaponIndex != -1 && hasWeapons[weaponIndex])
@@ -85,6 +85,7 @@ public class PlayerInfo : MonoBehaviour
             Rigidbody rb = bomb.GetComponent<Rigidbody>();
             Vector3 throwDirection = firePosition.transform.forward.normalized;
             rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+            Debug.Log(throwDirection * throwPower * powerGage.powerValue);
             lineRenderer.enabled = false;
 
 
@@ -155,7 +156,7 @@ public class PlayerInfo : MonoBehaviour
             nearObject = other.gameObject;
         }
 
-        Debug.Log(nearObject.name);
+        
     }
 
     void OnTriggerExit(Collider other)
