@@ -17,7 +17,9 @@ public class PowerGage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+
+
     }
 
     // Update is called once per frame
@@ -38,7 +40,10 @@ public class PowerGage : MonoBehaviour
     }
     void ChargingGage()
     {
-        if(Input.GetMouseButtonDown(0))
+
+
+        if (Input.GetMouseButtonDown(0))
+
         {
             isClick = true;
             Debug.Log("clicked");
@@ -52,34 +57,42 @@ public class PowerGage : MonoBehaviour
 
         if (isClick)
         {
-            if(clickTime >= maxClickTime)
+            if (clickTime >= maxClickTime)
             {
                 timeUp = false;
             }
-            else if(clickTime <= 0)
+            else if (clickTime <= 0)
             {
                 timeUp = true;
             }
             if (timeUp)
             {
                 clickTime += Time.deltaTime;
-                fire.Rotate(clickTime*-60*Time.deltaTime,0,0);
+
+
+                fire.Rotate(clickTime * -60 * Time.deltaTime, 0, 0);
+
             }
             else
             {
                 clickTime -= Time.deltaTime;
-                fire.Rotate(clickTime*60*Time.deltaTime,0,0);
+
+                fire.Rotate(clickTime * 60 * Time.deltaTime, 0, 0);
+
             }
             //Debug.Log(clickTime);
         }
         else
         {
             StartCoroutine(ResetClickTime());
-            fire.Rotate(clickTime*30*Time.deltaTime,0,0);
+
+
+            fire.Rotate(clickTime * 30 * Time.deltaTime, 0, 0);
+
             StartCoroutine(Wait_Change());
         }
 
-        if(powerSlider != null)
+        if (powerSlider != null)
         {
             powerValue = clickTime / maxClickTime;
             powerSlider.value = powerValue;
