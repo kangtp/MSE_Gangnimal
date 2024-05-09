@@ -44,6 +44,7 @@ public class ThirdPersonMovement : MonoBehaviour
         anim.SetBool("isGround",isGrounded);
         float h = turnspeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, h, 0);
+        
         if(isGrounded&&velocity.y<0)
         {
             velocity.y= -2;

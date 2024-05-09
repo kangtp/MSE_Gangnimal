@@ -20,7 +20,7 @@ public class PlayerInfo : MonoBehaviour
     bool iDown;
     int weaponIndex = -1;
 
-    GameObject nearObject;
+    GameObject nearObject;//Weapon => Item : Association
 
 
     // Start is called before the first frame update
@@ -86,7 +86,6 @@ public class PlayerInfo : MonoBehaviour
             nearObject = other.gameObject;
         }
 
-        Debug.Log(nearObject.name);
     }
 
     void OnTriggerExit(Collider other)

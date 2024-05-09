@@ -52,6 +52,8 @@ public class PlayerFire : MonoBehaviour
     void ShootingBullet()
     {
         DrawParabola();
+        
+       
         if (Input.GetMouseButtonUp(0))
         {
             
@@ -65,6 +67,7 @@ public class PlayerFire : MonoBehaviour
             
         }
     }
+    
 
 
 }
