@@ -8,8 +8,7 @@ public class PlayerFire : MonoBehaviour
 
     public GameObject firePosition;
     public GameObject bombFactory;
-    public PowerGauge powerGage;
-    public static PlayerFire instance;
+    public PowerGage powerGage;
     public float throwPower;
     
 
@@ -21,32 +20,18 @@ public class PlayerFire : MonoBehaviour
     public float maxTime;
 
     private void Start() {
-        instance = this;
+       
     }
 
    void Update()
     {
-        DrawParabola();
-        if (Input.GetMouseButtonUp(0))
-        {
-            
-            
-            
-            GameObject bomb = Instantiate(bombFactory);
-            bomb.transform.position = firePosition.transform.position;
-            Rigidbody rb = bomb.GetComponent<Rigidbody>();
-            Vector3 throwDirection = firePosition.transform.forward.normalized;
-            rb.AddForce(throwDirection * throwPower*powerGage.powerValue, ForceMode.Impulse);
-            lineRenderer.enabled=false;
-            
-        }
-        
+        ShootingBullet();
     }
    
     
     void DrawParabola()
     {
-         lineRenderer.enabled=true;
+        lineRenderer.enabled=true;
         Vector3[] points = new Vector3[numofDot];
         Vector3 startPosition = firePosition.transform.position;
         Vector3 startVelocity = throwPower * firePosition.transform.forward;
@@ -62,12 +47,27 @@ public class PlayerFire : MonoBehaviour
         
         lineRenderer.positionCount = numofDot;
         lineRenderer.SetPositions(points);
-        for(int i=0;i<numofDot;i++)
+        
+    }
+    void ShootingBullet()
+    {
+        DrawParabola();
+        
+       
+        if (Input.GetMouseButtonUp(0))
         {
-            lineRenderer.SetPosition(i,points[i]);
+            
+            GameObject bomb = Instantiate(bombFactory);
+            bomb.transform.position = firePosition.transform.position;
+            Rigidbody rb = bomb.GetComponent<Rigidbody>();
+
+            Vector3 throwDirection = firePosition.transform.forward.normalized;
+            rb.AddForce(throwDirection * throwPower*powerGage.powerValue, ForceMode.Impulse);
+            lineRenderer.enabled=false;
+            
         }
     }
+    
 
 
 }
-
