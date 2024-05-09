@@ -79,17 +79,20 @@ public class PlayerInfo : MonoBehaviour
             
             if (weaponIndex != -1 && hasWeapons[weaponIndex]) bomb = Instantiate(bullets[weaponIndex]);
 
+            if(bomb != null)
+            {
+                bomb.transform.position = firePosition.transform.position;
+                Rigidbody rb = bomb.GetComponent<Rigidbody>();
+                Vector3 throwDirection = firePosition.transform.forward.normalized;
+                rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+                Debug.Log(throwDirection * throwPower * powerGage.powerValue);
+                lineRenderer.enabled = false;
 
-            //bomb = Instantiate(bombFactory);
-            bomb.transform.position = firePosition.transform.position;
-            Rigidbody rb = bomb.GetComponent<Rigidbody>();
-            Vector3 throwDirection = firePosition.transform.forward.normalized;
-            rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-            Debug.Log(throwDirection * throwPower * powerGage.powerValue);
-            lineRenderer.enabled = false;
 
+                destroyWeapon();
 
-            destroyWeapon();
+            }
+
         }
 
     }
@@ -124,11 +127,11 @@ public class PlayerInfo : MonoBehaviour
 
         if(other.tag == "Item")
         {
-            if (other.name == "Shield")
+            if (other.name == "Shield(Clone)")
             {
                 haveShield = true;
             }
-            if (other.name == "Healpack")
+            if (other.name == "Healpack(Clone)")
             {
                 myHP += 10;
                 myHP = Math.Clamp(myHP, 0, 100);
