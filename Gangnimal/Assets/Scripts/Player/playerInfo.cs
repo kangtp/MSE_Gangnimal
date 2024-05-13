@@ -35,7 +35,7 @@ public class PlayerInfo : MonoBehaviour
     public float timeInterval;
     public float maxTime;
 
-    public GameObject firePosition;
+    GameObject firePosition;
     //public GameObject bombFactory;
 
 
@@ -45,6 +45,7 @@ public class PlayerInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        firePosition = GameObject.Find("Fireposition");
     }
 
     // Update is called once per frame
@@ -52,7 +53,6 @@ public class PlayerInfo : MonoBehaviour
     {
         GetInput();
         Interaction();
-
         ShootingBullet();
     }
 
@@ -86,7 +86,6 @@ public class PlayerInfo : MonoBehaviour
                 Rigidbody rb = bomb.GetComponent<Rigidbody>();
                 Vector3 throwDirection = firePosition.transform.forward.normalized;
                 rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-                Debug.Log(throwDirection * throwPower * powerGage.powerValue);
                 lineRenderer.enabled = false;
 
 

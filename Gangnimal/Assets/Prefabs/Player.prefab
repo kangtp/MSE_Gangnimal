@@ -160,7 +160,6 @@ GameObject:
   - component: {fileID: 4152334804432496152}
   - component: {fileID: 2579614961066156191}
   - component: {fileID: 8812535584311972699}
-  - component: {fileID: 1728536658809651670}
   - component: {fileID: 4616488144815108496}
   m_Layer: 3
   m_Name: Player
@@ -225,7 +224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1ed245b2471bd14385fa729af97938c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
   walkSpeed: 5
   sprintSpeed: 8
   turnspeed: 0
@@ -263,21 +261,6 @@ MonoBehaviour:
   maxTime: 10
   firePosition: {fileID: 2754191489058009185}
   throwPower: 15
---- !u!114 &1728536658809651670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4569815834679541765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0eb4d899c2ff72438f194ced21996d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerValue: 0
-  fire: {fileID: 8342956132665091131}
-  powerSlider: {fileID: 0}
 --- !u!120 &4616488144815108496
 LineRenderer:
   serializedVersion: 2
