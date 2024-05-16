@@ -56,9 +56,7 @@ public class PlayerInfo : MonoBehaviour
         ShootingBullet();
     }
 
-<<<<<<< Updated upstream
     //�߻� �� ���� ����
-=======
     public void TakeDamage(int damage)
     {
         HP -= damage;
@@ -75,7 +73,6 @@ public class PlayerInfo : MonoBehaviour
     }
 
 
->>>>>>> Stashed changes
     void destroyWeapon()
     {
         if (weaponIndex != -1 && hasWeapons[weaponIndex])

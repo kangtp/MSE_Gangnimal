@@ -32,15 +32,12 @@ public class explosion : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             PlayDestructionEffect();
-            // 자신을 삭제
             Destroy(gameObject);
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
-            // Player에게 데미지 입히기
             ApplyDamageToPlayer(collision.gameObject);
 
-            // 파괴 효과 실행
             PlayDestructionEffect();
 
             // 자신을 삭제
@@ -48,20 +45,16 @@ public class explosion : MonoBehaviour
         }
     }
 
-    // 파괴 효과를 실행하는 메서드
     private void PlayDestructionEffect()
     {
         if (explosionEffect != null)
         {
-            // 파괴 효과 인스턴스 생성
             GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
             
-            // 파괴 효과를 일정 시간 후에 삭제
             Destroy(effect, 2.0f); // 2초 후에 파괴 효과 삭제
         }
     }
 
-        // Player에게 데미지를 입히는 메서드
     private void ApplyDamageToPlayer(GameObject player)
     {
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
