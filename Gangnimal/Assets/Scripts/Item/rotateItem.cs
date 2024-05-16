@@ -16,6 +16,10 @@ public class RotateItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Rotate_Item();
+    }
+    void Rotate_Item()
+    {
         transform.Rotate(Vector3.up * speed * Time.deltaTime);
     }
 }

@@ -18,6 +18,8 @@ public class PowerGage : MonoBehaviour
     void Start()
     {
 
+
+
     }
 
     // Update is called once per frame
@@ -38,7 +40,10 @@ public class PowerGage : MonoBehaviour
     }
     void ChargingGage()
     {
+
+
         if (Input.GetMouseButtonDown(0))
+
         {
             isClick = true;
             Debug.Log("clicked");
@@ -63,19 +68,27 @@ public class PowerGage : MonoBehaviour
             if (timeUp)
             {
                 clickTime += Time.deltaTime;
+
+
                 fire.Rotate(clickTime * -60 * Time.deltaTime, 0, 0);
+
             }
             else
             {
                 clickTime -= Time.deltaTime;
+
                 fire.Rotate(clickTime * 60 * Time.deltaTime, 0, 0);
+
             }
             //Debug.Log(clickTime);
         }
         else
         {
             StartCoroutine(ResetClickTime());
+
+
             fire.Rotate(clickTime * 30 * Time.deltaTime, 0, 0);
+
             StartCoroutine(Wait_Change());
         }
 

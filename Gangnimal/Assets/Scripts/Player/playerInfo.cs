@@ -25,7 +25,7 @@ public class PlayerInfo : MonoBehaviour
     bool iDown;
     int weaponIndex = -1;
 
-    GameObject nearObject;
+    GameObject nearObject;//Weapon => Item : Association
 
     
     //line
@@ -176,7 +176,7 @@ public class PlayerInfo : MonoBehaviour
             nearObject = other.gameObject;
         }
 
-        
+
     }
 
     void OnTriggerExit(Collider other)
