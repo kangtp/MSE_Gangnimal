@@ -15,7 +15,7 @@ public class PlayerInfo : MonoBehaviour
     public bool[] hasWeapons;
     public GameObject[] bullets;
     //public static PlayerInfo instance;
-    public PowerGage powerGage;
+    PowerGage powerGage;
 
 
     //public gameObject myWeapon;
@@ -46,6 +46,11 @@ public class PlayerInfo : MonoBehaviour
     private void Start()
     {
         firePosition = GameObject.Find("Fireposition");
+        powerGage = GameObject.Find("Canvas").GetComponent<PowerGage>();
+        if(powerGage ==null)
+        {
+            Debug.LogError("powergage is no");
+        }
     }
 
     // Update is called once per frame
@@ -71,7 +76,11 @@ public class PlayerInfo : MonoBehaviour
 
     void ShootingBullet()
     {
-        DrawParabola();
+        
+        if(Input.GetMouseButton(0))
+        {
+            DrawParabola();
+        }
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -92,6 +101,7 @@ public class PlayerInfo : MonoBehaviour
                 destroyWeapon();
 
             }
+            lineRenderer.enabled=false;
 
         }
 

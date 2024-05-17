@@ -20,8 +20,10 @@ public class ThirdPersonMovement : MonoBehaviour
     Vector3 velocity;
     //Camera myCamera; // 이 부분은 사용하지 않습니다.
 
-    void Start()
-    {
+    private void Awake() {
+        
+    
+    
         truespeed = walkSpeed;
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
@@ -30,10 +32,11 @@ public class ThirdPersonMovement : MonoBehaviour
 
         // 메인 카메라 찾기
         Camera mainCamera = Camera.main;
+        Transform cam;
         if (mainCamera != null)
         {
-            // 카메라 할당
-            // cam = mainCamera.transform;
+            
+            cam = mainCamera.transform;
         }
         else
         {
