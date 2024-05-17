@@ -18,7 +18,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public float gravity;
     bool isGrounded;
     Vector3 velocity;
-    //Camera myCamera; // 이 부분은 사용하지 않습니다.
+    
 
     private void Awake() {
         
@@ -51,7 +51,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     public void PlayerMove3rd()
     {
-        isGrounded = Physics.CheckSphere(transform.position, .1f, 1);
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1);
         anim.SetBool("isGround", isGrounded);
         float h = turnspeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, h, 0);
