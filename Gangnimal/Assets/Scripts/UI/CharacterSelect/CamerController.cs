@@ -28,7 +28,7 @@ public class CamerController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Bear GameObject를 찾을 수 없습니다.");
+            
         }
 }
 
