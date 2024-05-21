@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 public class PlayerInfo : MonoBehaviour
 {
-    public int myHP = 100;
+    public int HP = 100;
     public float movingTime = 10.0f;
     public bool myTurn = true;
 
@@ -59,6 +59,22 @@ public class PlayerInfo : MonoBehaviour
         GetInput();
         Interaction();
         ShootingBullet();
+    }
+
+    //�߻� �� ���� ����
+    public void TakeDamage(int damage)
+    {
+        HP -= damage;
+        Debug.Log("HP is : " + HP);
+        if (HP <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Debug.Log("Player has died.");
     }
 
 
@@ -143,8 +159,8 @@ public class PlayerInfo : MonoBehaviour
             }
             if (other.name == "Healpack(Clone)")
             {
-                myHP += 10;
-                myHP = Math.Clamp(myHP, 0, 100);
+                HP += 10;
+                HP = Math.Clamp(HP, 0, 100);
             }
             Destroy(other.gameObject);
 

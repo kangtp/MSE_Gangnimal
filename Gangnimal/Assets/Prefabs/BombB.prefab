@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6319510873924235226}
   - component: {fileID: 6333784494240614467}
   - component: {fileID: 4838007434041573281}
+  - component: {fileID: 1642431419601350793}
   m_Layer: 6
   m_Name: BombB
   m_TagString: Bullet
@@ -98,6 +99,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1642431419601350793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234798633183886030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92c99f4a59657ae4bb71f45c9ff45046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionEffect: {fileID: 4938275916486807079, guid: 8c8776f99fb3d2d4f82e938431a3051f, type: 3}
+  damageAmount: 20
 --- !u!1 &4162916608792606002
 GameObject:
   m_ObjectHideFlags: 0

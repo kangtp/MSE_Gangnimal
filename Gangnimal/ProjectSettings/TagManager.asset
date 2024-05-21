@@ -3,24 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Ground
-  - Weapon
-  - Item
-  - Bullet
-  - Bear
-  - FirePosition
-  - Lookat
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
-  - Obstacle
-  - PlayerBullet
-  - Lookat
+  - 
+  - 
+  - 
   - 
   - 
   - 
