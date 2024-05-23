@@ -165,6 +165,7 @@ public class AccountManager : MonoBehaviour
     {
         Account a = JsonUtility.FromJson<Account>(json);
         Debug.Log(UserInfo.Instance.userName + " battle record: " + "win " + a.win + " / lose " + a.lose);
+        Debug.Log(UserInfo.Instance.userName + " win late: " + (float)( int.Parse(a.win) * 100 / (int.Parse(a.win) + int.Parse(a.lose)) ) + "%");
     }
 
 }
