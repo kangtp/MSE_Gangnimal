@@ -8,7 +8,7 @@ public class MainUIButton : MonoBehaviour
 
     public void StartButton()
     {
-        SceneManager.LoadScene("CharacterSelect");
+        SceneManager.LoadScene("MapSelect");
     }
 
     public void OptionButton()

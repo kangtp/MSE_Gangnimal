@@ -7,6 +7,23 @@ public class NextScene : MonoBehaviour
 {
     public void ToNext()
     {
-        SceneManager.LoadScene("ForestScene");
+        switch (PlayerPrefs.GetInt("SelectedMapIndex"))
+        {
+            case 0 :
+                SceneManager.LoadScene("ForestScene");
+                break;
+            case 1 :
+                SceneManager.LoadScene("Desert");
+                break;
+            case 2 :
+                SceneManager.LoadScene("Winter");
+                break;
+            
+                
+        }
+    }
+    public void ToCharacterSelect()
+    {
+        SceneManager.LoadScene("CharacterSelect");
     }
 }
