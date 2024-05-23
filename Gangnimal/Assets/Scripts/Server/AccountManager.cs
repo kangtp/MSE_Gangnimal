@@ -9,7 +9,8 @@ public class AccountManager : MonoBehaviour
 {
     private string signUpUrl = "http://localhost:7755/gangnimal/signup";
     private string signInUrl = "http://localhost:7755/gangnimal/signin";
-    private string updateRecordUrl = "http://localhost:7755/gangnimal/update/record/";
+    private string updateRecordUrl = "http://localhost:7755/gangnimal/record/update/";
+    private string findRecordUrl = "http://localhost:7755/gangnimal/record/";
 
     //for Sign In
     public TMP_InputField nickNameInput;
@@ -35,7 +36,14 @@ public class AccountManager : MonoBehaviour
         updateRecordUrl += UserInfo.Instance.userName + "/win";  //later, bring the string that stored battle result.
         Debug.Log(updateRecordUrl);
         StartCoroutine(RecordUpdateRequest());
-        updateRecordUrl = "http://localhost:7755/gangnimal/update/record/";
+        updateRecordUrl = "http://localhost:7755/gangnimal/record/update/";
+    }
+
+    public void FindMyBattleRecord()
+    {
+        findRecordUrl += UserInfo.Instance.userName;
+        StartCoroutine(FindRecordRequest());
+        findRecordUrl = "http://localhost:7755/gangnimal/record/";
     }
 
     IEnumerator signUpRequest()
@@ -112,7 +120,6 @@ public class AccountManager : MonoBehaviour
 
     IEnumerator RecordUpdateRequest()
     {
-
         UnityWebRequest www = UnityWebRequest.Get(updateRecordUrl);
         www.SetRequestHeader("Accept", "application/json");
         yield return www.SendWebRequest();
@@ -131,4 +138,33 @@ public class AccountManager : MonoBehaviour
                 break;
         }
     }
+
+    IEnumerator FindRecordRequest()
+    {
+        UnityWebRequest www = UnityWebRequest.Get(findRecordUrl);
+        www.SetRequestHeader("Accept", "application/json");
+        yield return www.SendWebRequest();
+
+        switch (www.result)
+        {
+            case UnityWebRequest.Result.ConnectionError:
+            case UnityWebRequest.Result.DataProcessingError:
+                Debug.Log("Error: " + www.error);
+                break;
+            case UnityWebRequest.Result.ProtocolError:
+                Debug.Log("HTTP Error: " + www.error);
+                break;
+            case UnityWebRequest.Result.Success:
+                string json = www.downloadHandler.text;
+                ParseResult(json);
+                break;
+        }
+    }
+
+    public void ParseResult(string json)
+    {
+        Account a = JsonUtility.FromJson<Account>(json);
+        Debug.Log(UserInfo.Instance.userName + " battle record: " + "win " + a.win + " / lose " + a.lose);
+    }
+
 }
