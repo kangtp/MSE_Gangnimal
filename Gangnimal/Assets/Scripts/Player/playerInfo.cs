@@ -16,7 +16,7 @@ public class PlayerInfo : MonoBehaviour
     public GameObject[] bullets;
     //public static PlayerInfo instance;
     public PowerGage powerGage;
-
+    //public Text healthText;
 
     //public gameObject myWeapon;
 
@@ -45,6 +45,7 @@ public class PlayerInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        HP = 100;
     }
 
     // Update is called once per frame
@@ -56,6 +57,9 @@ public class PlayerInfo : MonoBehaviour
         ShootingBullet();
     }
 
+
+
+
     //�߻� �� ���� ����
     public void TakeDamage(int damage)
     {
@@ -63,6 +67,7 @@ public class PlayerInfo : MonoBehaviour
         Debug.Log("HP is : " + HP);
         if (HP <= 0)
         {
+            HP = 0;
             Die();
         }
     }
