@@ -14,16 +14,26 @@ public class TestLobby : MonoBehaviour
     private Lobby joinedlobby;
     private float heartbeatTimer;
     private float lobbyUpdateTimer;
+
+    private float lobbyPollTimer;
     private string PlayerName;
 
     private bool enableStart;
+
+    private bool stopUpdateLobby;
+
+    public const string KEY_START_GAME = "Start";
+
     private void Start()
     {
         enableStart = false;
+        stopUpdateLobby = false;
         start();
     }
     private async void start()
     {
+
+
         await UnityServices.InitializeAsync(); //request
 
         AuthenticationService.Instance.SignedIn += () =>
@@ -59,8 +69,9 @@ public class TestLobby : MonoBehaviour
 
     private async void HandleLobbyPollForUpdates()
     {
-        if (joinedlobby != null)
+        if (joinedlobby != null && !stopUpdateLobby) 
         {
+
             lobbyUpdateTimer -= Time.deltaTime;
             if (lobbyUpdateTimer < 0f)
             {
@@ -69,7 +80,15 @@ public class TestLobby : MonoBehaviour
 
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedlobby.Id);
                 joinedlobby = lobby;
-                
+        
+                if (joinedlobby.Data[KEY_START_GAME].Value != "0")
+                {
+                    if (hostlobby != null)
+                    {
+                        TestRelay.Instance.JoinRelay(joinedlobby.Data[KEY_START_GAME].Value);
+                        stopUpdateLobby = true;
+                    }
+                }
 
             }
         }
@@ -88,7 +107,8 @@ public class TestLobby : MonoBehaviour
                 IsPrivate = false,
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>{
-                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Castle")}
+                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Castle")},
+                    {KEY_START_GAME, new DataObject(DataObject.VisibilityOptions.Member, "0")}
                 }
             };
 
@@ -173,7 +193,7 @@ public class TestLobby : MonoBehaviour
         {
             Debug.Log(e);
         }
-      
+
     }
 
     private Player GetPlayer()
@@ -200,52 +220,81 @@ public class TestLobby : MonoBehaviour
         }
     }
 
-    public void StartGame(){
-
-        if(joinedlobby != null){
-            int count = 0;
-        foreach (Player player in joinedlobby.Players)
+    public async void StartGame()
+    {
+        if (joinedlobby != null)
         {
-            count++;
-        }
+            int count = 0;
+            foreach (Player player in joinedlobby.Players)
+            {
+                count++;
+            }
+            if (count == 2)
+            {
+                if (hostlobby != null)
+                {
+                    string relayCode = await TestRelay.Instance.CreateRelay();
 
-        if(count == 2){
-            SceneManager.LoadScene("ForestScene");
-        }
+                    Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinedlobby.Id, new UpdateLobbyOptions
+                    {
+                        Data = new Dictionary<string, DataObject>{
+                            {KEY_START_GAME, new DataObject(DataObject.VisibilityOptions.Member,relayCode)}
+                        }
+                    });
+                }
+                else
+                {
+                    TestRelay.Instance.JoinRelay(joinedlobby.Data[KEY_START_GAME].Value);
+                }
+
+                //SceneManager.LoadScene("ForestScene");
+
+            }
         }
 
     }
 
-    private async void UpdateGameMode(string map) {
-        try{
-        hostlobby = await Lobbies.Instance.UpdateLobbyAsync(hostlobby.Id, new UpdateLobbyOptions{
-            Data = new Dictionary<string, DataObject>{
+    private async void UpdateGameMode(string map)
+    {
+        try
+        {
+            hostlobby = await Lobbies.Instance.UpdateLobbyAsync(hostlobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>{
                 {"Map", new DataObject(DataObject.VisibilityOptions.Public, map)}
             }
-        });
-        joinedlobby = hostlobby;
+            });
+            joinedlobby = hostlobby;
 
-        PrintPlayers(hostlobby);
+            PrintPlayers(hostlobby);
 
-        } catch(LobbyServiceException e){
+        }
+        catch (LobbyServiceException e)
+        {
             Debug.Log(e);
         }
     }
 
     private async void LeaveLobby()
     {
-        try{
-        await LobbyService.Instance.RemovePlayerAsync(joinedlobby.Id,AuthenticationService.Instance.PlayerId);
-        } catch(LobbyServiceException e){
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(joinedlobby.Id, AuthenticationService.Instance.PlayerId);
+        }
+        catch (LobbyServiceException e)
+        {
             Debug.Log(e);
         }
     }
 
     private async void DeleteLobby()
     {
-        try{
-        await LobbyService.Instance.DeleteLobbyAsync(joinedlobby.Id);
-        } catch(LobbyServiceException e){
+        try
+        {
+            await LobbyService.Instance.DeleteLobbyAsync(joinedlobby.Id);
+        }
+        catch (LobbyServiceException e)
+        {
             Debug.Log(e);
         }
     }
