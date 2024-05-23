@@ -16,6 +16,13 @@ public class MainUIButton : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(false);
         GameObject.Find("Canvas").transform.Find("OptionUI").gameObject.SetActive(true);
     }
+
+    public void SignUpButton()
+    {
+        GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("SignUpUI").gameObject.SetActive(true);
+    }
+
     public void ExitButton()
     {
 #if UNITY_EDITOR
@@ -23,5 +30,17 @@ public class MainUIButton : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    public void BackButtonFromOption()
+    {
+        GameObject.Find("Canvas").transform.Find("OptionUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(true);
+    }
+
+    public void BackButtonFromSignUp()
+    {
+        GameObject.Find("Canvas").transform.Find("SignUpUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(true);
     }
 }
