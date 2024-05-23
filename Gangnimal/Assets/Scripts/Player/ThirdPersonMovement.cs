@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class ThirdPersonMovement : MonoBehaviour
 {
-    public Transform cam;
-    float turnTime=.1f;
+    float turnTime = 0.1f;
     float turnVelocity;
     Animator anim;
     bool sprinting;
@@ -22,80 +18,150 @@ public class ThirdPersonMovement : MonoBehaviour
     bool isGrounded;
     Vector3 velocity;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-      truespeed = walkSpeed;
-      controller = GetComponent<CharacterController>();
-      anim = GetComponentInChildren<Animator>();
-      Cursor.lockState=CursorLockMode.Locked;
-      Cursor.visible=false;
+    PlayerInfo playerInfo;
 
+    private bool isDead = false; 
+
+    private void Awake()
+    {
+        truespeed = walkSpeed;
+        controller = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
+        playerInfo = GetComponentInChildren<PlayerInfo>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // 메인 카메라 찾기
+        Camera mainCamera = Camera.main;
+        Transform cam;
+        if (mainCamera != null)
+        {
+            cam = mainCamera.transform;
+        }
+        else
+        {
+            Debug.LogError("메인 카메라를 찾을 수 없습니다!");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        PlayerMove3rd();
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            playerInfo.HP -= 100;
+            if (playerInfo.HP <= 0 && !isDead)
+            {
+                isDead = true;
+                anim.SetTrigger("Death");
+                GameManager.instance.GameOver(); 
+            }
+        }
+
+        if (playerInfo.HP > 0)
+        {
+            PlayerMove3rd();
+        }
+        else
+        {
+            WhenDead();
+        }
     }
+
     public void PlayerMove3rd()
     {
-        isGrounded = Physics.CheckSphere(transform.position,.1f,1);
-        anim.SetBool("isGround",isGrounded);
+        CheckGroundStatus();
         float h = turnspeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, h, 0);
-        
-        if(isGrounded&&velocity.y<0)
-        {
-            velocity.y= -2;
-        }
-        
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if (isGrounded && velocity.y < 0)
         {
-            truespeed=sprintSpeed;
+            velocity.y = -2;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            truespeed = sprintSpeed;
             sprinting = true;
         }
-        if(Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             truespeed = walkSpeed;
-            sprinting= false;
+            sprinting = false;
         }
         anim.transform.localPosition = Vector3.zero;
         anim.transform.localEulerAngles = Vector3.zero;
-        
-        movement= new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        Vector3 direction = new Vector3(movement.x,0,movement.y).normalized;
 
-        if(direction.magnitude>=0.1f)
+        movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        Vector3 direction = new Vector3(movement.x, 0, movement.y).normalized;
+
+        if (direction.magnitude >= 0.1f)
         {
-            float targetAngle =Mathf.Atan2(direction.x,direction.z)*Mathf.Rad2Deg+cam.eulerAngles.y;
-            float angle=Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnVelocity,turnTime);
-            transform.rotation =Quaternion.Euler(0f,angle,0f);
-            Vector3 moveDirection = Quaternion.Euler(0f,targetAngle,0f) * Vector3.forward;
-            controller.Move(moveDirection.normalized*truespeed*Time.deltaTime);
-            if(sprinting ==true)
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnVelocity, turnTime);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            controller.Move(moveDirection.normalized * truespeed * Time.deltaTime);
+            if (sprinting)
             {
-                anim.SetFloat("Speed",2);
+                anim.SetFloat("Speed", 2);
             }
             else
             {
-                anim.SetFloat("Speed",1);
+                anim.SetFloat("Speed", 1);
             }
         }
         else
         {
-            anim.SetFloat("Speed",0);
+            anim.SetFloat("Speed", 0);
         }
-        if(Input.GetButtonDown("Jump")&& isGrounded)
+
+        if (playerInfo.HP > 0) 
         {
-            velocity.y = Mathf.Sqrt((jumpHeight*10)*-2f*gravity);
+            Jump();
         }
-        if(velocity.y>-20)
-        {
-            velocity.y +=(gravity*10)*Time.deltaTime;
-        }
+
         
-        controller.Move(velocity*Time.deltaTime);
+        if (velocity.y > -20)
+        {
+            velocity.y += (gravity * 10) * Time.deltaTime;
+        }
+        controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void CheckGroundStatus()
+    {
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3); 
+        anim.SetBool("isGround", isGrounded);
+    }
+
+    public void Jump()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt((jumpHeight * 10) * -2f * gravity);
+            Debug.Log(isGrounded);
+        }
+    }
+
+    private void WhenDead()
+    {
+        if (!isGrounded)
+        {
+            if (velocity.y > -20)
+            {
+                velocity.y += (gravity * 10) * Time.deltaTime;
+            }
+            controller.Move(velocity * Time.deltaTime);
+        }
+        else if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        {
+            anim.SetTrigger("Death");
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
 }

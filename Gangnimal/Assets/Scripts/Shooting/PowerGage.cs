@@ -11,14 +11,22 @@ public class PowerGage : MonoBehaviour
     private bool isClick = false;
     private float maxClickTime = 1f;
     private bool timeUp = true;
-    public Transform fire;
-
-    public Slider powerSlider;
+    Transform fire;
+    Slider powerSlider;
     // Start is called before the first frame update
     void Start()
     {
 
+        fire =GameObject.FindGameObjectWithTag("FirePosition").GetComponent<Transform>();
+        if (fire == null) {
+        Debug.LogError("FirePosition을 가진 게임 오브젝트를 찾을 수 없습니다.");
+        }
+        else
+        {
+            Debug.Log("찾음");
+        }
 
+        powerSlider = GameObject.Find("PowerGauge").GetComponent<Slider>();
 
     }
 
@@ -30,7 +38,7 @@ public class PowerGage : MonoBehaviour
     IEnumerator Wait_Change()
     {
         yield return new WaitForSeconds(0.3f);
-        Vector3 currentRotation = fire.transform.rotation.eulerAngles;
+        Vector3 currentRotation = fire.rotation.eulerAngles;
         fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
     }
     IEnumerator ResetClickTime()
@@ -86,8 +94,10 @@ public class PowerGage : MonoBehaviour
         {
             StartCoroutine(ResetClickTime());
 
-
-            fire.Rotate(clickTime * 30 * Time.deltaTime, 0, 0);
+            if(fire!=null)
+            {
+                fire.Rotate(clickTime * 30 * Time.deltaTime, 0, 0);
+            }
 
             StartCoroutine(Wait_Change());
         }

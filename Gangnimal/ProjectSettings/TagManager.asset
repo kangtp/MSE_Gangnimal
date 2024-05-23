@@ -8,16 +8,17 @@ TagManager:
   - Weapon
   - Item
   - Bullet
-  - Map
+  - Lookat
+  - FirePosition
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - Ground
   - Water
   - UI
-  - Obstacle
-  - PlayerBullet
+  - 
+  - 
   - 
   - 
   - 

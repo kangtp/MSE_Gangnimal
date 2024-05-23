@@ -15,8 +15,8 @@ public class PlayerInfo : MonoBehaviour
     public bool[] hasWeapons;
     public GameObject[] bullets;
     //public static PlayerInfo instance;
-    public PowerGage powerGage;
-    //public Text healthText;
+    PowerGage powerGage;
+
 
     //public gameObject myWeapon;
 
@@ -35,7 +35,7 @@ public class PlayerInfo : MonoBehaviour
     public float timeInterval;
     public float maxTime;
 
-    public GameObject firePosition;
+    GameObject firePosition;
     //public GameObject bombFactory;
 
 
@@ -45,7 +45,12 @@ public class PlayerInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        HP = 100;
+        firePosition = GameObject.Find("Fireposition");
+        powerGage = GameObject.Find("Canvas").GetComponent<PowerGage>();
+        if(powerGage ==null)
+        {
+            Debug.LogError("powergage is no");
+        }
     }
 
     // Update is called once per frame
@@ -53,7 +58,6 @@ public class PlayerInfo : MonoBehaviour
     {
         GetInput();
         Interaction();
-
         ShootingBullet();
     }
 
@@ -92,7 +96,11 @@ public class PlayerInfo : MonoBehaviour
 
     void ShootingBullet()
     {
-        DrawParabola();
+        
+        if(Input.GetMouseButton(0))
+        {
+            DrawParabola();
+        }
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -107,13 +115,13 @@ public class PlayerInfo : MonoBehaviour
                 Rigidbody rb = bomb.GetComponent<Rigidbody>();
                 Vector3 throwDirection = firePosition.transform.forward.normalized;
                 rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-                Debug.Log(throwDirection * throwPower * powerGage.powerValue);
                 lineRenderer.enabled = false;
 
 
                 destroyWeapon();
 
             }
+            lineRenderer.enabled=false;
 
         }
 
