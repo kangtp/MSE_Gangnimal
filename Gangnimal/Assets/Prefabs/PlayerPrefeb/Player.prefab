@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8594026892251213876}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Lookat
   m_TagString: Lookat
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 2152690175189184902}
   - component: {fileID: 472660352883033251}
   - component: {fileID: 5989333750769625972}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Weapon Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8342956132665091131}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Fireposition
   m_TagString: FirePosition
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 2579614961066156191}
   - component: {fileID: 8812535584311972699}
   - component: {fileID: 4616488144815108496}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da86ebb20292844b8a32c1979ac8ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myHP: 80
+  HP: 100
   movingTime: 10
   myTurn: 1
   weapons:
@@ -383,7 +383,7 @@ GameObject:
   - component: {fileID: 672257777535796906}
   - component: {fileID: 5399129797113429204}
   - component: {fileID: 9107558125267297324}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -907,7 +907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 708912814365418344, guid: 1dadc8095b5050546895d2bc75f66317, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 796647228782900949, guid: 1dadc8095b5050546895d2bc75f66317, type: 3}
       propertyPath: m_Layer
@@ -919,7 +919,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1431478346453954353, guid: 1dadc8095b5050546895d2bc75f66317, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1552598414582384371, guid: 1dadc8095b5050546895d2bc75f66317, type: 3}
       propertyPath: m_Layer
@@ -1031,7 +1031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4544388282545153921, guid: 1dadc8095b5050546895d2bc75f66317, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4602242400659566357, guid: 1dadc8095b5050546895d2bc75f66317, type: 3}
       propertyPath: m_Layer

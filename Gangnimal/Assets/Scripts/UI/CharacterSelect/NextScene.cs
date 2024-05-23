@@ -26,4 +26,8 @@ public class NextScene : MonoBehaviour
     {
         SceneManager.LoadScene("CharacterSelect");
     }
+    public void ToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }

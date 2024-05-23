@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ThirdPersonMovement : MonoBehaviour
 {
-    //public Transform cam;
     float turnTime = 0.1f;
     float turnVelocity;
     Animator anim;
@@ -18,15 +17,17 @@ public class ThirdPersonMovement : MonoBehaviour
     public float gravity;
     bool isGrounded;
     Vector3 velocity;
-    
 
-    private void Awake() {
-        
-    
-    
+    PlayerInfo playerInfo;
+
+    private bool isDead = false; 
+
+    private void Awake()
+    {
         truespeed = walkSpeed;
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        playerInfo = GetComponentInChildren<PlayerInfo>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -35,7 +36,6 @@ public class ThirdPersonMovement : MonoBehaviour
         Transform cam;
         if (mainCamera != null)
         {
-            
             cam = mainCamera.transform;
         }
         else
@@ -46,13 +46,30 @@ public class ThirdPersonMovement : MonoBehaviour
 
     void Update()
     {
-        PlayerMove3rd();
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            playerInfo.HP -= 100;
+            if (playerInfo.HP <= 0 && !isDead)
+            {
+                isDead = true;
+                anim.SetTrigger("Death");
+                GameManager.instance.GameOver(); 
+            }
+        }
+
+        if (playerInfo.HP > 0)
+        {
+            PlayerMove3rd();
+        }
+        else
+        {
+            WhenDead();
+        }
     }
 
     public void PlayerMove3rd()
     {
-        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1);
-        anim.SetBool("isGround", isGrounded);
+        CheckGroundStatus();
         float h = turnspeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, h, 0);
 
@@ -84,7 +101,7 @@ public class ThirdPersonMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDirection.normalized * truespeed * Time.deltaTime);
-            if (sprinting == true)
+            if (sprinting)
             {
                 anim.SetFloat("Speed", 2);
             }
@@ -97,15 +114,54 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             anim.SetFloat("Speed", 0);
         }
-        if (Input.GetButtonDown("Jump") && isGrounded)
+
+        if (playerInfo.HP > 0) 
         {
-            velocity.y = Mathf.Sqrt((jumpHeight * 10) * -2f * gravity);
+            Jump();
         }
+
+        
         if (velocity.y > -20)
         {
             velocity.y += (gravity * 10) * Time.deltaTime;
         }
-
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void CheckGroundStatus()
+    {
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3); 
+        anim.SetBool("isGround", isGrounded);
+    }
+
+    public void Jump()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt((jumpHeight * 10) * -2f * gravity);
+            Debug.Log(isGrounded);
+        }
+    }
+
+    private void WhenDead()
+    {
+        if (!isGrounded)
+        {
+            if (velocity.y > -20)
+            {
+                velocity.y += (gravity * 10) * Time.deltaTime;
+            }
+            controller.Move(velocity * Time.deltaTime);
+        }
+        else if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        {
+            anim.SetTrigger("Death");
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
 }
