@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Countdown : MonoBehaviour
-{
+{/*
     [SerializeField] float setTime = 15.0f;
     [SerializeField] Text countdownText;
     private PlayerInfo playerinfo;
@@ -38,5 +38,5 @@ public class Countdown : MonoBehaviour
             }
 
         }
-    }
+    }*/
 }

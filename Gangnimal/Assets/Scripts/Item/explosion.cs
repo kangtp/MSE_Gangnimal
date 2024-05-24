@@ -58,9 +58,13 @@ public class explosion : MonoBehaviour
     private void ApplyDamageToPlayer(GameObject player)
     {
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
-        if (playerInfo != null)
+        if (playerInfo != null && !playerInfo.haveShield)
         {
             playerInfo.TakeDamage(damageAmount);
+        }
+        else if(playerInfo != null && playerInfo.haveShield){
+            //delete shield 
+            playerInfo.haveShield = false;
         }
     }
 
