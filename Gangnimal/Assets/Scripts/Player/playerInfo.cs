@@ -27,7 +27,7 @@ public class PlayerInfo : MonoBehaviour
 
     GameObject nearObject;//Weapon => Item : Association
 
-    
+
     //line
     [SerializeField]
     public LineRenderer lineRenderer;
@@ -46,10 +46,23 @@ public class PlayerInfo : MonoBehaviour
     private void Start()
     {
         firePosition = GameObject.Find("Fireposition");
-        powerGage = GameObject.Find("Canvas").GetComponent<PowerGage>();
-        if(powerGage ==null)
+        StartCoroutine(awaitPowerGage());
+    }
+
+    private IEnumerator awaitPowerGage()
+    {
+        while (true)
         {
-            Debug.LogError("powergage is no");
+            yield return new WaitForSeconds(0.1f);
+            powerGage = GameObject.Find("PowerGageManage").GetComponent<PowerGage>();
+            if (powerGage == null)
+            {
+                Debug.Log("powergage is no");
+            }
+            else
+            {
+                StopCoroutine(awaitPowerGage());
+            }
         }
     }
 
@@ -92,20 +105,20 @@ public class PlayerInfo : MonoBehaviour
 
     void ShootingBullet()
     {
-        
-        if(Input.GetMouseButton(0))
+
+        if (Input.GetMouseButton(0))
         {
             DrawParabola();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            
-            GameObject bomb=null;
-            
+
+            GameObject bomb = null;
+
             if (weaponIndex != -1 && hasWeapons[weaponIndex]) bomb = Instantiate(bullets[weaponIndex]);
 
-            if(bomb != null)
+            if (bomb != null)
             {
                 bomb.transform.position = firePosition.transform.position;
                 Rigidbody rb = bomb.GetComponent<Rigidbody>();
@@ -117,7 +130,7 @@ public class PlayerInfo : MonoBehaviour
                 destroyWeapon();
 
             }
-            lineRenderer.enabled=false;
+            lineRenderer.enabled = false;
 
         }
 
@@ -151,7 +164,7 @@ public class PlayerInfo : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
 
-        if(other.tag == "Item")
+        if (other.tag == "Item")
         {
             if (other.name == "Shield(Clone)")
             {
@@ -172,15 +185,15 @@ public class PlayerInfo : MonoBehaviour
     {
 
         iDown = Input.GetKeyDown(KeyCode.E);
-        
-        
+
+
         //Debug.Log(iDown);
 
     }
 
     void OnTriggerStay(Collider other)
     {
-        if(other.tag == "Weapon")
+        if (other.tag == "Weapon")
         {
             nearObject = other.gameObject;
         }
@@ -201,12 +214,13 @@ public class PlayerInfo : MonoBehaviour
     {
         if (iDown && nearObject != null)
         {
-            if(nearObject.tag == "Weapon") {
-                Item item = nearObject.GetComponent<Item> ();
+            if (nearObject.tag == "Weapon")
+            {
+                Item item = nearObject.GetComponent<Item>();
                 weaponIndex = item.value;
 
 
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     if (hasWeapons[i])
                     {

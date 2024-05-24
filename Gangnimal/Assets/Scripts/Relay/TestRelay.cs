@@ -15,6 +15,7 @@ using TMPro;
 public class TestRelay : MonoBehaviour
 {
 
+    public GameObject[] turnOnobj;
     public TMP_InputField codeinput;
 
     public static TestRelay Instance {get; private set;}
@@ -29,9 +30,10 @@ public class TestRelay : MonoBehaviour
         JoinRelay(codeinput.text);
     }
 
+
     private async void Start()
     {
-        /*
+        
         await UnityServices.InitializeAsync();
 
         AuthenticationService.Instance.SignedIn += () =>
@@ -40,11 +42,20 @@ public class TestRelay : MonoBehaviour
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        */
 
     }
 
-    public async Task<string> CreateRelay()
+
+    private void turnOn()
+    {
+        foreach (GameObject item in turnOnobj)
+        {
+            Debug.Log(item.ToString());
+            item.SetActive(true);
+        }
+    }
+
+    public async void CreateRelay()
     {
         try
         {
@@ -60,15 +71,13 @@ public class TestRelay : MonoBehaviour
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
+            turnOn(); // 플레이어를 생성하기전에 몇개 오브젝트에서 awake, start에서 바로 플레이어를 찾아야되서 delay를 줘야된다.
             NetworkManager.Singleton.StartHost();
-
-            return joinCode;
 
         }
         catch (RelayServiceException e)
         {
             Debug.Log(e);
-            return null;
         }
         
     }
@@ -111,6 +120,7 @@ public class TestRelay : MonoBehaviour
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
+            turnOn();
             NetworkManager.Singleton.StartClient();
 
         }

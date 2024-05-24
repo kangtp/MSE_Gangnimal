@@ -1,6 +1,9 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Netcode;
 
-public class ThirdPersonMovement : MonoBehaviour
+public class ThirdPersonMovement : NetworkBehaviour
 {
     float turnTime = 0.1f;
     float turnVelocity;
@@ -20,7 +23,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     PlayerInfo playerInfo;
 
-    private bool isDead = false; 
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -31,17 +34,26 @@ public class ThirdPersonMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // 메인 카메라 찾기
         Camera mainCamera = Camera.main;
         Transform cam;
         if (mainCamera != null)
         {
             cam = mainCamera.transform;
+            //StopCoroutine(awaitFindCamera());
         }
         else
         {
-            Debug.LogError("메인 카메라를 찾을 수 없습니다!");
+            Debug.Log("메인 카메라를 찾을 수 없습니다!");
         }
+
+        // 메인 카메라 찾기
+        //StartCoroutine(awaitFindCamera());
+    }
+
+    private IEnumerator awaitFindCamera()
+    {
+        yield return new WaitForSeconds(5.0f);
+        
     }
 
     void Update()
@@ -53,7 +65,7 @@ public class ThirdPersonMovement : MonoBehaviour
             {
                 isDead = true;
                 anim.SetTrigger("Death");
-                GameManager.instance.GameOver(); 
+                GameManager.instance.GameOver();
             }
         }
 
@@ -115,12 +127,12 @@ public class ThirdPersonMovement : MonoBehaviour
             anim.SetFloat("Speed", 0);
         }
 
-        if (playerInfo.HP > 0) 
+        if (playerInfo.HP > 0)
         {
             Jump();
         }
 
-        
+
         if (velocity.y > -20)
         {
             velocity.y += (gravity * 10) * Time.deltaTime;
@@ -130,7 +142,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void CheckGroundStatus()
     {
-        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3); 
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3);
         anim.SetBool("isGround", isGrounded);
     }
 
