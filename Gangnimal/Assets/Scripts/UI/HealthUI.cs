@@ -20,7 +20,7 @@ public class HealthUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        if(playerinfo != null && playerinfo.HP >= 0 && playerinfo.myTurn){
+        if(playerinfo != null && playerinfo.HP >= 0){
             healthText.text = Mathf.Round(playerinfo.HP).ToString();
 
         }

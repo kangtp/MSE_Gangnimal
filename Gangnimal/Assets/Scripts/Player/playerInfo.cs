@@ -42,6 +42,11 @@ public class PlayerInfo : MonoBehaviour
     public float throwPower;
 
 
+    //sound
+    private AudioSource audioSource;
+    private AudioClip getHPSound;
+    private AudioClip getShieldSound;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -51,6 +56,13 @@ public class PlayerInfo : MonoBehaviour
         {
             Debug.LogError("powergage is no");
         }
+        audioSource = gameObject.AddComponent<AudioSource>();
+
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource component is missing on this game object.");
+        }
+        SoundSetting();
     }
 
     // Update is called once per frame
@@ -61,7 +73,23 @@ public class PlayerInfo : MonoBehaviour
         ShootingBullet();
     }
 
+    void SoundSetting(){
+        getHPSound = Resources.Load<AudioClip>("SoundEffect/Heal");
 
+        if (getHPSound == null)
+        {
+            Debug.LogError("Failed to load sound effect from Resources.");
+            return;
+        }
+        getShieldSound = Resources.Load<AudioClip>("SoundEffect/getShield");
+
+        if (getShieldSound == null)
+        {
+            Debug.LogError("Failed to load sound effect from Resources.");
+            return;
+        }
+
+    }
 
 
     //�߻� �� ���� ����
@@ -160,11 +188,24 @@ public class PlayerInfo : MonoBehaviour
             if (other.name == "Shield(Clone)")
             {
                 haveShield = true;
+                if (audioSource != null && getShieldSound != null)
+                {
+                audioSource.PlayOneShot(getShieldSound);
+                Debug.Log("Sound.");                
+                Debug.Log("AudioSource volume: " + audioSource.volume);
+                Debug.Log("AudioSource mute: " + audioSource.mute);    
+                }
             }
             if (other.name == "Healpack(Clone)")
             {
+                if (audioSource != null && getHPSound != null)
+                {
+                audioSource.PlayOneShot(getHPSound);
+                Debug.Log("Sound.");                
+                }
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
+
             }
             Destroy(other.gameObject);
 

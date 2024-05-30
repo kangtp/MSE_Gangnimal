@@ -113,6 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 4938275916486807079, guid: 8c8776f99fb3d2d4f82e938431a3051f, type: 3}
   damageAmount: 20
+  explosionSound: {fileID: 8300000, guid: 1dc075f8a89ceed4ebfbfaedd28ced17, type: 3}
 --- !u!1 &4162916608792606002
 GameObject:
   m_ObjectHideFlags: 0
