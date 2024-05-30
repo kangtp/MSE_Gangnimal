@@ -139,7 +139,7 @@ public class ThirdPersonMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt((jumpHeight * 10) * -2f * gravity);
-            Debug.Log(isGrounded);
+            GameManager.instance.PlayJumpSound();
         }
     }
 
@@ -155,6 +155,7 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         else if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
+            
             anim.SetTrigger("Death");
         }
     }

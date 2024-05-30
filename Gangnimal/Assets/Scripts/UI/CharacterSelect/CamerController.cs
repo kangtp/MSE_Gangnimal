@@ -9,8 +9,12 @@ public class CamerController : MonoBehaviour
     void Start()
     {
         cinemachineFreeLook = GetComponent<CinemachineFreeLook>();
+        if (GameManager.instance != null)
+        {
+            cinemachineFreeLook.m_XAxis.m_MaxSpeed = 300 * GameManager.instance.mouseSensitivity;
+        }
 
-        // GameObject 참조를 가져올 때 null 검사 추가
+        
         GameObject lookat = GameObject.FindGameObjectWithTag("Lookat");
         if (lookat != null)
         {

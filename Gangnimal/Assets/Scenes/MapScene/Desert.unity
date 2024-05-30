@@ -22069,52 +22069,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9a904a45434ee2648b5c6cfcfc7ba3c4, type: 3}
---- !u!1 &849180942
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 849180944}
-  - component: {fileID: 849180943}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &849180943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849180942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7215d81d94d55c843969fa56489c2c55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGameOver: 0
-  gameOverPannel: {fileID: 996928171}
---- !u!4 &849180944
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849180942}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 763.2174, y: 495.807, z: 101.30249}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &851402834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26634,7 +26588,7 @@ GameObject:
   - component: {fileID: 996928174}
   - component: {fileID: 996928173}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27785,7 +27739,7 @@ Transform:
   m_GameObject: {fileID: 1024013776}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.31, y: 3.444, z: 5.311}
+  m_LocalPosition: {x: -28.29, y: 7.86, z: 5.311}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43174,7 +43128,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1520448879}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5961e8f84ffd947a4d9bda5df2eae2, type: 3}
+  m_Script: {fileID: 11500000, guid: 19cf5e487774c314f9f568f1fb06d41b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefabs:
@@ -65031,4 +64985,3 @@ SceneRoots:
   - {fileID: 822821872}
   - {fileID: 1520448881}
   - {fileID: 1024013777}
-  - {fileID: 849180944}
