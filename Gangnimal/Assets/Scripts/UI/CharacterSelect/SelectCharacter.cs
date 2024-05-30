@@ -7,7 +7,12 @@ public class SelectCharacter : MonoBehaviour
 {
     private List<GameObject> models;
     private int select_index=0;
+    
     // Start is called before the first frame update
+    void Awake()
+    {
+       
+    }
     void Start()
     {
         
@@ -32,6 +37,7 @@ public class SelectCharacter : MonoBehaviour
         models[select_index].SetActive(false);
         select_index=index;
         models[select_index].SetActive(true);
+        GameManager.instance.PlayCharacterSound(select_index);
         PlayerPrefs.SetInt("SelectedCharacterIndex", select_index);
         PlayerPrefs.Save();
     }
