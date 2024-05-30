@@ -10,16 +10,8 @@ public class CamerController : MonoBehaviour
     {
         cinemachineFreeLook = GetComponent<CinemachineFreeLook>();
 
-        // GameObject 참조를 가져올 때 null 검사 추가
-        GameObject lookat = GameObject.FindGameObjectWithTag("Lookat");
-        if (lookat != null)
-        {
-            cinemachineFreeLook.LookAt = lookat.GetComponent<Transform>();
-        }
-        else
-        {
-            Debug.LogError("Lookat GameObject를 찾을 수 없습니다.");
-        }
+        
+       
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -29,6 +21,15 @@ public class CamerController : MonoBehaviour
         else
         {
             
+        }
+         GameObject lookat = player.transform.GetChild(0).gameObject;
+        if (lookat != null)
+        {
+            cinemachineFreeLook.LookAt = lookat.GetComponent<Transform>();
+        }
+        else
+        {
+            Debug.LogError("Lookat GameObject를 찾을 수 없습니다.");
         }
 }
 
