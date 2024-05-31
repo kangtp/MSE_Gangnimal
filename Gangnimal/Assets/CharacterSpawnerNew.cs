@@ -31,6 +31,11 @@ public class CharacterSpawnerNew : MonoBehaviour
     void Start()
     {
         GameManager.instance.InitializeGameOverPanel();
+        if(GameManager.instance.GameOver)
+        {
+            Debug.Log("panel ");
+        }
+
     }
 
     // Update is called once per frame

@@ -20,10 +20,10 @@ public class explosion : MonoBehaviour
             Debug.LogError("AudioSource component is missing on this game object.");
         }
         audioSource.enabled = true;
-        SoundSetting();
+        //SoundSetting();
     }
 
-
+/*
     void SoundSetting(){
         explosionSound = Resources.Load<AudioClip>("SoundEffect/MExplosion");
 
@@ -34,7 +34,7 @@ public class explosion : MonoBehaviour
         }
 
     }
-
+*/
     // Update is called once per frame
     void Update()
     {
@@ -55,13 +55,8 @@ public class explosion : MonoBehaviour
         // 충돌한 오브젝트의 태그가 "Map"인지 확인
         if (collision.gameObject.CompareTag("Ground"))
         {
-            if (audioSource != null && explosionSound != null)
-            {
-                audioSource.PlayOneShot(explosionSound);
-                Debug.Log("Sound.");         
-                Debug.Log("AudioSource volume: " + audioSource.volume);
-                Debug.Log("AudioSource mute: " + audioSource.mute);       
-            }  
+            
+            GameManager.instance.PlayExplosionSound();
 
             PlayDestructionEffect();
             Destroy(gameObject);
@@ -69,11 +64,9 @@ public class explosion : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
-            if (audioSource != null && explosionSound != null)
-            {
-                audioSource.PlayOneShot(explosionSound);
-                Debug.Log("Sound.");                
-            }   
+            
+            GameManager.instance.PlayExplosionSound();
+            
             ApplyDamageToPlayer(collision.gameObject);
 
             PlayDestructionEffect();

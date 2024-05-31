@@ -62,7 +62,7 @@ public class PlayerInfo : MonoBehaviour
         {
             Debug.LogError("AudioSource component is missing on this game object.");
         }
-        SoundSetting();
+        //SoundSetting();
     }
 
     // Update is called once per frame
@@ -73,7 +73,7 @@ public class PlayerInfo : MonoBehaviour
         ShootingBullet();
     }
 
-    void SoundSetting(){
+    /*void SoundSetting(){
         getHPSound = Resources.Load<AudioClip>("SoundEffect/Heal");
 
         if (getHPSound == null)
@@ -90,6 +90,7 @@ public class PlayerInfo : MonoBehaviour
         }
 
     }
+    */
 
 
     //�߻� �� ���� ����
@@ -188,21 +189,18 @@ public class PlayerInfo : MonoBehaviour
             if (other.name == "Shield(Clone)")
             {
                 haveShield = true;
-                if (audioSource != null && getShieldSound != null)
-                {
-                audioSource.PlayOneShot(getShieldSound);
+                
+                GameManager.instance.PlayShieldSound();
                 Debug.Log("Sound.");                
-                Debug.Log("AudioSource volume: " + audioSource.volume);
-                Debug.Log("AudioSource mute: " + audioSource.mute);    
-                }
+
+                
             }
             if (other.name == "Healpack(Clone)")
             {
-                if (audioSource != null && getHPSound != null)
-                {
-                audioSource.PlayOneShot(getHPSound);
+                
+                GameManager.instance.PlayHpSound();
                 Debug.Log("Sound.");                
-                }
+                
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
 

@@ -23,10 +23,25 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SelectScene/MapSelect.unity
     guid: 72e79c5e0ee21d64b9449000b8807b24
+  - enabled: 0
+    path: Assets/Scenes/MapScene/o/Desert_O.unity
+    guid: 3057035e937a71440a96faa017270d6c
+  - enabled: 0
+    path: Assets/Scenes/MapScene/o/Winter_O.unity
+    guid: f2c78711b09961c45afbcaf3ddfa9a7e
   - enabled: 1
     path: Assets/Scenes/MapScene/Desert.unity
-    guid: 3057035e937a71440a96faa017270d6c
+    guid: 2479792fe1a4b0b4fad484503b1a21f8
   - enabled: 1
     path: Assets/Scenes/MapScene/Winter.unity
-    guid: f2c78711b09961c45afbcaf3ddfa9a7e
+    guid: 37672d2784d4cb04c8f5536d4126805e
+  - enabled: 0
+    path: Assets/Scenes/MapScene/Kd/Desert_kd.unity
+    guid: 745674c0018c242479a77768835b475e
+  - enabled: 0
+    path: Assets/Scenes/MapScene/Kd/ForestScene_ld.unity
+    guid: 3e4c234ad1676d145af2b71ec20f701f
+  - enabled: 0
+    path: Assets/Scenes/MapScene/Kd/Winter_ld.unity
+    guid: 52c54582f5921bf44b9ed55e837b948d
   m_configObjects: {}

@@ -155,7 +155,7 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         else if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            
+            GameManager.instance.InitializeGameOverPanel();
             anim.SetTrigger("Death");
         }
     }
