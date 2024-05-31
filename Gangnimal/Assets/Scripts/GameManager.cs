@@ -50,10 +50,10 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         
-        if (gameOverPannel != null)
+        /*if (gameOverPannel != null)
         {
             gameOverPannel.SetActive(false);
-        }
+        }*/
         if (!isGameOver)
         {
             isGameOver = true;
