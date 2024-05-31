@@ -43095,8 +43095,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1520448881}
-  - component: {fileID: 1520448882}
   - component: {fileID: 1520448883}
+  - component: {fileID: 1520448884}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -43119,23 +43119,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1520448882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520448879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19cf5e487774c314f9f568f1fb06d41b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterPrefabs:
-  - {fileID: 4569815834679541765, guid: d2a6d1076cd624d4b89aecb9242fe14e, type: 3}
-  - {fileID: 7497273596272859595, guid: db63c7bf5f2bb9b45a00bd24bfd9fc56, type: 3}
-  - {fileID: 7232361903755489202, guid: 173026d6005bf7a4d917cfe6ad7e4bf1, type: 3}
-  spawnPoint: {fileID: 1024013777}
 --- !u!114 &1520448883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43155,6 +43138,23 @@ MonoBehaviour:
   - {fileID: 6855085915264888833, guid: f14877361c4702c49a1445e4a40f3735, type: 3}
   - {fileID: 4887737576511698750, guid: e602ed11c911e324db87a9546d054e83, type: 3}
   spawnNumber: 15
+--- !u!114 &1520448884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520448879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d92203dd5b5bd9a43b27cb834bf0a5cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterPrefabs:
+  - {fileID: 4569815834679541765, guid: d2a6d1076cd624d4b89aecb9242fe14e, type: 3}
+  - {fileID: 7497273596272859595, guid: db63c7bf5f2bb9b45a00bd24bfd9fc56, type: 3}
+  - {fileID: 7232361903755489202, guid: 173026d6005bf7a4d917cfe6ad7e4bf1, type: 3}
+  spawnPoint: {fileID: 1024013777}
 --- !u!1 &1520935883 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 9a904a45434ee2648b5c6cfcfc7ba3c4, type: 3}
