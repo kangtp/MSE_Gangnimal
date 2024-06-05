@@ -23,7 +23,7 @@ public class PowerGage : MonoBehaviour
     }
     void Start()
     {
-        powerSlider = GameObject.Find("Canvas").GetComponent<Slider>();
+        powerSlider = GameObject.Find("Canvas").transform.GetChild(0).GetComponent<Slider>();
     }
 
     IEnumerator WaitingForObject()
