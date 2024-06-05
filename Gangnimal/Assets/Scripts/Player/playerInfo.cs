@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.Netcode;
 using Unity.VisualScripting;
 
 
@@ -45,7 +46,7 @@ public class PlayerInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        firePosition = GameObject.Find("Fireposition");
+        firePosition = gameObject.transform.GetChild(0).gameObject;
         //StartCoroutine("awaitPowerGage");
     }
 
@@ -142,6 +143,7 @@ public class PlayerInfo : MonoBehaviour
 
     void DrawParabola()
     {
+        Debug.Log(NetworkManager.Singleton.LocalClientId);
         lineRenderer.enabled = true;
         Vector3[] points = new Vector3[numofDot];
         Vector3 startPosition = firePosition.transform.position;
