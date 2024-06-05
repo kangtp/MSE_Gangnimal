@@ -96,7 +96,7 @@ public class PlayerInfo : NetworkBehaviour
     }
 
 
-    void destroyWeapon()
+    void destroyWeapon(GameObject go)
     {
         if (weaponIndex != -1 && hasWeapons[weaponIndex])
         {
@@ -104,6 +104,11 @@ public class PlayerInfo : NetworkBehaviour
 
             hasWeapons[weaponIndex] = false;
             weapons[weaponIndex].SetActive(false);
+            Item item = go.GetComponent<Item>();
+            if(item != null)
+            {
+                item.RequestDespawnServerRpc();
+            }
         }
 
     }
@@ -121,7 +126,8 @@ public class PlayerInfo : NetworkBehaviour
 
             GameObject bomb = null;
 
-            if (weaponIndex != -1 && hasWeapons[weaponIndex]) bomb = Instantiate(bullets[weaponIndex]);
+            if (weaponIndex != -1 && hasWeapons[weaponIndex]) 
+                bomb = Instantiate(bullets[weaponIndex]);
 
             if (bomb != null)
             {
@@ -133,7 +139,7 @@ public class PlayerInfo : NetworkBehaviour
                 lineRenderer.enabled = false;
 
 
-                destroyWeapon();
+                destroyWeapon(bomb);
 
             }
             lineRenderer.enabled = false;
