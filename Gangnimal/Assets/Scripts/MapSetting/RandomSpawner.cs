@@ -16,6 +16,7 @@ public class RandomSpawner : MonoBehaviour
     // Update is called once per fram
     void SpawnItem()
     {
+        Debug.Log("host : " + NetworkManager.Singleton.IsServer);
         if (NetworkManager.Singleton.IsServer)
         {
             for (int i = 0; i < 5; i++)
@@ -24,7 +25,9 @@ public class RandomSpawner : MonoBehaviour
                 {
                     Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 30), 3, Random.Range(0, 50));
                     GameObject spawn = Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
-                    spawn.transform.SetParent(this.gameObject.transform);
+                    NetworkObject networkObject = spawn.GetComponent<NetworkObject>();
+                    networkObject.Spawn(true);
+                    //networkObject.transform.SetParent(this.gameObject.transform);
 
                 }
             }
