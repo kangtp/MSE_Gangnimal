@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class RandomSpawner : MonoBehaviour
 {
@@ -12,18 +13,20 @@ public class RandomSpawner : MonoBehaviour
         SpawnItem();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    // Update is called once per fram
     void SpawnItem()
     {
-        for(int i = 0; i < 5; i++)
+        if (NetworkManager.Singleton.IsServer)
         {
-            for (int j = 0; j < spawnNumber; j++) 
+            for (int i = 0; i < 5; i++)
             {
-                Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 30), 3, Random.Range(0, 50));
-                Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
+                for (int j = 0; j < spawnNumber; j++)
+                {
+                    Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 30), 3, Random.Range(0, 50));
+                    GameObject spawn = Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
+                    spawn.transform.SetParent(this.gameObject.transform);
+
+                }
             }
         }
     }
