@@ -93,7 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6029578914612100787}
   - component: {fileID: 4345370891297252800}
-  - component: {fileID: 4537860678512041699}
   m_Layer: 0
   m_Name: BombM
   m_TagString: Untagged
@@ -140,27 +139,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: d6d6a960df51c5446a739eb62d37348b, type: 3}
---- !u!114 &4537860678512041699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5879868982310121949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &6537982193071741001
 GameObject:
   m_ObjectHideFlags: 0
