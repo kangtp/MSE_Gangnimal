@@ -126,12 +126,17 @@ public class PlayerInfo : NetworkBehaviour
 
             GameObject bomb = null;
 
-            if (weaponIndex != -1 && hasWeapons[weaponIndex]) 
+            if (weaponIndex != -1 && hasWeapons[weaponIndex])
+            {
                 bomb = Instantiate(bullets[weaponIndex]);
+                NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
+                networkObject.Spawn(true);
+            }
+                
 
             if (bomb != null)
             {
-                //bomb.GetComponent<NetworkObject>().Spawn(true);
+                
                 bomb.transform.position = firePosition.transform.position;
                 Rigidbody rb = bomb.GetComponent<Rigidbody>();
                 Vector3 throwDirection = firePosition.transform.forward.normalized;
