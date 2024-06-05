@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 
-public class ThirdPersonMovement : NetworkBehaviour
+public class ThirdPersonMovement : MonoBehaviour
 {
     float turnTime = 0.1f;
     float turnVelocity;
-    Animator anim;
+    public Animator anim;
     bool sprinting;
     CharacterController controller;
     Vector2 movement;
@@ -25,29 +25,15 @@ public class ThirdPersonMovement : NetworkBehaviour
 
     private bool isDead = false;
 
+
     private void Awake()
     {
         truespeed = walkSpeed;
         controller = GetComponent<CharacterController>();
-        anim = GetComponentInChildren<Animator>();
+        //anim = GetComponentInChildren<Animator>();
         playerInfo = GetComponentInChildren<PlayerInfo>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        Camera mainCamera = Camera.main;
-        Transform cam;
-        if (mainCamera != null)
-        {
-            cam = mainCamera.transform;
-            //StopCoroutine(awaitFindCamera());
-        }
-        else
-        {
-            Debug.Log("메인 카메라를 찾을 수 없습니다!");
-        }
-
-        // 메인 카메라 찾기
-        //StartCoroutine(awaitFindCamera());
     }
 
     private IEnumerator awaitFindCamera()

@@ -46,22 +46,25 @@ public class PlayerInfo : MonoBehaviour
     private void Start()
     {
         firePosition = GameObject.Find("Fireposition");
-        StartCoroutine(awaitPowerGage());
+        //StartCoroutine("awaitPowerGage");
     }
 
     private IEnumerator awaitPowerGage()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.1f);
-            powerGage = GameObject.Find("PowerGageManage").GetComponent<PowerGage>();
-            if (powerGage == null)
+            yield return new WaitForSeconds(1.0f);
+            if (GameObject.Find("PowerGageManage").GetComponent<PowerGage>() != null)
             {
-                Debug.Log("powergage is no");
-            }
-            else
-            {
-                StopCoroutine(awaitPowerGage());
+                powerGage = GameObject.Find("PowerGageManage").GetComponent<PowerGage>();
+                if (powerGage == null)
+                {
+                    Debug.Log("powergage is no");
+                }
+                else
+                {
+                    StopCoroutine("awaitPowerGage");
+                }
             }
         }
     }

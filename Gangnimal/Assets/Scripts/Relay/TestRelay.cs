@@ -14,15 +14,17 @@ using TMPro;
 
 public class TestRelay : MonoBehaviour
 {
-
+    [SerializeField]
     public GameObject[] turnOnobj;
     public TMP_InputField codeinput;
 
-    public static TestRelay Instance {get; private set;}
-    string code;
+    public static TestRelay Instance { get; private set; }
+    bool condition;
 
-    private void Awake() {
+    private void Awake()
+    {
         Instance = this;
+        condition = false;
     }
 
     public void JointheRelay()
@@ -33,7 +35,7 @@ public class TestRelay : MonoBehaviour
 
     private async void Start()
     {
-        
+
         await UnityServices.InitializeAsync();
 
         AuthenticationService.Instance.SignedIn += () =>
@@ -45,13 +47,21 @@ public class TestRelay : MonoBehaviour
 
     }
 
-
-    private void turnOn()
+    IEnumerator turnOn()
     {
-        foreach (GameObject item in turnOnobj)
+        yield return new WaitForSeconds(4.0f);
+        while (true)
         {
-            Debug.Log(item.ToString());
-            item.SetActive(true);
+            if (condition)
+            {
+                yield return new WaitForSeconds(0.1f);
+                foreach (GameObject item in turnOnobj)
+                {
+                    Debug.Log(item.ToString());
+                    item.SetActive(true);
+                }
+                StopCoroutine("turnOn");
+            }
         }
     }
 
@@ -63,51 +73,49 @@ public class TestRelay : MonoBehaviour
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
-            Debug.Log("joincode= "+joinCode);
-
-            code = joinCode;
+            Debug.Log("joincode= " + joinCode);
 
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-            turnOn(); // 플레이어를 생성하기전에 몇개 오브젝트에서 awake, start에서 바로 플레이어를 찾아야되서 delay를 줘야된다.
-            NetworkManager.Singleton.StartHost();
 
+            condition = NetworkManager.Singleton.StartHost();
+            StartCoroutine("turnOn"); // 플레이어를 생성하기전에 몇개 오브젝트에서 awake, start에서 바로 플레이어를 찾아야되서 delay를 줘야된다.
         }
         catch (RelayServiceException e)
         {
             Debug.Log(e);
         }
-        
+
     }
 
-/*
-    public async Task<string> CreateRelay()
-    {
-        try
+    /*
+        public async Task<string> CreateRelay()
         {
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(3);
+            try
+            {
+                Allocation allocation = await RelayService.Instance.CreateAllocationAsync(3);
 
-            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+                string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
-            Debug.Log(joinCode);
+                Debug.Log(joinCode);
 
-            RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
+                RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-            NetworkManager.Singleton.StartHost();
+                NetworkManager.Singleton.StartHost();
 
-            return joinCode;
+                return joinCode;
+            }
+            catch (RelayServiceException e)
+            {
+                Debug.Log(e);
+                return null;
+            }
         }
-        catch (RelayServiceException e)
-        {
-            Debug.Log(e);
-            return null;
-        }
-    }
-    */
+        */
 
     public async void JoinRelay(string joinCode)
     {
@@ -120,8 +128,8 @@ public class TestRelay : MonoBehaviour
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-            turnOn();
-            NetworkManager.Singleton.StartClient();
+            condition = NetworkManager.Singleton.StartClient();
+            StartCoroutine("turnOn");
 
         }
         catch (RelayServiceException e)
