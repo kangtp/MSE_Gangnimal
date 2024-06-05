@@ -131,7 +131,7 @@ public class PlayerInfo : NetworkBehaviour
 
             if (bomb != null)
             {
-                bomb.GetComponent<NetworkObject>().Spawn(true);
+                //bomb.GetComponent<NetworkObject>().Spawn(true);
                 bomb.transform.position = firePosition.transform.position;
                 Rigidbody rb = bomb.GetComponent<Rigidbody>();
                 Vector3 throwDirection = firePosition.transform.forward.normalized;
