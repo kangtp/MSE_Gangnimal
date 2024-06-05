@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2560337395920077112}
   - component: {fileID: 3643803970285641021}
   - component: {fileID: 7916336513554770101}
+  - component: {fileID: 6570313076693846006}
   m_Layer: 0
   m_Name: StoneB
   m_TagString: Bullet
@@ -165,3 +166,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 6316753914491094277, guid: d47bbea38ebd25648b24b00702d1fc82, type: 3}
   damageAmount: 10
+--- !u!114 &6570313076693846006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533925628434848813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
