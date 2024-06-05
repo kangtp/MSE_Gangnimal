@@ -243,6 +243,7 @@ public class PlayerInfo : NetworkBehaviour
 
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
+                //weapons[weaponIndex].GetComponent<NetworkObject>().Spawn(true);
 
                 //nearObject.GetComponent<NetworkObject>().Despawn(true);
                 //Destroy(nearObject);
