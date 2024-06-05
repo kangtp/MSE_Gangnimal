@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4511152981628570647}
   - component: {fileID: 178854161767077446}
   - component: {fileID: 8243003044357797687}
+  - component: {fileID: 5921839523165547036}
   m_Layer: 0
   m_Name: Branch
   m_TagString: Weapon
@@ -172,3 +173,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.58
   m_Center: {x: -0.007118225, y: 0.0049462835, z: 0.01702135}
+--- !u!114 &5921839523165547036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3858310578583261179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3820857830
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4555794336796494251}
   - component: {fileID: 8852250536283955379}
   - component: {fileID: 5858125200160753351}
+  - component: {fileID: 8431271714153496333}
   m_Layer: 0
   m_Name: Healpack
   m_TagString: Item
@@ -155,3 +156,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.86
   m_Center: {x: -0.0068259835, y: 0.1600316, z: 0.0025842488}
+--- !u!114 &8431271714153496333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855085915264888833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1440840231
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

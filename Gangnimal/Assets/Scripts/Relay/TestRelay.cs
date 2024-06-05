@@ -21,10 +21,13 @@ public class TestRelay : MonoBehaviour
     public static TestRelay Instance { get; private set; }
     bool condition;
 
+    public bool canSpawn;
+
     private void Awake()
     {
         Instance = this;
         condition = false;
+        canSpawn = false;
     }
 
     public void JointheRelay()
@@ -130,6 +133,7 @@ public class TestRelay : MonoBehaviour
 
             condition = NetworkManager.Singleton.StartClient();
             StartCoroutine("turnOn");
+            canSpawn = true;
 
         }
         catch (RelayServiceException e)
