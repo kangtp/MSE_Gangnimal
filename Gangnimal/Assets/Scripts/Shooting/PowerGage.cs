@@ -34,7 +34,7 @@ public class PowerGage : MonoBehaviour
             if(NetworkManager.Singleton.LocalClient.PlayerObject != null)
             {
                 player = NetworkManager.Singleton.LocalClient.PlayerObject;
-                fire = player.transform.GetChild(2).GetComponent<Transform>();
+                fire = player.transform.GetChild(0).GetComponent<Transform>();
                 StopCoroutine("WaitingForObject");
             }
         }

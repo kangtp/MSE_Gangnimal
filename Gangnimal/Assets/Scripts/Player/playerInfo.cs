@@ -6,7 +6,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 
 
-public class PlayerInfo : MonoBehaviour
+public class PlayerInfo : NetworkBehaviour
 {
     public int HP = 100;
     public float movingTime = 10.0f;
@@ -46,7 +46,8 @@ public class PlayerInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        firePosition = gameObject.transform.GetChild(0).gameObject;
+        Debug.Log("sival : " + gameObject.transform.GetChild(0).gameObject.name);
+        firePosition =  NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
         //StartCoroutine("awaitPowerGage");
     }
 
