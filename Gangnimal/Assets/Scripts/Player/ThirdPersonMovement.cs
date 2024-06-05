@@ -2,8 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine.Networking;
 
-public class ThirdPersonMovement : MonoBehaviour
+public class ThirdPersonMovement : NetworkBehaviour
 {
     float turnTime = 0.1f;
     float turnVelocity;
@@ -55,7 +56,7 @@ public class ThirdPersonMovement : MonoBehaviour
             }
         }
 
-        if (playerInfo.HP > 0)
+        if (playerInfo.HP > 0 && IsLocalPlayer)
         {
             PlayerMove3rd();
         }
