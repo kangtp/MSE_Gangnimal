@@ -48,7 +48,7 @@ public class PlayerInfo : NetworkBehaviour
     {
         Debug.Log("sival : " + gameObject.transform.GetChild(0).gameObject.name);
         firePosition =  NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
-        //StartCoroutine("awaitPowerGage");
+        StartCoroutine("awaitPowerGage");
     }
 
     private IEnumerator awaitPowerGage()
@@ -56,9 +56,9 @@ public class PlayerInfo : NetworkBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
-            if (GameObject.Find("PowerGageManage").GetComponent<PowerGage>() != null)
+            if (GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>() != null)
             {
-                powerGage = GameObject.Find("PowerGageManage").GetComponent<PowerGage>();
+                powerGage = GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>();
                 if (powerGage == null)
                 {
                     Debug.Log("powergage is no");
@@ -125,6 +125,7 @@ public class PlayerInfo : NetworkBehaviour
 
             if (bomb != null)
             {
+                bomb.GetComponent<NetworkObject>().Spawn(true);
                 bomb.transform.position = firePosition.transform.position;
                 Rigidbody rb = bomb.GetComponent<Rigidbody>();
                 Vector3 throwDirection = firePosition.transform.forward.normalized;
@@ -144,7 +145,7 @@ public class PlayerInfo : NetworkBehaviour
 
     void DrawParabola()
     {
-        Debug.Log(NetworkManager.Singleton.LocalClientId);
+        //Debug.Log(NetworkManager.Singleton.LocalClientId);
         lineRenderer.enabled = true;
         Vector3[] points = new Vector3[numofDot];
         Vector3 startPosition = firePosition.transform.position;
@@ -223,6 +224,10 @@ public class PlayerInfo : NetworkBehaviour
             if (nearObject.tag == "Weapon")
             {
                 Item item = nearObject.GetComponent<Item>();
+                if(item != null)
+                {
+                    item.RequestDespawnServerRpc();
+                }
                 weaponIndex = item.value;
 
 
@@ -239,7 +244,8 @@ public class PlayerInfo : NetworkBehaviour
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
 
-                Destroy(nearObject);
+                //nearObject.GetComponent<NetworkObject>().Despawn(true);
+                //Destroy(nearObject);
             }
         }
     }
@@ -249,4 +255,6 @@ public class PlayerInfo : NetworkBehaviour
         //Debug.Log("MySecondCoroutine;" + t);
         yield return new WaitForSeconds(t);
     }
+
+    
 }
