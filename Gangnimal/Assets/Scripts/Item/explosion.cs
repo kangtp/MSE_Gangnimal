@@ -44,10 +44,6 @@ public class explosion : MonoBehaviour
     // 충돌이 발생했을 때 호출되는 메서드
     private void OnCollisionEnter(Collision collision)
     { 
-        if (!audioSource.isActiveAndEnabled)
-        {
-            audioSource.enabled = true;
-        }
         
         //자신에 닿아서 터지는 경우 방지
         WaitCoroutine(1.0f);
@@ -59,7 +55,7 @@ public class explosion : MonoBehaviour
             GameManager.instance.PlayExplosionSound();
 
             PlayDestructionEffect();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
 
         }
         else if (collision.gameObject.CompareTag("Player"))
@@ -71,8 +67,7 @@ public class explosion : MonoBehaviour
 
             PlayDestructionEffect();
 
-            // 자신을 삭제
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -81,8 +76,8 @@ public class explosion : MonoBehaviour
         if (explosionEffect != null)
         {
             GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
+            Destroy(effect,2.0f);
             
-            Destroy(effect, 2.0f); // 2초 후에 파괴 효과 삭제
         }
     }
 

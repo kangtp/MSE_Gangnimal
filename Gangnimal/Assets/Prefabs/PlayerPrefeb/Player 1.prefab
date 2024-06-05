@@ -178,7 +178,7 @@ CharacterController:
   m_Height: 1.83
   m_Radius: 0.31
   m_SlopeLimit: 45
-  m_StepOffset: 0.01
+  m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.95, z: 0}
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da86ebb20292844b8a32c1979ac8ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 100
+  HP: 50
   movingTime: 10
   myTurn: 1
   weapons:

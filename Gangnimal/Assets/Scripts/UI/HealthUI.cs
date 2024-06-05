@@ -22,7 +22,6 @@ public class HealthUI : MonoBehaviour
     {   
         if(playerinfo != null && playerinfo.HP >= 0){
             healthText.text = Mathf.Round(playerinfo.HP).ToString();
-
         }
     }
 }

@@ -10,18 +10,16 @@ public class PlayerInfo : MonoBehaviour
     public int HP = 100;
     public float movingTime = 10.0f;
     public bool myTurn = true;
+    
 
     public GameObject[] weapons;
     public bool[] hasWeapons;
     public GameObject[] bullets;
-    //public static PlayerInfo instance;
-    PowerGage powerGage;
-
-
-    //public gameObject myWeapon;
-
+    public float changeDelay=2f;
     public bool haveShield = false;
-
+    PowerGage powerGage;
+    
+    bool detect;
     bool iDown;
     int weaponIndex = -1;
 
@@ -42,11 +40,6 @@ public class PlayerInfo : MonoBehaviour
     public float throwPower;
 
 
-    //sound
-    private AudioSource audioSource;
-    private AudioClip getHPSound;
-    private AudioClip getShieldSound;
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -56,13 +49,6 @@ public class PlayerInfo : MonoBehaviour
         {
             Debug.LogError("powergage is no");
         }
-        audioSource = gameObject.AddComponent<AudioSource>();
-
-        if (audioSource == null)
-        {
-            Debug.LogError("AudioSource component is missing on this game object.");
-        }
-        //SoundSetting();
     }
 
     // Update is called once per frame
@@ -73,42 +59,15 @@ public class PlayerInfo : MonoBehaviour
         ShootingBullet();
     }
 
-    /*void SoundSetting(){
-        getHPSound = Resources.Load<AudioClip>("SoundEffect/Heal");
-
-        if (getHPSound == null)
-        {
-            Debug.LogError("Failed to load sound effect from Resources.");
-            return;
-        }
-        getShieldSound = Resources.Load<AudioClip>("SoundEffect/getShield");
-
-        if (getShieldSound == null)
-        {
-            Debug.LogError("Failed to load sound effect from Resources.");
-            return;
-        }
-
-    }
-    */
-
-
-    //�߻� �� ���� ����
+    
     public void TakeDamage(int damage)
     {
         HP -= damage;
         Debug.Log("HP is : " + HP);
-        if (HP <= 0)
-        {
-            HP = 0;
-            Die();
-        }
+        
     }
 
-    void Die()
-    {
-        Debug.Log("Player has died.");
-    }
+    
 
 
     void destroyWeapon()
@@ -128,7 +87,19 @@ public class PlayerInfo : MonoBehaviour
         
         if(Input.GetMouseButton(0))
         {
-            DrawParabola();
+            if(detect)
+            {
+                lineRenderer.startColor =Color.red;
+                lineRenderer.endColor =Color.red;
+                DrawParabola();
+            }
+            else
+            {
+                lineRenderer.startColor =Color.blue;
+                lineRenderer.endColor =Color.blue;
+                DrawParabola();
+            }
+           
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -145,8 +116,6 @@ public class PlayerInfo : MonoBehaviour
                 Vector3 throwDirection = firePosition.transform.forward.normalized;
                 rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
                 lineRenderer.enabled = false;
-
-
                 destroyWeapon();
 
             }
@@ -159,24 +128,40 @@ public class PlayerInfo : MonoBehaviour
 
     void DrawParabola()
     {
+        detect=false;
         lineRenderer.enabled = true;
         Vector3[] points = new Vector3[numofDot];
         Vector3 startPosition = firePosition.transform.position;
         Vector3 startVelocity = throwPower * firePosition.transform.forward;
-
-
+        
         float timeInterval = maxTime / numofDot;
+       
+
         for (int i = 0; i < numofDot; i++)
         {
             float t = i * timeInterval;
             points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
+
+            // 레이쏴서 플레이어 인식하면!
+            if (Physics.Raycast(points[i], Vector3.forward, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Player")))
+            {
+                detect =true;
+                Debug.Log("충돌한 물체: " + hit.collider.name);
+                
+                points[i] = hit.point;
+                lineRenderer.positionCount = i + 1;
+                lineRenderer.SetPositions(points);
+                break;
+                
+            }
+            lineRenderer.positionCount = numofDot;
+            lineRenderer.SetPositions(points);
+            
         }
 
-
-        lineRenderer.positionCount = numofDot;
-        lineRenderer.SetPositions(points);
-
+    
     }
+    
 
 
 
@@ -189,23 +174,13 @@ public class PlayerInfo : MonoBehaviour
             if (other.name == "Shield(Clone)")
             {
                 haveShield = true;
-                
-                GameManager.instance.PlayShieldSound();
-                Debug.Log("Sound.");                
-
-                
             }
             if (other.name == "Healpack(Clone)")
             {
-                
-                GameManager.instance.PlayHpSound();
-                Debug.Log("Sound.");                
-                
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
-
             }
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
 
         }
 
@@ -262,7 +237,7 @@ public class PlayerInfo : MonoBehaviour
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
 
-                Destroy(nearObject);
+                nearObject.SetActive(false);
             }
         }
     }
