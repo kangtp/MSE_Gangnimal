@@ -6,7 +6,7 @@ using UnityEngine;
 public class SelectCharacter : MonoBehaviour
 {
     private List<GameObject> models;
-    private int select_index=0;
+    private int select_index;
     
     // Start is called before the first frame update
     void Awake()
@@ -15,7 +15,8 @@ public class SelectCharacter : MonoBehaviour
     }
     void Start()
     {
-        
+        select_index=0;
+        PlayerPrefs.SetInt("SelectedCharacterIndex", select_index);
         models =new List<GameObject>();
         foreach(Transform t in transform)
         {
@@ -37,9 +38,10 @@ public class SelectCharacter : MonoBehaviour
         models[select_index].SetActive(false);
         select_index=index;
         models[select_index].SetActive(true);
-        GameManager.instance.PlayCharacterSound(select_index);
         PlayerPrefs.SetInt("SelectedCharacterIndex", select_index);
+        GameManager.instance.PlayCharacterSound(select_index);
         PlayerPrefs.Save();
+        Debug.Log("맵선택창");
     }
 
     // Update is called once per frame

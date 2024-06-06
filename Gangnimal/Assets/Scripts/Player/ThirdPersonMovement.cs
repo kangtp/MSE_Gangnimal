@@ -49,9 +49,9 @@ public class ThirdPersonMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             playerInfo.HP -= 100;
-            if (playerInfo.HP <= 0 && !isDead)
+            if (playerInfo.HP <= 0 && isDead)
             {
-                isDead = true;
+                
                 anim.SetTrigger("Death");
                 GameManager.instance.GameOver(); 
             }
@@ -145,18 +145,12 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void WhenDead()
     {
-        if (!isGrounded)
+       
+        if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            if (velocity.y > -20)
-            {
-                velocity.y += (gravity * 10) * Time.deltaTime;
-            }
-            controller.Move(velocity * Time.deltaTime);
-        }
-        else if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-        {
-            GameManager.instance.InitializeGameOverPanel();
             anim.SetTrigger("Death");
+            GameManager.instance.GameOver();
+            Debug.Log("게임오버패널 켜져야지!");
         }
     }
 

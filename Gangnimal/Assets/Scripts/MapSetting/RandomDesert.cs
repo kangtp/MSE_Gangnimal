@@ -23,7 +23,8 @@ public class RandomDesert : MonoBehaviour
             for (int j = 0; j < spawnNumber; j++) 
             {
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(-80, -10), 7, Random.Range(0, 40));
-                Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
+                GameObject spawnObject =Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
+                spawnObject.transform.SetParent(gameObject.transform);
             }
         }
     }
