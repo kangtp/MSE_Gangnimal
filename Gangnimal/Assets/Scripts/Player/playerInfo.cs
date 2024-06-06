@@ -15,6 +15,7 @@ public class PlayerInfo : NetworkBehaviour
     public GameObject[] weapons;
     public bool[] hasWeapons;
     public GameObject[] bullets;
+    private GameObject bullet;
     //public static PlayerInfo instance;
     PowerGage powerGage;
 
@@ -116,37 +117,47 @@ public class PlayerInfo : NetworkBehaviour
     void ShootingBullet()
     {
 
+        if (!IsLocalPlayer)
+        {
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             DrawParabola();
+            
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && IsOwner)
         {
 
-            GameObject bomb = null;
+            //GameObject bomb = null;
 
             if (weaponIndex != -1 && hasWeapons[weaponIndex])
             {
-                bomb = Instantiate(bullets[weaponIndex]);
-                NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
-                networkObject.Spawn(true);
+                //bomb = Instantiate(bullets[weaponIndex]);
+                //Debug.Log(firePosition.transform.position);
+                //NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
+                //networkObject.Spawn(true);
+                bullet = bullets[weaponIndex];
+                SpawnBulletServerRpc();
             }
+
+            //if (bomb != null)
+            //{
                 
+            //    bomb.transform.position = firePosition.transform.position;
+            //    Rigidbody rb = bomb.GetComponent<Rigidbody>();
+            //    Vector3 throwDirection = firePosition.transform.forward.normalized;
+            //    //rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+            //    bomb.GetComponent<Item>().AddForceServerRpc(throwDirection * throwPower * powerGage.powerValue);
 
-            if (bomb != null)
-            {
-                
-                bomb.transform.position = firePosition.transform.position;
-                Rigidbody rb = bomb.GetComponent<Rigidbody>();
-                Vector3 throwDirection = firePosition.transform.forward.normalized;
-                rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-                lineRenderer.enabled = false;
+            //    lineRenderer.enabled = false;
 
 
-                destroyWeapon(bomb);
+                //destroyWeapon(bullet);
 
-            }
+            //}
             lineRenderer.enabled = false;
 
         }
@@ -230,6 +241,10 @@ public class PlayerInfo : NetworkBehaviour
 
     void Interaction()
     {
+        if (!IsLocalPlayer)
+        {
+            return;
+        }
         if (iDown && nearObject != null)
         {
             if (nearObject.tag == "Weapon")
@@ -268,5 +283,14 @@ public class PlayerInfo : NetworkBehaviour
         yield return new WaitForSeconds(t);
     }
 
+    [ServerRpc]
+    private void SpawnBulletServerRpc()
+    {
+        GameObject InstantiatedBullet = Instantiate(bullet, firePosition.transform.position, Quaternion.identity);
+        InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
+        Vector3 throwDirection = firePosition.transform.forward.normalized;
+        InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+        
+    }
     
 }

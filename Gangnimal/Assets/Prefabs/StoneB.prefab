@@ -16,7 +16,8 @@ GameObject:
   - component: {fileID: 2560337395920077112}
   - component: {fileID: 3643803970285641021}
   - component: {fileID: 7916336513554770101}
-  - component: {fileID: 7714719941376537603}
+  - component: {fileID: -4926264310541013860}
+  - component: {fileID: 5252428432170619464}
   m_Layer: 0
   m_Name: StoneB
   m_TagString: Bullet
@@ -188,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 6316753914491094277, guid: d47bbea38ebd25648b24b00702d1fc82, type: 3}
   damageAmount: 10
---- !u!114 &7714719941376537603
+--- !u!114 &-4926264310541013860
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,7 +198,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1533925628434848813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnreliableDeltas: 0
@@ -219,3 +220,15 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &5252428432170619464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533925628434848813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

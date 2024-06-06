@@ -16,8 +16,9 @@ GameObject:
   - component: {fileID: 8117973654554337584}
   - component: {fileID: 4372463169275874113}
   - component: {fileID: 5143857799394023552}
-  - component: {fileID: -4327488571801786315}
-  m_Layer: 6
+  - component: {fileID: -5313682526185933140}
+  - component: {fileID: -4790094194287951341}
+  m_Layer: 0
   m_Name: BranchB
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -188,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 6316753914491094277, guid: d47bbea38ebd25648b24b00702d1fc82, type: 3}
   damageAmount: 5
---- !u!114 &-4327488571801786315
+--- !u!114 &-5313682526185933140
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,7 +198,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5104423808313205056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnreliableDeltas: 0
@@ -219,3 +220,15 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-4790094194287951341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5104423808313205056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
