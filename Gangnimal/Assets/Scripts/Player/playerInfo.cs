@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Networking;
 using Unity.VisualScripting;
 
 
@@ -50,6 +51,7 @@ public class PlayerInfo : NetworkBehaviour
         Debug.Log("sival : " + gameObject.transform.GetChild(0).gameObject.name);
         firePosition =  NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
         StartCoroutine("awaitPowerGage");
+        
     }
 
     private IEnumerator awaitPowerGage()
@@ -75,6 +77,7 @@ public class PlayerInfo : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!IsOwner) {return;}
         GetInput();
         Interaction();
         ShootingBullet();
@@ -105,6 +108,8 @@ public class PlayerInfo : NetworkBehaviour
 
             hasWeapons[weaponIndex] = false;
             weapons[weaponIndex].SetActive(false);
+            if(IsServer) {RequestNotVisibleItemClientRpc(weaponIndex);}
+            if(!IsServer) {RequestNotVisibleItemServerRpc(weaponIndex);}
             Item item = go.GetComponent<Item>();
             if(item != null)
             {
@@ -255,32 +260,31 @@ public class PlayerInfo : NetworkBehaviour
                     item.RequestDespawnServerRpc();
                 }
                 weaponIndex = item.value;
-
+                
 
                 for (int i = 0; i < 3; i++)
                 {
                     if (hasWeapons[i])
                     {
                         hasWeapons[i] = false;
-                        weapons[i].SetActive(false);
+                        weapons[weaponIndex].SetActive(false);
                     }
-
                 }
+                Debug.Log("where is my mind : " + IsServer);
 
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
-                //weapons[weaponIndex].GetComponent<NetworkObject>().Spawn(true);
 
-                //nearObject.GetComponent<NetworkObject>().Despawn(true);
-                //Destroy(nearObject);
+                if(IsServer) {RequestVisibleItemClientRpc(weaponIndex);}
+                if(!IsServer) {RequestVisibleItemServerRpc(weaponIndex);}
             }
         }
     }
 
-    IEnumerator WaitCoroutine(float t)
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestVisibleItemServerRpc(int value)
     {
-        //Debug.Log("MySecondCoroutine;" + t);
-        yield return new WaitForSeconds(t);
+        weapons[value].SetActive(true);
     }
 
     [ServerRpc]
@@ -293,4 +297,21 @@ public class PlayerInfo : NetworkBehaviour
         
     }
     
+    [ClientRpc(RequireOwnership = false)]
+    public void RequestVisibleItemClientRpc(int value)
+    {
+        weapons[value].SetActive(true);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestNotVisibleItemServerRpc(int value)
+    {
+        weapons[value].SetActive(false);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void RequestNotVisibleItemClientRpc(int value)
+    {
+        weapons[value].SetActive(false);
+    }
 }

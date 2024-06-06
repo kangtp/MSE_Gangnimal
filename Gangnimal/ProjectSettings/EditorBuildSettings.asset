@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: aff078db07bbe4f5e836e9fbda5145ac
+  - enabled: 1
     path: Assets/Scenes/MapScene/ForestScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
@@ -14,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: ed1055897eee1d146817b4b7c54a0f2f
-  - enabled: 1
-    path: Assets/Scenes/Lobby.unity
-    guid: aff078db07bbe4f5e836e9fbda5145ac
   - enabled: 1
     path: Assets/Scenes/SelectScene/CharacterSelect.unity
     guid: d659f89c90b47c4469d7cce37a6e737e
