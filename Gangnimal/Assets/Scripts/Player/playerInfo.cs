@@ -16,7 +16,7 @@ public class PlayerInfo : NetworkBehaviour
     public GameObject[] weapons;
     public bool[] hasWeapons;
     public GameObject[] bullets;
-    private GameObject bullet;
+    //private GameObject bullet;
     //public static PlayerInfo instance;
     PowerGage powerGage;
 
@@ -100,7 +100,7 @@ public class PlayerInfo : NetworkBehaviour
     }
 
 
-    void destroyWeapon(GameObject go)
+    void destroyWeapon(int weaponIndex)
     {
         if (weaponIndex != -1 && hasWeapons[weaponIndex])
         {
@@ -110,11 +110,11 @@ public class PlayerInfo : NetworkBehaviour
             weapons[weaponIndex].SetActive(false);
             if(IsServer) {RequestNotVisibleItemClientRpc(weaponIndex);}
             if(!IsServer) {RequestNotVisibleItemServerRpc(weaponIndex);}
-            Item item = go.GetComponent<Item>();
-            if(item != null)
-            {
-                item.RequestDespawnServerRpc();
-            }
+            //Item item = go.GetComponent<Item>();
+            //if(item != null)
+            //{
+            //    item.RequestDespawnServerRpc();
+            //}
         }
 
     }
@@ -133,9 +133,9 @@ public class PlayerInfo : NetworkBehaviour
             
         }
 
-        if (Input.GetMouseButtonUp(0) && IsOwner)
+        if (Input.GetMouseButtonUp(0) && IsLocalPlayer)
         {
-
+            
             //GameObject bomb = null;
 
             if (weaponIndex != -1 && hasWeapons[weaponIndex])
@@ -144,8 +144,8 @@ public class PlayerInfo : NetworkBehaviour
                 //Debug.Log(firePosition.transform.position);
                 //NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
                 //networkObject.Spawn(true);
-                bullet = bullets[weaponIndex];
-                SpawnBulletServerRpc();
+               
+                SpawnBulletServerRpc(weaponIndex);
             }
 
             //if (bomb != null)
@@ -160,7 +160,7 @@ public class PlayerInfo : NetworkBehaviour
             //    lineRenderer.enabled = false;
 
 
-                //destroyWeapon(bullet);
+                destroyWeapon(weaponIndex);
 
             //}
             lineRenderer.enabled = false;
@@ -288,15 +288,29 @@ public class PlayerInfo : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SpawnBulletServerRpc()
+    private void SpawnBulletServerRpc(int index)
     {
-        GameObject InstantiatedBullet = Instantiate(bullet, firePosition.transform.position, Quaternion.identity);
+        if (IsOwner)
+        {
+            GameObject InstantiatedBullet = Instantiate(bullets[index], firePosition.transform.position, Quaternion.identity);
+            InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
+            Vector3 throwDirection = firePosition.transform.forward.normalized;
+            InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+            //SpawnBulletClientRpc();
+        }
+        
+    }
+
+    [ClientRpc]
+    private void SpawnBulletClientRpc(int index)
+    {
+        GameObject InstantiatedBullet = Instantiate(bullets[index], firePosition.transform.position, Quaternion.identity);
         InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
         Vector3 throwDirection = firePosition.transform.forward.normalized;
         InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-        
+
     }
-    
+
     [ClientRpc(RequireOwnership = false)]
     public void RequestVisibleItemClientRpc(int value)
     {
