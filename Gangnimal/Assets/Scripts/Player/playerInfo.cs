@@ -173,10 +173,12 @@ public class PlayerInfo : MonoBehaviour
         {
             if (other.name == "Shield(Clone)")
             {
+                GameManager.instance.PlayShieldSound();
                 haveShield = true;
             }
             if (other.name == "Healpack(Clone)")
             {
+                GameManager.instance.PlayHpSound();
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
             }

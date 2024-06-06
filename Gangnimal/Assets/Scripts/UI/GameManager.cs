@@ -12,7 +12,10 @@ public class GameManager : MonoBehaviour
     public AudioClip deathSound;
     public AudioClip getHPSound;
     public AudioClip getShieldSound;
-    public AudioClip explosionSound;
+    public AudioClip explosionSound1;
+    public AudioClip explosionSound2;
+    public AudioClip explosionSound3;
+
     public AudioClip[] characterSounds; // 캐릭터 사운드 배열
     [HideInInspector] public AudioSource audioSource;
 
@@ -88,9 +91,17 @@ public class GameManager : MonoBehaviour
     {
         audioSource.PlayOneShot(getShieldSound);
     }
-    public void PlayExplosionSound()
+    public void PlayExplosionSound1()
     {
-         audioSource.PlayOneShot(explosionSound);
+        audioSource.PlayOneShot(explosionSound1);
+    }
+    public void PlayExplosionSound2()
+    {
+        audioSource.PlayOneShot(explosionSound2);
+    }
+    public void PlayExplosionSound3()
+    {
+        audioSource.PlayOneShot(explosionSound3);
     }
     public void PlayHpSound()
     {

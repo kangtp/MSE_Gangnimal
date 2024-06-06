@@ -51,8 +51,18 @@ public class explosion : MonoBehaviour
         // 충돌한 오브젝트의 태그가 "Map"인지 확인
         if (collision.gameObject.CompareTag("Ground"))
         {
-            
-            GameManager.instance.PlayExplosionSound();
+
+            if (gameObject.name == "BranchB")
+            {
+                GameManager.instance.PlayExplosionSound3();
+            }
+            else if(gameObject.name == "StoneB"){
+                GameManager.instance.PlayExplosionSound2();
+            }
+            else if(gameObject.name == "BombB"){
+                GameManager.instance.PlayExplosionSound1();
+            }
+            GameManager.instance.PlayExplosionSound1();
 
             PlayDestructionEffect();
             gameObject.SetActive(false);
@@ -61,7 +71,16 @@ public class explosion : MonoBehaviour
         else if (collision.gameObject.CompareTag("Player"))
         {
             
-            GameManager.instance.PlayExplosionSound();
+            if (gameObject.name == "BranchB")
+            {
+                GameManager.instance.PlayExplosionSound3();
+            }
+            else if(gameObject.name == "StoneB"){
+                GameManager.instance.PlayExplosionSound2();
+            }
+            else if(gameObject.name == "BombB"){
+                GameManager.instance.PlayExplosionSound1();
+            }
             
             ApplyDamageToPlayer(collision.gameObject);
 
@@ -69,6 +88,17 @@ public class explosion : MonoBehaviour
 
             gameObject.SetActive(false);
         }
+/*
+        if (gameObject.name == "BranchB")
+        {
+            GameManager.instance.PlayExplosionSound3();
+        }
+        else if(gameObject.name == "StoneB"){
+            GameManager.instance.PlayExplosionSound2();
+        }
+        else if(gameObject.name == "BombB"){
+            GameManager.instance.PlayExplosionSound1();
+        }*/
     }
 
     private void PlayDestructionEffect()
