@@ -23,24 +23,4 @@ public class Item : NetworkBehaviour
         NetworkObject.Despawn(true);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void AddForceServerRPC(Vector3 force)
-    {
-        if(rb == null)
-        {
-            rb = GetComponent<Rigidbody>();
-        }
-        rb.AddForce(force , ForceMode.Impulse);
-        AddForceClientRPC(force);
-    }
-
-    [ClientRpc]
-    private void AddForceClientRPC(Vector3 force)
-    {
-        if (rb == null)
-        {
-            rb = GetComponent<Rigidbody>();
-        }
-        rb.AddForce(force, ForceMode.Impulse);
-    }
 }
