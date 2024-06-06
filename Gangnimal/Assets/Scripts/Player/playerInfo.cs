@@ -144,8 +144,7 @@ public class PlayerInfo : NetworkBehaviour
                 //Debug.Log(firePosition.transform.position);
                 //NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
                 //networkObject.Spawn(true);
-                bullet = bullets[weaponIndex];
-                SpawnBulletServerRpc();
+                SpawnBulletServerRpc(weaponIndex);
             }
 
             //if (bomb != null)
@@ -160,7 +159,7 @@ public class PlayerInfo : NetworkBehaviour
             //    lineRenderer.enabled = false;
 
 
-                //destroyWeapon(bullet);
+                destroyWeapon(bullet);
 
             //}
             lineRenderer.enabled = false;
@@ -168,6 +167,7 @@ public class PlayerInfo : NetworkBehaviour
         }
 
     }
+
 
 
     void DrawParabola()
@@ -288,13 +288,13 @@ public class PlayerInfo : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SpawnBulletServerRpc()
+    private void SpawnBulletServerRpc(int index)
     {
+        bullet = bullets[weaponIndex];
         GameObject InstantiatedBullet = Instantiate(bullet, firePosition.transform.position, Quaternion.identity);
         InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
         Vector3 throwDirection = firePosition.transform.forward.normalized;
-        InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-        
+        InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);   
     }
     
     [ClientRpc(RequireOwnership = false)]
