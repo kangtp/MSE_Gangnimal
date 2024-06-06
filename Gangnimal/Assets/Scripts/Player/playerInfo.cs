@@ -48,10 +48,9 @@ public class PlayerInfo : NetworkBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        Debug.Log("sival : " + gameObject.transform.GetChild(0).gameObject.name);
-        firePosition =  NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
+        firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
         StartCoroutine("awaitPowerGage");
-        
+
     }
 
     private IEnumerator awaitPowerGage()
@@ -77,7 +76,7 @@ public class PlayerInfo : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!IsOwner) {return;}
+        if (!IsLocalPlayer) { return; }
         GetInput();
         Interaction();
         ShootingBullet();
@@ -108,8 +107,8 @@ public class PlayerInfo : NetworkBehaviour
 
             hasWeapons[weaponIndex] = false;
             weapons[weaponIndex].SetActive(false);
-            if(IsServer) {RequestNotVisibleItemClientRpc(weaponIndex);}
-            if(!IsServer) {RequestNotVisibleItemServerRpc(weaponIndex);}
+            if (IsServer) { RequestNotVisibleItemClientRpc(weaponIndex); }
+            if (!IsServer) { RequestNotVisibleItemServerRpc(weaponIndex); }
             //Item item = go.GetComponent<Item>();
             //if(item != null)
             //{
@@ -130,12 +129,12 @@ public class PlayerInfo : NetworkBehaviour
         if (Input.GetMouseButton(0))
         {
             DrawParabola();
-            
+
         }
 
         if (Input.GetMouseButtonUp(0) && IsLocalPlayer)
         {
-            
+
             //GameObject bomb = null;
 
             if (weaponIndex != -1 && hasWeapons[weaponIndex])
@@ -144,13 +143,13 @@ public class PlayerInfo : NetworkBehaviour
                 //Debug.Log(firePosition.transform.position);
                 //NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
                 //networkObject.Spawn(true);
-               
-                SpawnBulletServerRpc(weaponIndex);
+                SpawnBulletServerRpc(weaponIndex, firePosition.transform.position,firePosition.transform.forward.normalized,throwPower,powerGage.powerValue);
+                
             }
 
             //if (bomb != null)
             //{
-                
+
             //    bomb.transform.position = firePosition.transform.position;
             //    Rigidbody rb = bomb.GetComponent<Rigidbody>();
             //    Vector3 throwDirection = firePosition.transform.forward.normalized;
@@ -160,7 +159,7 @@ public class PlayerInfo : NetworkBehaviour
             //    lineRenderer.enabled = false;
 
 
-                destroyWeapon(weaponIndex);
+            destroyWeapon(weaponIndex);
 
             //}
             lineRenderer.enabled = false;
@@ -256,12 +255,12 @@ public class PlayerInfo : NetworkBehaviour
             if (nearObject.tag == "Weapon")
             {
                 Item item = nearObject.GetComponent<Item>();
-                if(item != null)
+                if (item != null)
                 {
                     item.RequestDespawnServerRpc();
                 }
                 weaponIndex = item.value;
-                
+
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -276,8 +275,8 @@ public class PlayerInfo : NetworkBehaviour
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
 
-                if(IsServer) {RequestVisibleItemClientRpc(weaponIndex);}
-                if(!IsServer) {RequestVisibleItemServerRpc(weaponIndex);}
+                if (IsServer) { RequestVisibleItemClientRpc(weaponIndex); }
+                if (!IsServer) { RequestVisibleItemServerRpc(weaponIndex); }
             }
         }
     }
@@ -287,29 +286,24 @@ public class PlayerInfo : NetworkBehaviour
     {
         weapons[value].SetActive(true);
     }
-
-    [ServerRpc]
-    private void SpawnBulletServerRpc(int index)
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnBulletServerRpc(int index, Vector3 position, Vector3 throw_D,float throw_p, float p_value)
     {
-        if (IsOwner)
-        {
-            GameObject InstantiatedBullet = Instantiate(bullets[index], firePosition.transform.position, Quaternion.identity);
-            InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
-            Vector3 throwDirection = firePosition.transform.forward.normalized;
-            InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-            //SpawnBulletClientRpc();
-        }
-        
+        GameObject InstantiatedBullet = Instantiate(bullets[index], position, Quaternion.identity);
+        InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
+        Vector3 throwDirection = throw_D;
+        InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throw_p * p_value, ForceMode.Impulse);
+
     }
 
-    [ClientRpc]
+    [ClientRpc(RequireOwnership = false)]
     private void SpawnBulletClientRpc(int index)
     {
         GameObject InstantiatedBullet = Instantiate(bullets[index], firePosition.transform.position, Quaternion.identity);
         InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
         Vector3 throwDirection = firePosition.transform.forward.normalized;
         InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-
     }
 
     [ClientRpc(RequireOwnership = false)]
