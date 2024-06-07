@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Networking;
 using Unity.Netcode;
@@ -40,8 +41,8 @@ public class explosion : NetworkBehaviour
         if (explosionEffect != null)
         {
             GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
-            
-            Destroy(effect, 2.0f); // 2초 후에 파괴 효과 삭제
+            effect.GetComponent<NetworkObject>().Spawn();
+            //Destroy(effect, 2.0f); // 2초 후에 파괴 효과 삭제
         }
     }
 

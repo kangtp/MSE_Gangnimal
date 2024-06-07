@@ -678,7 +678,7 @@ GameObject:
   - component: {fileID: 4581695890159397735}
   - component: {fileID: 2818079608041328418}
   - component: {fileID: -9099096570163842308}
-  - component: {fileID: -4778302392689298381}
+  - component: {fileID: 5069454495558638360}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Item
@@ -823,7 +823,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-4778302392689298381
+--- !u!114 &5069454495558638360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -835,7 +835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee68a3732104eec49bd2d551f80d7434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 0
   value: 0
 --- !u!1 &6652496588483275743
 GameObject:
