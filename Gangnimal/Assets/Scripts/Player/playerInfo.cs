@@ -209,8 +209,12 @@ public class PlayerInfo : NetworkBehaviour
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
             }
-            Destroy(other.gameObject);
-
+            //Destroy(other.gameObject);
+            Item item = other.gameObject.GetComponent<Item>();
+            if (item != null)
+            {
+                item.RequestDespawnServerRpc();
+            }
         }
 
     }
