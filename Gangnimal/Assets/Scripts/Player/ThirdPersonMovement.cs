@@ -45,6 +45,7 @@ public class ThirdPersonMovement : NetworkBehaviour
 
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             playerInfo.HP -= 100;
@@ -56,9 +57,11 @@ public class ThirdPersonMovement : NetworkBehaviour
             }
         }
 
-        if (playerInfo.HP > 0 && IsLocalPlayer)
+        if (playerInfo.HP > 0 && IsLocalPlayer && TestRelay.Instance.canSpawn && Camera.main != null)
         {
             PlayerMove3rd();
+            Quaternion playerRotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
+            transform.rotation = playerRotation;
         }
         else
         {
@@ -69,8 +72,7 @@ public class ThirdPersonMovement : NetworkBehaviour
     public void PlayerMove3rd()
     {
         CheckGroundStatus();
-        float h = turnspeed * Input.GetAxis("Mouse X");
-        transform.Rotate(0, h, 0);
+        
 
         if (isGrounded && velocity.y < 0)
         {

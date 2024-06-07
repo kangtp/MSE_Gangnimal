@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Item : NetworkBehaviour
 {
-    public enum Type { Weapon };
+    public enum Type { Weapon , Item };
     public Type type;
     public int value;
 

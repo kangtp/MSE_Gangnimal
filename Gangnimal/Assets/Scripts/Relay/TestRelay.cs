@@ -84,6 +84,7 @@ public class TestRelay : MonoBehaviour
 
 
             condition = NetworkManager.Singleton.StartHost();
+            canSpawn = true;
             StartCoroutine("turnOn"); // 플레이어를 생성하기전에 몇개 오브젝트에서 awake, start에서 바로 플레이어를 찾아야되서 delay를 줘야된다.
         }
         catch (RelayServiceException e)
@@ -133,7 +134,6 @@ public class TestRelay : MonoBehaviour
 
             condition = NetworkManager.Singleton.StartClient();
             StartCoroutine("turnOn");
-            canSpawn = true;
 
         }
         catch (RelayServiceException e)

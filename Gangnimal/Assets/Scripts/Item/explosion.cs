@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using Unity.Netcode;
 
-public class explosion : MonoBehaviour
+public class explosion : NetworkBehaviour
 {
     public GameObject explosionEffect;
     public int damageAmount; 
@@ -46,9 +48,9 @@ public class explosion : MonoBehaviour
     private void ApplyDamageToPlayer(GameObject player)
     {
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
-        if (playerInfo != null)
+        if (playerInfo != null && IsOwner)
         {
-            playerInfo.TakeDamage(damageAmount);
+            playerInfo.TakeDamageServerRpc(damageAmount);
         }
     }
 

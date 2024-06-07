@@ -83,7 +83,8 @@ public class PlayerInfo : NetworkBehaviour
     }
 
     //�߻� �� ���� ����
-    public void TakeDamage(int damage)
+    [ServerRpc]
+    public void TakeDamageServerRpc(int damage)
     {
         HP -= damage;
         Debug.Log("HP is : " + HP);
@@ -209,7 +210,7 @@ public class PlayerInfo : NetworkBehaviour
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
             }
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<Item>().RequestDespawnServerRpc();
 
         }
 
