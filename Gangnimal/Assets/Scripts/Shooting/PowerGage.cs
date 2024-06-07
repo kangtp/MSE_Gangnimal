@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 
 public class PowerGage : MonoBehaviour
 {
@@ -13,21 +14,31 @@ public class PowerGage : MonoBehaviour
     private bool timeUp = true;
     Transform fire;
     Slider powerSlider;
+
+    NetworkObject player;
     // Start is called before the first frame update
+
+    private void Awake() {
+        StartCoroutine("WaitingForObject");
+    }
     void Start()
     {
+        powerSlider = GameObject.Find("Canvas").transform.GetChild(0).GetComponent<Slider>();
+    }
 
-        fire =GameObject.FindGameObjectWithTag("FirePosition").GetComponent<Transform>();
-        if (fire == null) {
-        Debug.LogError("FirePosition을 가진 게임 오브젝트를 찾을 수 없습니다.");
-        }
-        else
+    IEnumerator WaitingForObject()
+    {
+        while (true)
         {
-            Debug.Log("찾음");
+            yield return new WaitForSeconds(0.01f);
+            if(NetworkManager.Singleton.LocalClient.PlayerObject != null)
+            {
+                player = NetworkManager.Singleton.LocalClient.PlayerObject;
+                fire = player.transform.GetChild(0).GetComponent<Transform>();
+                StopCoroutine("WaitingForObject");
+            }
         }
-
-        powerSlider = GameObject.Find("PowerGauge").GetComponent<Slider>();
-
+        
     }
 
     // Update is called once per frame
@@ -35,6 +46,7 @@ public class PowerGage : MonoBehaviour
     {
         ChargingGage();
     }
+
     IEnumerator Wait_Change()
     {
         yield return new WaitForSeconds(0.3f);
@@ -48,8 +60,6 @@ public class PowerGage : MonoBehaviour
     }
     void ChargingGage()
     {
-
-
         if (Input.GetMouseButtonDown(0))
 
         {

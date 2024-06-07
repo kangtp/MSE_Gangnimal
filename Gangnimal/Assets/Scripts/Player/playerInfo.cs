@@ -2,29 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.Netcode;
+using Unity.Networking;
 using Unity.VisualScripting;
 
 
-public class PlayerInfo : MonoBehaviour
+public class PlayerInfo : NetworkBehaviour, SubjectInterface
 {
     public int HP = 100;
     public float movingTime = 10.0f;
     public bool myTurn = true;
-    
+    private int allDamage;// 적에게 가한 데미지
 
     public GameObject[] weapons;
     public bool[] hasWeapons;
     public GameObject[] bullets;
     public float changeDelay=2f;
-    public bool haveShield = false;
+    //private GameObject bullet;
+    //public static PlayerInfo instance;
     PowerGage powerGage;
+
+
+    //public gameObject myWeapon;
+
+    public bool haveShield = false;
     
     bool detect;
     bool iDown;
     int weaponIndex = -1;
 
     GameObject nearObject;//Weapon => Item : Association
-
     
     //line
     [SerializeField]
@@ -36,140 +43,157 @@ public class PlayerInfo : MonoBehaviour
     GameObject firePosition;
     //public GameObject bombFactory;
 
-
     public float throwPower;
 
+    private List<Observerinterface> observers = new List<Observerinterface>();
 
     // Start is called before the first frame update
     private void Start()
     {
-        firePosition = GameObject.Find("Fireposition");
-        powerGage = GameObject.Find("Canvas").GetComponent<PowerGage>();
-        if(powerGage ==null)
+        firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
+        StartCoroutine("awaitPowerGage");
+
+    }
+
+    private IEnumerator awaitPowerGage()
+    {
+        while (true)
         {
-            Debug.LogError("powergage is no");
+            yield return new WaitForSeconds(1.0f);
+            if (GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>() != null)
+            {
+                powerGage = GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>();
+                if (powerGage == null)
+                {
+                    Debug.Log("powergage is no");
+                }
+                else
+                {
+                    StopCoroutine("awaitPowerGage");
+                }
+            }
         }
+        GameManager.instance.isGameOver=false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsLocalPlayer) { return; }
         GetInput();
         Interaction();
         ShootingBullet();
     }
 
-    
-    public void TakeDamage(int damage)
+    //�߻� �� ���� ����
+    [ServerRpc]
+    public void TakeDamageServerRpc(int damage)
     {
         HP -= damage;
         Debug.Log("HP is : " + HP);
-        
+        if (HP <= 0)
+        {
+            GetInput();
+            Interaction();
+            ShootingBullet();
+        }
     }
 
-    
+    public void TakeDamage(int damage)
+    {
+        HP -= damage;
+        NotifyObservers();
+        Debug.Log("HP is : " + HP);
+    }
 
 
-    void destroyWeapon()
+    void destroyWeapon(int weaponIndex)
     {
         if (weaponIndex != -1 && hasWeapons[weaponIndex])
         {
-            //WaitCoroutine(2.0f);
-
             hasWeapons[weaponIndex] = false;
             weapons[weaponIndex].SetActive(false);
+            if (IsServer) { RequestNotVisibleItemClientRpc(weaponIndex); }
+            if (!IsServer) { RequestNotVisibleItemServerRpc(weaponIndex); }
+            //Item item = go.GetComponent<Item>();
+            //if(item != null)
+            //{
+            //    item.RequestDespawnServerRpc();
+            //}
         }
-
     }
 
     void ShootingBullet()
     {
-        
-        if(Input.GetMouseButton(0))
+
+        if (!IsLocalPlayer)
         {
-            if(detect)
-            {
-                lineRenderer.startColor =Color.red;
-                lineRenderer.endColor =Color.red;
-                DrawParabola();
-            }
-            else
-            {
-                lineRenderer.startColor =Color.blue;
-                lineRenderer.endColor =Color.blue;
-                DrawParabola();
-            }
-           
+            return;
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButton(0))
         {
-            
-            GameObject bomb=null;
-            
-            if (weaponIndex != -1 && hasWeapons[weaponIndex]) bomb = Instantiate(bullets[weaponIndex]);
-
-            if(bomb != null)
-            {
-                bomb.transform.position = firePosition.transform.position;
-                Rigidbody rb = bomb.GetComponent<Rigidbody>();
-                Vector3 throwDirection = firePosition.transform.forward.normalized;
-                rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-                lineRenderer.enabled = false;
-                destroyWeapon();
-
-            }
-            lineRenderer.enabled=false;
+            DrawParabola();
 
         }
 
+        if (Input.GetMouseButtonUp(0) && IsLocalPlayer)
+        {
+
+            //GameObject bomb = null;
+
+            if (weaponIndex != -1 && hasWeapons[weaponIndex])
+            {
+                //bomb = Instantiate(bullets[weaponIndex]);
+                //Debug.Log(firePosition.transform.position);
+                //NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
+                //networkObject.Spawn(true);
+                SpawnBulletServerRpc(weaponIndex, firePosition.transform.position,firePosition.transform.forward.normalized,throwPower,powerGage.powerValue);
+                
+            }
+
+            //if (bomb != null)
+            //{
+
+            //    bomb.transform.position = firePosition.transform.position;
+            //    Rigidbody rb = bomb.GetComponent<Rigidbody>();
+            //    Vector3 throwDirection = firePosition.transform.forward.normalized;
+            //    //rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+            //    bomb.GetComponent<Item>().AddForceServerRpc(throwDirection * throwPower * powerGage.powerValue);
+
+            //    lineRenderer.enabled = false;
+
+
+            destroyWeapon(weaponIndex);
+
+            //}
+            lineRenderer.enabled = false;
+
+        }
     }
+
 
 
     void DrawParabola()
     {
-        detect=false;
+        //Debug.Log(NetworkManager.Singleton.LocalClientId);
         lineRenderer.enabled = true;
         Vector3[] points = new Vector3[numofDot];
         Vector3 startPosition = firePosition.transform.position;
         Vector3 startVelocity = throwPower * firePosition.transform.forward;
-        
         float timeInterval = maxTime / numofDot;
-       
-
         for (int i = 0; i < numofDot; i++)
         {
             float t = i * timeInterval;
             points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
-
-            // 레이쏴서 플레이어 인식하면!
-            if (Physics.Raycast(points[i], Vector3.forward, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Player")))
-            {
-                detect =true;
-                Debug.Log("충돌한 물체: " + hit.collider.name);
-                
-                points[i] = hit.point;
-                lineRenderer.positionCount = i + 1;
-                lineRenderer.SetPositions(points);
-                break;
-                
-            }
-            lineRenderer.positionCount = numofDot;
-            lineRenderer.SetPositions(points);
-            
         }
-
-    
+        lineRenderer.positionCount = numofDot;
+        lineRenderer.SetPositions(points);
     }
-    
-
-
-
 
     void OnTriggerEnter(Collider other)
     {
-
-        if(other.tag == "Item")
+        if (other.tag == "Item")
         {
             if (other.name == "Shield(Clone)")
             {
@@ -181,31 +205,28 @@ public class PlayerInfo : MonoBehaviour
                 GameManager.instance.PlayHpSound();
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
+                NotifyObservers();
             }
-            other.gameObject.SetActive(false);
+            other.gameObject.GetComponent<Item>().RequestDespawnServerRpc();
 
         }
-
     }
 
     void GetInput()
     {
-
         iDown = Input.GetKeyDown(KeyCode.E);
-        
-        
+
+
         //Debug.Log(iDown);
 
     }
 
     void OnTriggerStay(Collider other)
     {
-        if(other.tag == "Weapon")
+        if (other.tag == "Weapon")
         {
             nearObject = other.gameObject;
         }
-
-
     }
 
     void OnTriggerExit(Collider other)
@@ -216,37 +237,101 @@ public class PlayerInfo : MonoBehaviour
         }
     }
 
-
     void Interaction()
     {
+        if (!IsLocalPlayer)
+        {
+            return;
+        }
         if (iDown && nearObject != null)
         {
-            if(nearObject.tag == "Weapon") {
-                Item item = nearObject.GetComponent<Item> ();
+            if (nearObject.tag == "Weapon")
+            {
+                Item item = nearObject.GetComponent<Item>();
+                if (item != null)
+                {
+                    item.RequestDespawnServerRpc();
+                }
                 weaponIndex = item.value;
 
 
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     if (hasWeapons[i])
                     {
                         hasWeapons[i] = false;
-                        weapons[i].SetActive(false);
+                        weapons[weaponIndex].SetActive(false);
                     }
-
                 }
+                Debug.Log("where is my mind : " + IsServer);
 
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
 
-                nearObject.SetActive(false);
+                if (IsServer) { RequestVisibleItemClientRpc(weaponIndex); }
+                if (!IsServer) { RequestVisibleItemServerRpc(weaponIndex); }
             }
         }
     }
 
-    IEnumerator WaitCoroutine(float t)
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestVisibleItemServerRpc(int value)
     {
-        //Debug.Log("MySecondCoroutine;" + t);
-        yield return new WaitForSeconds(t);
+        weapons[value].SetActive(true);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnBulletServerRpc(int index, Vector3 position, Vector3 throw_D,float throw_p, float p_value)
+    {
+        GameObject InstantiatedBullet = Instantiate(bullets[index], position, Quaternion.identity);
+        InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
+        Vector3 throwDirection = throw_D;
+        InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throw_p * p_value, ForceMode.Impulse);
+
+    }
+
+    [ClientRpc]
+    private void SpawnBulletClientRpc(int index)
+    {
+        GameObject InstantiatedBullet = Instantiate(bullets[index], firePosition.transform.position, Quaternion.identity);
+        InstantiatedBullet.GetComponent<NetworkObject>().Spawn();
+        Vector3 throwDirection = firePosition.transform.forward.normalized;
+        InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
+    }
+
+    [ClientRpc]
+    public void RequestVisibleItemClientRpc(int value)
+    {
+        weapons[value].SetActive(true);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestNotVisibleItemServerRpc(int value)
+    {
+        weapons[value].SetActive(false);
+    }
+
+    [ClientRpc]
+    public void RequestNotVisibleItemClientRpc(int value)
+    {
+        weapons[value].SetActive(false);
+    }
+
+    public void RegisterObserver(Observerinterface observer)
+    {
+        observers.Add(observer);
+    }
+
+    public void RemoveObserver(Observerinterface observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void NotifyObservers()
+    {
+        foreach (Observerinterface observer in observers)
+        {
+            observer.InformationUpdate(HP);
+        }
     }
 }

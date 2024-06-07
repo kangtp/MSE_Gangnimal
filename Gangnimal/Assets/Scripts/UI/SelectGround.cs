@@ -11,8 +11,8 @@ public class SelectGround : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mapSelect=0;
-        PlayerPrefs.SetInt("SelectedCharacterIndex", mapSelect);
+       mapSelect=0;
+       PlayerPrefs.SetInt("SelectedCharacterIndex", mapSelect);
        foreach(Transform t in transform)
        {
             grounds.Add(t.gameObject);

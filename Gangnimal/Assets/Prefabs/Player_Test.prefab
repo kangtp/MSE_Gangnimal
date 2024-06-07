@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5974986744858310359}
   - component: {fileID: 4510239277779691861}
+  - component: {fileID: 5332793058367896779}
   - component: {fileID: 2136452506322058641}
   - component: {fileID: 3202583489340280941}
   - component: {fileID: 109007990679228068}
@@ -64,6 +65,27 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.95, z: 0}
+--- !u!114 &5332793058367896779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837731966985881514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1137292816
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &2136452506322058641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da86ebb20292844b8a32c1979ac8ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myHP: 80
+  HP: 100
   movingTime: 10
   myTurn: 1
   weapons:
@@ -105,7 +127,6 @@ MonoBehaviour:
   - {fileID: 5104423808313205056, guid: 7176ae0fa028b824496f5d5cf1e2b3c7, type: 3}
   - {fileID: 1533925628434848813, guid: 8a15083f37066034283120c2d006060c, type: 3}
   - {fileID: 1234798633183886030, guid: 84683417d055f3241bff09ad3c00e05b, type: 3}
-  powerGage: {fileID: 0}
   haveShield: 0
   lineRenderer: {fileID: 109007990679228068}
   numofDot: 70
