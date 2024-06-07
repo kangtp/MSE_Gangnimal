@@ -52,10 +52,8 @@ public class ThirdPersonMovement : NetworkBehaviour
             playerInfo.HP -= 100;
         }
 
-        if (playerInfo.HP > 0 && IsLocalPlayer && TestRelay.Instance.canSpawn && Camera.main != null)
+        if (playerInfo.HP > 0 && IsLocalPlayer)
         {
-            Quaternion playerRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
-            transform.rotation = playerRotation;
             PlayerMove3rd();
         }
         else if(playerInfo.HP <= 0)
