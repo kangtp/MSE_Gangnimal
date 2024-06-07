@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectImages : MonoBehaviour
 {
     private List<GameObject> images;
     private int select_index=0;
+    [SerializeField]
+    private Sprite[] sprites;
+    private Image background;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +20,11 @@ public class SelectImages : MonoBehaviour
             images.Add(t.gameObject);
             t.gameObject.SetActive(false);
         }
+        background = GameObject.Find("BackGround").GetComponent<Image>();
+
+        
         images[select_index].SetActive(true);
+        background.sprite = sprites[select_index];
     }
     public void Select(int index)
     {
@@ -31,6 +39,7 @@ public class SelectImages : MonoBehaviour
         images[select_index].SetActive(false);
         select_index=index;
         images[select_index].SetActive(true);
+        background.sprite = sprites[select_index];
         PlayerPrefs.SetInt("SelectedMapIndex", select_index);
         PlayerPrefs.Save();
     }

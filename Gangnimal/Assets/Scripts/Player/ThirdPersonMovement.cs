@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ThirdPersonMovement : MonoBehaviour
@@ -19,7 +20,7 @@ public class ThirdPersonMovement : MonoBehaviour
     Vector3 velocity;
 
     PlayerInfo playerInfo;
-
+    Vector3 firstPosition;
     private bool isDead = false; 
 
     private void Awake()
@@ -43,25 +44,24 @@ public class ThirdPersonMovement : MonoBehaviour
             Debug.LogError("메인 카메라를 찾을 수 없습니다!");
         }
     }
-
+    void Start()
+    {
+        
+    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyUp(KeyCode.Tab))
         {
             playerInfo.HP -= 100;
-            if (playerInfo.HP <= 0 && isDead)
-            {
-                
-                anim.SetTrigger("Death");
-                GameManager.instance.GameOver(); 
-            }
         }
-
+        
         if (playerInfo.HP > 0)
         {
+            Quaternion playerRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
+            transform.rotation = playerRotation;
             PlayerMove3rd();
         }
-        else
+        else if(playerInfo.HP <= 0)
         {
             WhenDead();
         }
@@ -70,8 +70,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public void PlayerMove3rd()
     {
         CheckGroundStatus();
-        float h = turnspeed * Input.GetAxis("Mouse X");
-        transform.Rotate(0, h, 0);
+        
 
         if (isGrounded && velocity.y < 0)
         {
@@ -146,12 +145,22 @@ public class ThirdPersonMovement : MonoBehaviour
     private void WhenDead()
     {
        
-        if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
+            if(anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
+            {
+                anim.Play("idle");
+            }
+            GameManager.instance.SetAlive(false);
             anim.SetTrigger("Death");
             GameManager.instance.GameOver();
+            if(GameManager.instance.gameOverPannel==null)
+            {
+                Debug.Log("없어!");
+            }
             Debug.Log("게임오버패널 켜져야지!");
         }
+       
     }
 
     private void OnDrawGizmos()
@@ -159,4 +168,11 @@ public class ThirdPersonMovement : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
+    IEnumerator Goland()
+    {
+        gameObject.GetComponent<CharacterController>().enabled=false;
+        yield return new WaitForSeconds(2f);
+        anim.SetTrigger("Death");
+    }
+    
 }

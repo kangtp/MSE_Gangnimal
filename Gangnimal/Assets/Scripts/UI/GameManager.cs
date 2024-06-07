@@ -1,12 +1,17 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글톤 인스턴스
 
     public bool isGameOver = false; // 게임 오버 상태
+    private bool isAlive=true;// 누군가 오버이지만 자신은 살아있다면 이긴거임
 
     public GameObject gameOverPannel;
+    private TextMeshProUGUI overText;
 
     public AudioClip jumpSound;
     public AudioClip deathSound;
@@ -15,7 +20,7 @@ public class GameManager : MonoBehaviour
     public AudioClip explosionSound;
     public AudioClip[] characterSounds; // 캐릭터 사운드 배열
     [HideInInspector] public AudioSource audioSource;
-
+    int test=0;
     [HideInInspector] public float mouseSensitivity = 1.0f; // 마우스 감도
 
     private void Awake()
@@ -43,12 +48,18 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        gameOverPannel=GameObject.Find("GameOver");
-        if (gameOverPannel != null)
-        {
-            gameOverPannel.SetActive(false);
-        }
         isGameOver=false;
+        isAlive=true;
+        if(SceneManager.GetActiveScene().name =="ForestScene" || SceneManager.GetActiveScene().name =="Winter" || SceneManager.GetActiveScene().name =="Desert")
+        {
+            gameOverPannel=GameObject.Find("GameOver");
+            if (gameOverPannel != null)
+            {
+                gameOverPannel.SetActive(false);
+            }
+            isGameOver=false;
+            isAlive=true;
+        }
     }
     // 게임 오버 처리
     public void GameOver()
@@ -56,20 +67,34 @@ public class GameManager : MonoBehaviour
         
         if (!isGameOver)
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
             isGameOver = true;
             gameOverPannel.SetActive(true);
             
-            Debug.Log("Game Over!");
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
-            PlayDeathSound();
+            if(isAlive)
+            {
+                overText.text = "You Win";
+            }
+            else
+            {
+                overText.text = "You Lose";
+            }
+           
+            
         }
     }
     public void InitializeGameOverPanel()
-    {
+    {   
+        if(gameOverPannel !=null)
+        {
+            gameOverPannel = null;
+        }
+        isAlive=true;
         gameOverPannel = GameObject.Find("GameOver");
         if (gameOverPannel != null)
         {
+            overText =gameOverPannel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             gameOverPannel.SetActive(false);
         }
     }
@@ -136,6 +161,10 @@ public class GameManager : MonoBehaviour
         {
             mouseSensitivity = 1.0f; 
         }
+    }
+    public void SetAlive(bool alive)
+    {
+        isAlive = alive;
     }
 
     
