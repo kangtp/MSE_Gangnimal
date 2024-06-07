@@ -11,8 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: ed1055897eee1d146817b4b7c54a0f2f
-  - enabled: 1
-    path: Assets/Scenes/MapScene/ForestScene.unity
+  - enabled: 0
+    path: Assets/Scenes/MapScene/Forest.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
@@ -38,8 +38,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MapScene/Kd/Desert_kd.unity
     guid: 745674c0018c242479a77768835b475e
-  - enabled: 0
-    path: Assets/Scenes/MapScene/Kd/ForestScene_ld.unity
+  - enabled: 1
+    path: Assets/Scenes/MapScene/ForestScene.unity
     guid: 3e4c234ad1676d145af2b71ec20f701f
   - enabled: 0
     path: Assets/Scenes/MapScene/Kd/Winter_ld.unity
