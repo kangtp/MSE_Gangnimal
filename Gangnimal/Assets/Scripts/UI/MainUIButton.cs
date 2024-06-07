@@ -23,6 +23,13 @@ public class MainUIButton : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("SignUpUI").gameObject.SetActive(true);
     }
 
+    public void RecordButton()
+    {
+        GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("RecordUI").gameObject.SetActive(true);
+        FindObjectOfType<AccountManager>().FindMyBattleRecord();
+    }
+
     public void ExitButton()
     {
 #if UNITY_EDITOR
@@ -41,6 +48,12 @@ public class MainUIButton : MonoBehaviour
     public void BackButtonFromSignUp()
     {
         GameObject.Find("Canvas").transform.Find("SignUpUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(true);
+    }
+
+    public void BackButtonFromRecord()
+    {
+        GameObject.Find("Canvas").transform.Find("RecordUI").gameObject.SetActive(false);
         GameObject.Find("Canvas").transform.Find("MainUI").gameObject.SetActive(true);
     }
 }
