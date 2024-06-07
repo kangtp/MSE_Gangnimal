@@ -1,11 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine.Networking;
 
-public class ThirdPersonMovement : MonoBehaviour
+public class ThirdPersonMovement : NetworkBehaviour
 {
     float turnTime = 0.1f;
     float turnVelocity;
-    Animator anim;
+    public Animator anim;
     bool sprinting;
     CharacterController controller;
     Vector2 movement;
@@ -27,22 +31,16 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         truespeed = walkSpeed;
         controller = GetComponent<CharacterController>();
-        anim = GetComponentInChildren<Animator>();
+        //anim = GetComponentInChildren<Animator>();
         playerInfo = GetComponentInChildren<PlayerInfo>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
 
-        // 메인 카메라 찾기
-        Camera mainCamera = Camera.main;
-        Transform cam;
-        if (mainCamera != null)
-        {
-            cam = mainCamera.transform;
-        }
-        else
-        {
-            Debug.LogError("메인 카메라를 찾을 수 없습니다!");
-        }
+    private IEnumerator awaitFindCamera()
+    {
+        yield return new WaitForSeconds(5.0f);
+        
     }
     void Start()
     {
@@ -54,12 +52,14 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             playerInfo.HP -= 100;
         }
-        
-        if (playerInfo.HP > 0)
+
+        if (playerInfo.HP > 0 && IsLocalPlayer && TestRelay.Instance.canSpawn && Camera.main != null)
         {
             Quaternion playerRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
             transform.rotation = playerRotation;
             PlayerMove3rd();
+            Quaternion playerRotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
+            transform.rotation = playerRotation;
         }
         else if(playerInfo.HP <= 0)
         {
@@ -114,12 +114,12 @@ public class ThirdPersonMovement : MonoBehaviour
             anim.SetFloat("Speed", 0);
         }
 
-        if (playerInfo.HP > 0) 
+        if (playerInfo.HP > 0)
         {
             Jump();
         }
 
-        
+
         if (velocity.y > -20)
         {
             velocity.y += (gravity * 10) * Time.deltaTime;
@@ -129,7 +129,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void CheckGroundStatus()
     {
-        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3); 
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3);
         anim.SetBool("isGround", isGrounded);
     }
 

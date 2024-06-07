@@ -1,23 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public class Item : NetworkBehaviour
 {
-    public enum Type { Weapon };
+    public enum Type { Weapon , Item };
     public Type type;
     public int value;
 
+    private Rigidbody rb;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestDespawnServerRpc()
     {
-        
+        NetworkObject.Despawn(true);
     }
+
 }
