@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public AudioClip explosionSound;
     public AudioClip[] characterSounds; // 캐릭터 사운드 배열
     [HideInInspector] public AudioSource audioSource;
-    int test=0;
     [HideInInspector] public float mouseSensitivity = 1.0f; // 마우스 감도
 
     private void Awake()

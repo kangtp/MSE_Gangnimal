@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine.Networking;
@@ -58,8 +57,6 @@ public class ThirdPersonMovement : NetworkBehaviour
             Quaternion playerRotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
             transform.rotation = playerRotation;
             PlayerMove3rd();
-            Quaternion playerRotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
-            transform.rotation = playerRotation;
         }
         else if(playerInfo.HP <= 0)
         {

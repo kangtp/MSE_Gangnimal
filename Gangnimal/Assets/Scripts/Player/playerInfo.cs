@@ -26,7 +26,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     //public gameObject myWeapon;
 
     public bool haveShield = false;
-    PowerGage powerGage;
     
     bool detect;
     bool iDown;
@@ -289,7 +288,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     }
 
-    [ClientRpc(RequireOwnership = false)]
+    [ClientRpc]
     private void SpawnBulletClientRpc(int index)
     {
         GameObject InstantiatedBullet = Instantiate(bullets[index], firePosition.transform.position, Quaternion.identity);
@@ -298,7 +297,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
     }
 
-    [ClientRpc(RequireOwnership = false)]
+    [ClientRpc]
     public void RequestVisibleItemClientRpc(int value)
     {
         weapons[value].SetActive(true);
@@ -310,7 +309,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         weapons[value].SetActive(false);
     }
 
-    [ClientRpc(RequireOwnership = false)]
+    [ClientRpc]
     public void RequestNotVisibleItemClientRpc(int value)
     {
         weapons[value].SetActive(false);
