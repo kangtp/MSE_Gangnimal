@@ -32,7 +32,7 @@ public class explosion : NetworkBehaviour
             else if(gameObject.name == "BombB"){
                 GameManager.instance.PlayExplosionSound1();
             }
-            GameManager.instance.PlayExplosionSound1();
+            //GameManager.instance.PlayExplosionSound1();
 
             PlayDestructionEffect();
             Destroy(gameObject);

@@ -127,10 +127,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4188916340356799234}
   - component: {fileID: 2097342322270723142}
+  - component: {fileID: 8000798685144249464}
   - component: {fileID: 8212157405778585425}
   - component: {fileID: 6113410107386519594}
-  - component: {fileID: 8340205730047218149}
   - component: {fileID: 4075474787412727474}
+  - component: {fileID: 8067755167387424452}
   m_Layer: 0
   m_Name: Player3_sunjune 1
   m_TagString: Player
@@ -184,6 +185,27 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.95, z: 0}
+--- !u!114 &8000798685144249464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861979913794438474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 785625607
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &8212157405778585425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1ed245b2471bd14385fa729af97938c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   walkSpeed: 5
   sprintSpeed: 8
   turnspeed: 0
@@ -232,19 +255,6 @@ MonoBehaviour:
   timeInterval: 0.1
   maxTime: 10
   throwPower: 15
---- !u!114 &8067755167387424452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861979913794438474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0eb4d899c2ff72438f194ced21996d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerValue: 0
 --- !u!120 &4075474787412727474
 LineRenderer:
   serializedVersion: 2
@@ -358,6 +368,19 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &8067755167387424452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861979913794438474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0eb4d899c2ff72438f194ced21996d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerValue: 0
 --- !u!1 &2052265049171771627
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +589,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3244275067844900863}
     m_Modifications:
+    - target: {fileID: 4038730231665722266, guid: 1776b0a88770af0439488d6cf1a8e23a, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 447726777
+      objectReference: {fileID: 0}
     - target: {fileID: 7889481747060661130, guid: 1776b0a88770af0439488d6cf1a8e23a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -632,6 +659,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 24061517366610528}
     m_Modifications:
+    - target: {fileID: 2807344223986363610, guid: 44a2b21607a54d149b144bc22d9bd290, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3128593394
+      objectReference: {fileID: 0}
     - target: {fileID: 3866176519568089870, guid: 44a2b21607a54d149b144bc22d9bd290, type: 3}
       propertyPath: m_Name
       value: BranchM
@@ -698,6 +729,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3244275067844900863}
     m_Modifications:
+    - target: {fileID: 3922502621957086138, guid: 231d711f8f3c55544b923a65603b0cb8, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 317937565
+      objectReference: {fileID: 0}
     - target: {fileID: 5879868982310121949, guid: 231d711f8f3c55544b923a65603b0cb8, type: 3}
       propertyPath: m_Name
       value: BombM
@@ -764,6 +799,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 24061517366610528}
     m_Modifications:
+    - target: {fileID: 3922502621957086138, guid: 231d711f8f3c55544b923a65603b0cb8, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1802749240
+      objectReference: {fileID: 0}
     - target: {fileID: 4345370891297252800, guid: 231d711f8f3c55544b923a65603b0cb8, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1146,6 +1185,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3244275067844900863}
     m_Modifications:
+    - target: {fileID: 2807344223986363610, guid: 44a2b21607a54d149b144bc22d9bd290, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3271575899
+      objectReference: {fileID: 0}
     - target: {fileID: 3866176519568089870, guid: 44a2b21607a54d149b144bc22d9bd290, type: 3}
       propertyPath: m_Name
       value: BranchM
