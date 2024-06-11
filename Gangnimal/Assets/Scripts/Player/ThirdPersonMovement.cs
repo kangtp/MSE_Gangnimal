@@ -151,6 +151,7 @@ public class ThirdPersonMovement : NetworkBehaviour
             GameManager.instance.GameOver();
             if(GameManager.instance.gameOverPannel==null)
             {
+                
                 Debug.Log("없어!");
             }
             Debug.Log("게임오버패널 켜져야지!");
@@ -163,11 +164,6 @@ public class ThirdPersonMovement : NetworkBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
-    IEnumerator Goland()
-    {
-        gameObject.GetComponent<CharacterController>().enabled=false;
-        yield return new WaitForSeconds(2f);
-        anim.SetTrigger("Death");
-    }
+   
     
 }

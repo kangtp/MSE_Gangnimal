@@ -6,13 +6,13 @@ public class CharacterSpawnerNew : MonoBehaviour
 {
      public GameObject[] characterPrefabs;
      public Transform spawnPoint;
-
+     
     // Start is called before the first frame update
     private void Awake() {
         
         int selectedIndex = PlayerPrefs.GetInt("SelectedCharacterIndex");
         
-
+        
        
         if (selectedIndex >= 0 && selectedIndex < characterPrefabs.Length)
         {
@@ -33,7 +33,7 @@ public class CharacterSpawnerNew : MonoBehaviour
     }
     void Start()
     {
-        GameManager.instance.InitializeGameOverPanel();
+        GameManager.instance.InitializeGameOverPanel(); // 혹시라도 못찾을 경우를 대비해서 캐릭터를 생성함과 동시에 찾아준다. 
     }
 
     // Update is called once per frame
