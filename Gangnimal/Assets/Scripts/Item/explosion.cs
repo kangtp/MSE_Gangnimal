@@ -9,6 +9,8 @@ public class explosion : NetworkBehaviour
     public GameObject explosionEffect;
     public int damageAmount; 
 
+    
+
 
     // 충돌이 발생했을 때 호출되는 메서드
     private void OnCollisionEnter(Collision collision)
@@ -77,17 +79,25 @@ public class explosion : NetworkBehaviour
         {
             GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
             effect.GetComponent<NetworkObject>().Spawn();
-            //Destroy(effect, 2.0f); // 2초 후에 파괴 효과 삭제
         }
     }
 
     private void ApplyDamageToPlayer(GameObject player)
     {
+        Debug.Log("isServer? " + IsServer + " isClient? " + IsClient + " IsHost? "+IsHost);
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
-        if (playerInfo != null && IsOwner)
+        if (playerInfo != null)
         {
-            playerInfo.TakeDamageServerRpc(damageAmount);
+            if (IsServer)
+            {
+                playerInfo.TakeDamageServerRpc(damageAmount);
+            }
+            else if (IsClient)
+            {
+                playerInfo.RequestDamageServerRpc(damageAmount);
+            }
         }
+
     }
 
     IEnumerator WaitCoroutine(float t)
@@ -95,4 +105,6 @@ public class explosion : NetworkBehaviour
         //Debug.Log("MySecondCoroutine;" + t);
         yield return new WaitForSeconds(t);
     }
+
+
 }

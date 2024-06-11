@@ -60,7 +60,7 @@ public class TestRelay : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
                 foreach (GameObject item in turnOnobj)
                 {
-                    Debug.Log(item.ToString());
+                    //Debug.Log(item.ToString());
                     item.SetActive(true);
                 }
                 StopCoroutine("turnOn");

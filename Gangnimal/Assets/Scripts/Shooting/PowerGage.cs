@@ -64,13 +64,11 @@ public class PowerGage : MonoBehaviour
 
         {
             isClick = true;
-            Debug.Log("clicked");
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             isClick = false;
-            Debug.Log("Release");
         }
 
         if (isClick)
