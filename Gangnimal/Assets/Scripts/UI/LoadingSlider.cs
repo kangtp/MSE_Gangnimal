@@ -15,18 +15,16 @@ public class LoadingSlider : MonoBehaviour
         slider.value = 0f;
         
         //테스트용
-        hostButton.onClick.Invoke();
+       
     }
 
     void Update()
     {
-        
         timer += Time.deltaTime;
-
-        
+      
         slider.value = Mathf.Clamp01(timer / loadTime);
 
-        if(timer>0.1f &&!clicked) // 딱 1번만 
+        if(timer>3f &&!clicked) // 딱 1번만 
         {
             hostButton.onClick.Invoke();
             clicked=true;
