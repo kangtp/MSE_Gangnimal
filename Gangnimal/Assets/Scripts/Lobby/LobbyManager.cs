@@ -20,8 +20,14 @@ public class LobbyManager : MonoBehaviour
     private string PlayerName;
     public TMP_InputField codeinput;
 
+    public static LobbyManager Instance;
+
+    [SerializeField]
+    private GameObject[] canvasobj; // 0 = Lobby Canvas // 1 = MapSelectCanvas // 2 = CharSelectCanvas
+
     private void Start()
     {
+        Instance = this;
         start();
     }
     private async void start()
@@ -35,6 +41,12 @@ public class LobbyManager : MonoBehaviour
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
         PlayerName = "MSE" + UnityEngine.Random.Range(10, 99);
+
+        foreach (GameObject canvas in canvasobj)
+        {
+            canvas.SetActive(false);
+        }
+        canvasobj[0].SetActive(true);
     }
 
     private void Update()
@@ -75,16 +87,18 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-     public bool IsLobbyHost() {
+    public bool IsLobbyHost()
+    {
         return joinedlobby != null && joinedlobby.HostId == AuthenticationService.Instance.PlayerId;
     }
 
-    private bool IsPlayerInLobby() {
-        if (joinedlobby != null && joinedlobby.Players != null) 
+    public bool IsPlayerInLobby()
+    {
+        if (joinedlobby != null && joinedlobby.Players != null)
         {
-            foreach (Player player in joinedlobby.Players) 
+            foreach (Player player in joinedlobby.Players)
             {
-                if (player.Id == AuthenticationService.Instance.PlayerId) 
+                if (player.Id == AuthenticationService.Instance.PlayerId)
                 {
                     // This player is in this lobby
                     return true;
@@ -116,7 +130,7 @@ public class LobbyManager : MonoBehaviour
             hostlobby = lobby;
             joinedlobby = hostlobby;
 
-            Debug.Log("Who is owner? " + IsLobbyHost() + ", "+lobby.LobbyCode);
+            Debug.Log("Who is owner? " + IsLobbyHost() + ", " + lobby.LobbyCode);
         }
         catch (LobbyServiceException e)
         {
@@ -192,7 +206,7 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log(e);
         }
-      
+
     }
 
     private Player GetPlayer()
@@ -221,53 +235,101 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public void StartGame(){
+    public void StartGame()
+    {
 
-        if(joinedlobby != null){
-            int count = 0;
-        foreach (Player player in joinedlobby.Players)
+        if (joinedlobby != null)
         {
-            count++;
-        }
+            int count = 0;
+            foreach (Player player in joinedlobby.Players)
+            {
+                count++;
+            }
 
-        if(count == 2){
-            SceneManager.LoadScene("ForestScene");
-        }
+            if (count == 2)
+            {
+                SceneManager.LoadScene("ForestScene");
+            }
         }
 
     }
 
-    private async void UpdateGameMode(string map) {
-        try{
-        hostlobby = await Lobbies.Instance.UpdateLobbyAsync(hostlobby.Id, new UpdateLobbyOptions{
-            Data = new Dictionary<string, DataObject>{
+    private async void UpdateGameMode(string map)
+    {
+        try
+        {
+            hostlobby = await Lobbies.Instance.UpdateLobbyAsync(hostlobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>{
                 {"Map", new DataObject(DataObject.VisibilityOptions.Public, map)}
             }
-        });
-        joinedlobby = hostlobby;
+            });
+            joinedlobby = hostlobby;
 
-        PrintPlayers(hostlobby);
+            PrintPlayers(hostlobby);
 
-        } catch(LobbyServiceException e){
+        }
+        catch (LobbyServiceException e)
+        {
             Debug.Log(e);
         }
     }
 
     private async void LeaveLobby()
     {
-        try{
-        await LobbyService.Instance.RemovePlayerAsync(joinedlobby.Id,AuthenticationService.Instance.PlayerId);
-        } catch(LobbyServiceException e){
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(joinedlobby.Id, AuthenticationService.Instance.PlayerId);
+        }
+        catch (LobbyServiceException e)
+        {
             Debug.Log(e);
         }
     }
 
     private async void DeleteLobby()
     {
-        try{
-        await LobbyService.Instance.DeleteLobbyAsync(joinedlobby.Id);
-        } catch(LobbyServiceException e){
+        try
+        {
+            await LobbyService.Instance.DeleteLobbyAsync(joinedlobby.Id);
+        }
+        catch (LobbyServiceException e)
+        {
             Debug.Log(e);
+        }
+    }
+
+    public void MapSelectActive()
+    {
+        canvasobj[0].SetActive(false);
+        canvasobj[1].SetActive(true);
+    }
+
+    public void CharacterSelectActiveHost()
+    {
+        CreateLobby();
+        foreach (GameObject canvas in canvasobj)
+        {
+            canvas.SetActive(false);
+        }
+        canvasobj[2].SetActive(true);
+        foreach (Transform child in canvasobj[2].transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+    }
+
+    public void CharacterSelectActiveClient()
+    {
+        JoinLobby(codeinput.text);
+        foreach (GameObject canvas in canvasobj)
+        {
+            canvas.SetActive(false);
+        }
+        canvasobj[2].SetActive(true);
+        foreach (Transform child in canvasobj[2].transform)
+        {
+            child.gameObject.SetActive(true);
         }
     }
 
@@ -276,23 +338,4 @@ public class LobbyManager : MonoBehaviour
         CreateLobby();
     }
 
-    public void SearchLobby()
-    {
-        ListLobbies();
-    }
-
-    public void JoinLobbyLobbyBt()
-    {
-        JoinLobby(codeinput.text);
-    }
-
-    public void LeaveLobbyBt()
-    {
-        LeaveLobby();
-    }
-
-    public void DeleteLobbyBt()
-    {
-        DeleteLobby();
-    }
 }

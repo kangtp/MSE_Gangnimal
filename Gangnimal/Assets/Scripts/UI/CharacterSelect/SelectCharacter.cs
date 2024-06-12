@@ -73,19 +73,8 @@ public class SelectCharacter : MonoBehaviour //캐릭터 선택씬
                 correctOrder[2]=p;
             }
         }
-        //확인용
-        foreach(GameObject p in correctOrder)
-        {
-            Debug.Log(p.name);
-        }
        
        return correctOrder;
     }    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
 }

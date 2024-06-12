@@ -15,12 +15,12 @@ public class ShieldUI : MonoBehaviour
 
         if (playerinfo == null)
         {
-            Debug.LogError("PlayerInfo¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            //Debug.LogError("PlayerInfoï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
 
         if (shield == null)
         {
-            Debug.LogError("Shield ÀÌ¹ÌÁö°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError("Shield ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
         }
 
 

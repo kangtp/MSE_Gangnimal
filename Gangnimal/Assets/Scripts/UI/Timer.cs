@@ -23,6 +23,10 @@ public class Timer : MonoBehaviour
     void Update()
     {
         Timer_Show();
+        if(LobbyManager.Instance.IsLobbyHost())
+        {
+            //if(LobbyManager.Instance.is)
+        }
     }
     void Timer_Show()
     {
