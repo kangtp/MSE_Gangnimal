@@ -1,10 +1,14 @@
+using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine.Networking;
 
-public class ThirdPersonMovement : MonoBehaviour
+public class ThirdPersonMovement : NetworkBehaviour
 {
     float turnTime = 0.1f;
     float turnVelocity;
-    Animator anim;
+    public Animator anim;
     bool sprinting;
     CharacterController controller;
     Vector2 movement;
@@ -19,49 +23,40 @@ public class ThirdPersonMovement : MonoBehaviour
     Vector3 velocity;
 
     PlayerInfo playerInfo;
-
+    Vector3 firstPosition;
     private bool isDead = false; 
 
     private void Awake()
     {
         truespeed = walkSpeed;
         controller = GetComponent<CharacterController>();
-        anim = GetComponentInChildren<Animator>();
+        //anim = GetComponentInChildren<Animator>();
         playerInfo = GetComponentInChildren<PlayerInfo>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // 메인 카메라 찾기
-        Camera mainCamera = Camera.main;
-        Transform cam;
-        if (mainCamera != null)
-        {
-            cam = mainCamera.transform;
-        }
-        else
-        {
-            Debug.LogError("메인 카메라를 찾을 수 없습니다!");
-        }
     }
 
+    private IEnumerator awaitFindCamera()
+    {
+        yield return new WaitForSeconds(5.0f);
+        
+    }
+    void Start()
+    {
+        
+    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyUp(KeyCode.Tab))
         {
             playerInfo.HP -= 100;
-            if (playerInfo.HP <= 0 && isDead)
-            {
-                
-                anim.SetTrigger("Death");
-                GameManager.instance.GameOver(); 
-            }
         }
 
-        if (playerInfo.HP > 0)
+        if (playerInfo.HP > 0 && IsLocalPlayer)
         {
             PlayerMove3rd();
         }
-        else
+        else if(playerInfo.HP <= 0)
         {
             WhenDead();
         }
@@ -70,8 +65,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public void PlayerMove3rd()
     {
         CheckGroundStatus();
-        float h = turnspeed * Input.GetAxis("Mouse X");
-        transform.Rotate(0, h, 0);
+        
 
         if (isGrounded && velocity.y < 0)
         {
@@ -115,12 +109,12 @@ public class ThirdPersonMovement : MonoBehaviour
             anim.SetFloat("Speed", 0);
         }
 
-        if (playerInfo.HP > 0) 
+        if (playerInfo.HP > 0)
         {
             Jump();
         }
 
-        
+
         if (velocity.y > -20)
         {
             velocity.y += (gravity * 10) * Time.deltaTime;
@@ -130,7 +124,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void CheckGroundStatus()
     {
-        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3); 
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, 1 << 3);
         anim.SetBool("isGround", isGrounded);
     }
 
@@ -146,12 +140,23 @@ public class ThirdPersonMovement : MonoBehaviour
     private void WhenDead()
     {
        
-        if (isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
+            if(anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
+            {
+                anim.Play("idle");
+            }
+            GameManager.instance.SetAlive(false);
             anim.SetTrigger("Death");
             GameManager.instance.GameOver();
+            if(GameManager.instance.gameOverPannel==null)
+            {
+                
+                Debug.Log("없어!");
+            }
             Debug.Log("게임오버패널 켜져야지!");
         }
+       
     }
 
     private void OnDrawGizmos()
@@ -159,4 +164,6 @@ public class ThirdPersonMovement : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
+   
+    
 }

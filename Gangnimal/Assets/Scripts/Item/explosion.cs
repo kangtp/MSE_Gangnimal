@@ -1,50 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class explosion : MonoBehaviour
+public class explosion : NetworkBehaviour
 {
     public GameObject explosionEffect;
     public int damageAmount; 
-    //sound
-    private AudioSource audioSource;
-    private AudioClip explosionSound;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        audioSource = gameObject.AddComponent<AudioSource>();
+    
 
-        if (audioSource == null)
-        {
-            Debug.LogError("AudioSource component is missing on this game object.");
-        }
-        audioSource.enabled = true;
-        //SoundSetting();
-    }
-
-/*
-    void SoundSetting(){
-        explosionSound = Resources.Load<AudioClip>("SoundEffect/MExplosion");
-
-        if (explosionSound == null)
-        {
-            Debug.LogError("Failed to load sound effect from Resources.");
-            return;
-        }
-
-    }
-*/
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     // 충돌이 발생했을 때 호출되는 메서드
     private void OnCollisionEnter(Collision collision)
     { 
         
+
         //자신에 닿아서 터지는 경우 방지
         WaitCoroutine(1.0f);
 
@@ -62,11 +34,10 @@ public class explosion : MonoBehaviour
             else if(gameObject.name == "BombB"){
                 GameManager.instance.PlayExplosionSound1();
             }
-            GameManager.instance.PlayExplosionSound1();
+            //GameManager.instance.PlayExplosionSound1();
 
             PlayDestructionEffect();
-            gameObject.SetActive(false);
-
+            Destroy(gameObject);
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
@@ -86,7 +57,8 @@ public class explosion : MonoBehaviour
 
             PlayDestructionEffect();
 
-            gameObject.SetActive(false);
+            // 자신을 삭제
+            Destroy(gameObject);
         }
 /*
         if (gameObject.name == "BranchB")
@@ -106,22 +78,26 @@ public class explosion : MonoBehaviour
         if (explosionEffect != null)
         {
             GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
-            Destroy(effect,2.0f);
-            
+            effect.GetComponent<NetworkObject>().Spawn();
         }
     }
 
     private void ApplyDamageToPlayer(GameObject player)
     {
+        Debug.Log("isServer? " + IsServer + " isClient? " + IsClient + " IsHost? "+IsHost);
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
-        if (playerInfo != null && !playerInfo.haveShield)
+        if (playerInfo != null)
         {
-            playerInfo.TakeDamage(damageAmount);
+            if (IsServer)
+            {
+                playerInfo.TakeDamageServerRpc(damageAmount);
+            }
+            else if (IsClient)
+            {
+                playerInfo.RequestDamageServerRpc(damageAmount);
+            }
         }
-        else if(playerInfo != null && playerInfo.haveShield){
-            //delete shield 
-            playerInfo.haveShield = false;
-        }
+
     }
 
     IEnumerator WaitCoroutine(float t)
@@ -129,4 +105,6 @@ public class explosion : MonoBehaviour
         //Debug.Log("MySecondCoroutine;" + t);
         yield return new WaitForSeconds(t);
     }
+
+
 }

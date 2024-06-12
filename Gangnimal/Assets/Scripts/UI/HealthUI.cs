@@ -1,27 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthUI : MonoBehaviour
+public class HealthUI : MonoBehaviour, Observerinterface
 {
     [SerializeField] Text healthText;
-    private PlayerInfo playerinfo;
+    private PlayerInfo playerInfo;
 
     void Start()
     {
-        playerinfo = FindObjectOfType<PlayerInfo>();
-
-        healthText.text = playerinfo.HP.ToString();
-
-
+        //playerInfo = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent
+        playerInfo = FindObjectOfType<PlayerInfo>();
+        playerInfo.RegisterObserver(this);
+        healthText = GameObject.Find("HP").GetComponent<Text>();
+        healthText.text = playerInfo.HP.ToString();
     }
 
-    // Update is called once per frame
-    void Update()
-    {   
-        if(playerinfo != null && playerinfo.HP >= 0){
-            healthText.text = Mathf.Round(playerinfo.HP).ToString();
-        }
+    void OnDestroy()
+    {
+        playerInfo.RemoveObserver(this);
     }
+
+
+    public void InformationUpdate(int health)
+    {
+        healthText.text = health.ToString();
+    }
+
+  
 }

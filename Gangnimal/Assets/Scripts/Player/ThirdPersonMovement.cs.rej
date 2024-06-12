@@ -1,6 +1,0 @@
-diff a/Gangnimal/Assets/Scripts/Player/ThirdPersonMovement.cs b/Gangnimal/Assets/Scripts/Player/ThirdPersonMovement.cs	(rejected hunks)
-@@ -40,3 +40,4 @@
-         anim.SetBool("isGround",isGrounded);
-+        float h = turnspeed * Input.GetAxis("Mouse X");
-         transform.Rotate(0, h, 0);
-         if(isGrounded&&velocity.y<0)
