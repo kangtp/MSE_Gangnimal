@@ -67,7 +67,7 @@ public class TestRelay : MonoBehaviour
         }
     }
 
-    public async void CreateRelay()
+    public async Task<string> CreateRelay()
     {
         try
         {
@@ -85,10 +85,12 @@ public class TestRelay : MonoBehaviour
             condition = NetworkManager.Singleton.StartHost();
             canSpawn = true;
             StartCoroutine("turnOn"); // 플레이어를 생성하기전에 몇개 오브젝트에서 awake, start에서 바로 플레이어를 찾아야되서 delay를 줘야된다.
+            return joinCode;
         }
         catch (RelayServiceException e)
         {
             Debug.Log(e);
+            return null;
         }
 
     }
