@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Gangnimal/Assets/Prefabs/NetworkPrefabs.meta
 guid: eb171bff9932e46eab861c244866c161
+========
+guid: afba7bd524252374d80a6f1dae8649e7
+>>>>>>>> origin/Jisu:Gangnimal/Assets/Prefabs/Map.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

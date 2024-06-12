@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Gangnimal/Assets/Prefabs/Items.meta
 guid: bfed43eca1cdd4c41a29bfaaada85658
+========
+guid: 7315b80b0918e6a4cbb2a177f4fddced
+>>>>>>>> origin/Jisu:Gangnimal/Assets/AssetStore/Hyper casual mobile GUI.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -47,9 +47,12 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     private List<Observerinterface> observers = new List<Observerinterface>();
 
+    private string playerId;
+
     // Start is called before the first frame update
     private void Start()
     {
+        
         firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
         StartCoroutine("awaitPowerGage");
 
@@ -86,19 +89,27 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     }
 
     //�߻� �� ���� ����
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void TakeDamageServerRpc(int damage)
     {
         HP -= damage;
-        Debug.Log("HP is : " + HP);
-        if (HP <= 0)
-        {
-            GetInput();
-            Interaction();
-            ShootingBullet();
-        }
+        NotifyObservers();
+        Debug.Log("Server HP is : " + HP);
     }
 
+    [ServerRpc]
+    public void RequestDamageServerRpc(int damage)
+    {
+        ApplyDamageToClientRpc(damage);
+    }
+
+    [ClientRpc]
+    public void ApplyDamageToClientRpc(int damage)
+    {
+        HP -= damage;
+        NotifyObservers();
+        Debug.Log("Client HP is : " + HP);
+    }
     public void TakeDamage(int damage)
     {
         HP -= damage;
@@ -260,7 +271,8 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                     if (hasWeapons[i])
                     {
                         hasWeapons[i] = false;
-                        weapons[weaponIndex].SetActive(false);
+
+                        weapons[i].SetActive(false);
                     }
                 }
                 Debug.Log("where is my mind : " + IsServer);
