@@ -22,6 +22,7 @@ public class LobbyManager : MonoBehaviour
 
     public static LobbyManager Instance;
 
+
     [SerializeField]
     private GameObject[] canvasobj; // 0 = Lobby Canvas // 1 = MapSelectCanvas // 2 = CharSelectCanvas
 
@@ -336,6 +337,19 @@ public class LobbyManager : MonoBehaviour
     public void CreateLobbyButton()
     {
         CreateLobby();
+    }
+
+    public bool StartCondition()
+    {
+        int count = 0;
+        foreach (Player player in joinedlobby.Players)
+        {
+            count++;
+        }
+        if(count == 2)
+        return true;
+        else
+        return false;
     }
 
 }

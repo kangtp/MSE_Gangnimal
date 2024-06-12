@@ -22,10 +22,20 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Timer_Show();
         if(LobbyManager.Instance.IsLobbyHost())
         {
-            //if(LobbyManager.Instance.is)
+            if(LobbyManager.Instance.StartCondition() == false)
+            {
+                timerText.text = "waiting for user";
+            }
+            else
+            {
+                Timer_Show();
+            }
+        }
+        else if(LobbyManager.Instance.IsLobbyHost() == false)
+        {
+            Timer_Show();
         }
     }
     void Timer_Show()
