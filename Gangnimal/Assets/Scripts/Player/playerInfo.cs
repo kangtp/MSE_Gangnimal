@@ -208,12 +208,12 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         {
             if (other.name == "Shield(Clone)")
             {
-                GameManager.instance.PlayShieldSound();
+                //GameManager.instance.PlayShieldSound();
                 haveShield = true;
             }
             if (other.name == "Healpack(Clone)")
             {
-                GameManager.instance.PlayHpSound();
+                //GameManager.instance.PlayHpSound();
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
                 NotifyObservers();
@@ -228,8 +228,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         iDown = Input.GetKeyDown(KeyCode.E);
 
 
-        //Debug.Log(iDown);
-
+        
     }
 
     void OnTriggerStay(Collider other)
@@ -274,8 +273,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                         weapons[weaponIndex].SetActive(false);
                     }
                 }
-                Debug.Log("where is my mind : " + IsServer);
-
+                
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
 

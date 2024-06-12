@@ -10,6 +10,7 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
     [SerializeField]
     private Sprite[] sprites; // 보여줄 이미지 스프라이트들
     private Image background; // 뒷배경화면
+    public GameObject[] characterSelects;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,4 +44,5 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
         PlayerPrefs.SetInt("SelectedMapIndex", select_index); // 다음씬에 가져가기 위해 playerprefebs에 저장해준다. 
         PlayerPrefs.Save();
     }
+  
 }
