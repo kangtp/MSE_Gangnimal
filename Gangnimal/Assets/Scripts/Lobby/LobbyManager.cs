@@ -6,20 +6,22 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
+using System;
 
-public class TestLobby : MonoBehaviour
+public class LobbyManager : MonoBehaviour
 {
 
     private Lobby hostlobby;
     private Lobby joinedlobby;
     private float heartbeatTimer;
     private float lobbyUpdateTimer;
+    private float lobbyPollTimer;
     private string PlayerName;
+    public TMP_InputField codeinput;
 
-    private bool enableStart;
     private void Start()
     {
-        enableStart = false;
         start();
     }
     private async void start()
@@ -69,13 +71,30 @@ public class TestLobby : MonoBehaviour
 
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedlobby.Id);
                 joinedlobby = lobby;
-                
-
             }
         }
     }
 
-    private async void CreateLobby()
+     public bool IsLobbyHost() {
+        return joinedlobby != null && joinedlobby.HostId == AuthenticationService.Instance.PlayerId;
+    }
+
+    private bool IsPlayerInLobby() {
+        if (joinedlobby != null && joinedlobby.Players != null) 
+        {
+            foreach (Player player in joinedlobby.Players) 
+            {
+                if (player.Id == AuthenticationService.Instance.PlayerId) 
+                {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public async void CreateLobby()
     {
         try
         {
@@ -88,7 +107,7 @@ public class TestLobby : MonoBehaviour
                 IsPrivate = false,
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>{
-                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Castle")}
+                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Public")}
                 }
             };
 
@@ -97,9 +116,7 @@ public class TestLobby : MonoBehaviour
             hostlobby = lobby;
             joinedlobby = hostlobby;
 
-            Debug.Log("Create Lobby!" + lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Id + " " + lobby.LobbyCode);
-
-            PrintPlayers(hostlobby);
+            Debug.Log("Who is owner? " + IsLobbyHost() + ", "+lobby.LobbyCode);
         }
         catch (LobbyServiceException e)
         {
@@ -150,6 +167,8 @@ public class TestLobby : MonoBehaviour
 
             PrintPlayers(JoinLobby);
 
+            Debug.Log("Who is owner? " + IsLobbyHost());
+
         }
         catch (LobbyServiceException e)
         {
@@ -180,9 +199,11 @@ public class TestLobby : MonoBehaviour
     {
         return new Player
         {
-            Data = new Dictionary<string, PlayerDataObject>{
-                        {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member,PlayerName)}
-                    }
+            Data = new Dictionary<string, PlayerDataObject>
+            {
+                {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member,
+                PlayerName)}
+            }
         };
     }
 
@@ -262,7 +283,7 @@ public class TestLobby : MonoBehaviour
 
     public void JoinLobbyLobbyBt()
     {
-        QuickJoinLobby();
+        JoinLobby(codeinput.text);
     }
 
     public void LeaveLobbyBt()
