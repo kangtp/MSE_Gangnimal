@@ -271,7 +271,8 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                     if (hasWeapons[i])
                     {
                         hasWeapons[i] = false;
-                        weapons[weaponIndex].SetActive(false);
+
+                        weapons[i].SetActive(false);
                     }
                 }
                 Debug.Log("where is my mind : " + IsServer);

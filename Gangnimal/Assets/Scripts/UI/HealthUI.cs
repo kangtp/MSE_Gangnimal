@@ -16,6 +16,7 @@ public class HealthUI : MonoBehaviour, Observerinterface
         healthText.text = playerInfo.HP.ToString();
     }
 
+
     void OnDestroy()
     {
         playerInfo.RemoveObserver(this);
