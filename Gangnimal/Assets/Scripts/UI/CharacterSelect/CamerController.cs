@@ -32,7 +32,7 @@ public class CamerController : MonoBehaviour
                 Debug.Log("client ID : " + NetworkManager.Singleton.IsClient);
                 cinemachineFreeLook.Follow = player.GetComponent<Transform>();
                 GameObject lookat = player.transform.GetChild(0).gameObject;
-                Debug.Log("lookat : " + lookat.transform);
+                //Debug.Log("lookat : " + lookat.transform);
                 if (lookat != null)
                 {
                     cinemachineFreeLook.LookAt = lookat.GetComponent<Transform>();

@@ -43,7 +43,12 @@ public class ThirdPersonMovement : NetworkBehaviour
     }
     void Start()
     {
-        
+        //GameManager.instance.gameOverPannel.SetActive(false);
+        if(GameManager.instance==null)
+        {
+            GameObject overpannel = GameObject.Find("GameOver");
+            overpannel.SetActive(false);
+        }
     }
     void Update()
     {
