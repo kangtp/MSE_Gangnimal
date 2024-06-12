@@ -30,6 +30,7 @@ public class LobbyManager : MonoBehaviour
     {
         Instance = this;
         start();
+        DontDestroyOnLoad(this.gameObject);
     }
     private async void start()
     {
@@ -132,6 +133,8 @@ public class LobbyManager : MonoBehaviour
             joinedlobby = hostlobby;
 
             Debug.Log("Who is owner? " + IsLobbyHost() + ", " + lobby.LobbyCode);
+
+            
         }
         catch (LobbyServiceException e)
         {
@@ -183,6 +186,8 @@ public class LobbyManager : MonoBehaviour
             PrintPlayers(JoinLobby);
 
             Debug.Log("Who is owner? " + IsLobbyHost());
+
+            
 
         }
         catch (LobbyServiceException e)
