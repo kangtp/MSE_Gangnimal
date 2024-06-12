@@ -97,7 +97,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         Debug.Log("Server HP is : " + HP);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void RequestDamageServerRpc(int damage)
     {
         ApplyDamageToClientRpc(damage);
@@ -106,15 +106,20 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     [ClientRpc]
     public void ApplyDamageToClientRpc(int damage)
     {
-        HP -= damage;
-        NotifyObservers();
-        Debug.Log("Client HP is : " + HP);
+        if (!IsServer)
+        {
+            HP -= damage;
+            NotifyObservers();
+            //gameObject.GetComponent<HealthUI>().updateHealth(HP);
+            Debug.Log("Client HP is : " + HP + " " + gameObject.GetComponent<NetworkObject>().OwnerClientId);
+        }
     }
     public void TakeDamage(int damage)
     {
         HP -= damage;
         NotifyObservers();
-        Debug.Log("HP is : " + HP);
+        //gameObject.GetComponent<HealthUI>().updateHealth(HP);
+        Debug.Log("HP is : " + HP + " " + gameObject.GetComponent<NetworkObject>().OwnerClientId);
     }
 
 

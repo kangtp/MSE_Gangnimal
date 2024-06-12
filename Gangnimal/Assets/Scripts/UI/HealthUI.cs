@@ -9,9 +9,9 @@ public class HealthUI : MonoBehaviour, Observerinterface
 
     void Start()
     {
-        //playerInfo = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent
         playerInfo = FindObjectOfType<PlayerInfo>();
         playerInfo.RegisterObserver(this);
+        Debug.Log(this.GetComponent<NetworkObject>().OwnerClientId);
         healthText = GameObject.Find("HP").GetComponent<Text>();
         healthText.text = playerInfo.HP.ToString();
     }
@@ -26,6 +26,11 @@ public class HealthUI : MonoBehaviour, Observerinterface
     {
         healthText.text = health.ToString();
     }
+
+    //public void updateHealth(int health)
+    //{
+    //    healthText.text = health.ToString();
+    //}
 
   
 }

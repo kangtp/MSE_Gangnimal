@@ -5,5 +5,6 @@ using UnityEngine;
 public interface Observerinterface
 {
     void InformationUpdate(int health);
+
 } 
 

@@ -84,20 +84,23 @@ public class explosion : NetworkBehaviour
 
     private void ApplyDamageToPlayer(GameObject player)
     {
-        Debug.Log("isServer? " + IsServer + " isClient? " + IsClient + " IsHost? "+IsHost);
+        //Debug.Log("isServer? " + IsServer + " isClient? " + IsClient + " IsHost? "+IsHost);
+
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
         if (playerInfo != null)
         {
-            if (IsServer)
+            if (player.GetComponent<NetworkObject>().OwnerClientId == 0)    //If Player that damaged is host, 
             {
-                playerInfo.TakeDamageServerRpc(damageAmount);
+                Debug.Log("client -> server");
+                playerInfo.TakeDamage(damageAmount);
             }
-            else if (IsClient)
+            else
             {
-                playerInfo.RequestDamageServerRpc(damageAmount);
+                Debug.Log("server -> client");
+                //playerInfo.RequestDamageServerRpc(damageAmount);
+                playerInfo.ApplyDamageToClientRpc(damageAmount);
             }
         }
-
     }
 
     IEnumerator WaitCoroutine(float t)
