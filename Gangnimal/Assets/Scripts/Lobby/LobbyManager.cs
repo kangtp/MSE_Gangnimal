@@ -85,6 +85,17 @@ public class LobbyManager : MonoBehaviour
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedlobby.Id);
                 joinedlobby = lobby;
             }
+
+            if(joinedlobby.Data["KEY_START_GAME"].Value != "0")
+            {
+               
+                if(!IsLobbyHost())
+                {
+                    TestRelay.Instance.JoinRelay(joinedlobby.Data["KEY_START_GAME"].Value);
+                }
+
+                joinedlobby = null;
+            }
         }
     }
 
@@ -122,7 +133,8 @@ public class LobbyManager : MonoBehaviour
                 IsPrivate = false,
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>{
-                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Public")}
+                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Public")},
+                    {"KEY_START_GAME", new DataObject(DataObject.VisibilityOptions.Member, "0")}
                 }
             };
 
@@ -132,6 +144,8 @@ public class LobbyManager : MonoBehaviour
             joinedlobby = hostlobby;
 
             Debug.Log("Who is owner? " + IsLobbyHost() + ", " + lobby.LobbyCode);
+
+            
         }
         catch (LobbyServiceException e)
         {
@@ -183,6 +197,10 @@ public class LobbyManager : MonoBehaviour
             PrintPlayers(JoinLobby);
 
             Debug.Log("Who is owner? " + IsLobbyHost());
+
+            joinedlobby = JoinLobby;
+
+            
 
         }
         catch (LobbyServiceException e)
@@ -236,20 +254,23 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
+    public async void StartGame()
     {
-
-        if (joinedlobby != null)
+        if (IsLobbyHost())
         {
-            int count = 0;
-            foreach (Player player in joinedlobby.Players)
+            try
             {
-                count++;
-            }
+                string relaycode = await TestRelay.Instance.CreateRelay();
 
-            if (count == 2)
-            {
-                SceneManager.LoadScene("ForestScene");
+                Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinedlobby.Id, new UpdateLobbyOptions{
+                    Data = new Dictionary<string, DataObject>{
+                        {"KEY_START_GAME", new DataObject(DataObject.VisibilityOptions.Member, relaycode)}
+                    }
+                });
+
+                joinedlobby = lobby;
+            } catch (LobbyServiceException e){
+                Debug.Log(e);
             }
         }
 
