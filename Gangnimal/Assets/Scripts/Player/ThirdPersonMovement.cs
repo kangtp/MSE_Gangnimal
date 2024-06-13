@@ -147,11 +147,12 @@ public class ThirdPersonMovement : NetworkBehaviour
         {
             if(IsServer)
             {
+                FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
                 WhenDeadHostClientRpc();
             }
             else if(!IsServer)
             {
-
+                FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
                 WhenDeadClientServerRpc();
             }
             oneDie=true;
@@ -236,6 +237,7 @@ public class ThirdPersonMovement : NetworkBehaviour
     [ClientRpc]
     private void WhenDeadHostClientRpc()
     {
+        FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             
@@ -258,6 +260,7 @@ public class ThirdPersonMovement : NetworkBehaviour
     [ServerRpc]
     private void WhenDeadClientServerRpc()
     {
+        FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
