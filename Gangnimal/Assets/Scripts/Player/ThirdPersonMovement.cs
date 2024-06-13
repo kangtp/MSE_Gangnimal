@@ -145,11 +145,11 @@ public class ThirdPersonMovement : NetworkBehaviour
         }
         else if (playerInfo.HP <= 0 && !oneDie)
         {
-            if(IsHost)
+            if(IsServer)
             {
                 WhenDeadHostClientRpc();
             }
-            else if(IsClient)
+            else if(!IsServer)
             {
 
                 WhenDeadClientServerRpc();
@@ -238,10 +238,7 @@ public class ThirdPersonMovement : NetworkBehaviour
     {
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
-            {
-                anim.Play("idle");
-            }
+            
             if(playerInfo.HP<=0)
             {
                 GameManager.instance.SetAlive(false);
@@ -270,12 +267,10 @@ public class ThirdPersonMovement : NetworkBehaviour
             if(playerInfo.HP<=0)
             {
                 GameManager.instance.SetAlive(false);
-            }
-            else
-            {
                 anim.SetTrigger("Death");
             }
-            anim.SetTrigger("Death");
+            
+            
             GameManager.instance.GameOver();
             if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
             {
@@ -284,7 +279,7 @@ public class ThirdPersonMovement : NetworkBehaviour
             }
             Debug.Log("게임오버패널 켜져야지!");
         }
-
+        WhenDeadHostClientRpc();
     }
 
     private void OnDrawGizmos()

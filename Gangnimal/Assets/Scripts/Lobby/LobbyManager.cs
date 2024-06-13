@@ -374,4 +374,12 @@ public class LobbyManager : MonoBehaviour
         return false;
     }
 
+    public void SignOut()
+    {   
+        AuthenticationService.Instance.SignedOut += () =>
+        {
+            Debug.Log("signout");
+        };
+    }
+
 }
