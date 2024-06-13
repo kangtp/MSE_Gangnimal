@@ -34,21 +34,6 @@ public class TestRelay : MonoBehaviour
         JoinRelay(codeinput.text);
     }
 
-
-    private async void Start()
-    {
-
-        await UnityServices.InitializeAsync();
-
-        AuthenticationService.Instance.SignedIn += () =>
-        {
-            Debug.Log("Signed in" + AuthenticationService.Instance.PlayerId);
-        };
-
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
-
-    }
-
     IEnumerator turnOn()
     {
         yield return new WaitForSeconds(4.0f);
@@ -57,17 +42,23 @@ public class TestRelay : MonoBehaviour
             if (condition)
             {
                 yield return new WaitForSeconds(0.1f);
+                Load_map.Instance.LoadMapFunction();
                 foreach (GameObject item in turnOnobj)
                 {
-                    //Debug.Log(item.ToString());
                     item.SetActive(true);
+                }
+                turnOnobj[3].SetActive(false);
+                turnOnobj[4].SetActive(false);
+                foreach (Transform child in turnOnobj[4].transform)
+                {
+                    child.gameObject.SetActive(false);
                 }
                 StopCoroutine("turnOn");
             }
         }
     }
 
-    public async void CreateRelay()
+    public async Task<string> CreateRelay()
     {
         try
         {
@@ -81,14 +72,15 @@ public class TestRelay : MonoBehaviour
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-
             condition = NetworkManager.Singleton.StartHost();
             canSpawn = true;
             StartCoroutine("turnOn"); // 플레이어를 생성하기전에 몇개 오브젝트에서 awake, start에서 바로 플레이어를 찾아야되서 delay를 줘야된다.
+            return joinCode;
         }
         catch (RelayServiceException e)
         {
             Debug.Log(e);
+            return null;
         }
 
     }

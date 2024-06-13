@@ -51,7 +51,7 @@ public class SelectCharacter : MonoBehaviour //캐릭터 선택씬
         explainPannels[select_index].SetActive(true);
         
         PlayerPrefs.SetInt("SelectedCharacterIndex", select_index);// 그리고 전투씬에서의 스폰을 위한 정보값 저장
-        GameManager.instance.PlayCharacterSound(select_index);// 버튼 클릭시 사운드 넣기
+        //GameManager.instance.PlayCharacterSound(select_index);// 버튼 클릭시 사운드 넣기
         PlayerPrefs.Save(); // 저장해주기
         
     }
@@ -73,19 +73,8 @@ public class SelectCharacter : MonoBehaviour //캐릭터 선택씬
                 correctOrder[2]=p;
             }
         }
-        //확인용
-        foreach(GameObject p in correctOrder)
-        {
-            Debug.Log(p.name);
-        }
        
        return correctOrder;
     }    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
 }

@@ -7,33 +7,36 @@ public class LoadingSlider : MonoBehaviour
     public float loadTime = 5f; // 대기시간
     public Button hostButton;
     private float timer = 0f;
-    bool clicked=false;//중복클릭 방지용으로 false
+    bool clicked = false;//중복클릭 방지용으로 false
 
     void Start()
     {
         // 초기화
         slider.value = 0f;
-        
+
         //테스트용
-       
+
     }
 
     void Update()
     {
         timer += Time.deltaTime;
-      
+
         slider.value = Mathf.Clamp01(timer / loadTime);
 
-        if(timer>3f &&!clicked) // 딱 1번만 
+        if (timer > 1f && !clicked) // 딱 1번만 
         {
-            hostButton.onClick.Invoke();
-            clicked=true;
+            if (PlayerPrefs.GetInt("RelayInfo") == 0)
+            {
+                hostButton.onClick.Invoke();
+                clicked = true;
+            }
         }
         if (slider.value >= 1f)
         {
 
             OnLoadingComplete();
-            
+
         }
     }
 

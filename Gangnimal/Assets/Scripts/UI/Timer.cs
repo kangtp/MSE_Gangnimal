@@ -13,16 +13,34 @@ public class Timer : MonoBehaviour
     public int endTime;
     private float currentTime;
 
+    private bool oneTime;
+
     // Start is called before the first frame update
     void Start()
     {
+        oneTime = false;
         currentTime = endTime;
+        timerText.text = "waiting for user";
     }
 
     // Update is called once per frame
     void Update()
     {
-        Timer_Show();
+        if (LobbyManager.Instance.IsLobbyHost())
+        {
+            if (LobbyManager.Instance.StartCondition() == false)
+            {
+                timerText.text = "waiting for user";
+            }
+            else if(LobbyManager.Instance.StartCondition())
+            {                
+                Timer_Show();
+            }
+        }
+        else if (LobbyManager.Instance.IsLobbyHost() == false)
+        {
+            Timer_Show();
+        }
     }
     void Timer_Show()
     {
@@ -36,9 +54,13 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            currentTime = 0;
-            
-            startButton.onClick.Invoke();
+            if (!oneTime && LobbyManager.Instance.IsLobbyHost())
+            {
+                currentTime = 0;
+                LobbyManager.Instance.StartGame();
+                oneTime = true;
+            }
+            //startButton.onClick.Invoke();
         }
 
         timerText.text = Mathf.CeilToInt(currentTime).ToString();

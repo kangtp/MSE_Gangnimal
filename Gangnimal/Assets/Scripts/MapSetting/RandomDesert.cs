@@ -6,6 +6,7 @@ public class RandomDesert : MonoBehaviour
 {
     public GameObject[] objects;
     public int spawnNumber;
+    public int[] spawnposition;
     // Start is called before the first frame update
     void Start()
     {
