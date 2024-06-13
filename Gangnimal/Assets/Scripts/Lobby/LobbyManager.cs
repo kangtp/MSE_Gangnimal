@@ -52,7 +52,7 @@ public class LobbyManager : MonoBehaviour
 
     private void Update()
     {
-        HandleLobbyHeartbeat();
+        //HandleLobbyHeartbeat();
         HandleLobbyPollForUpdates();
     }
 
@@ -133,7 +133,7 @@ public class LobbyManager : MonoBehaviour
                 IsPrivate = false,
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>{
-                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "Public")},
+                    {"Map", new DataObject(DataObject.VisibilityOptions.Public,  PlayerPrefs.GetString("SelectedMapIndex"))},
                     {"KEY_START_GAME", new DataObject(DataObject.VisibilityOptions.Member, "0")}
                 }
             };
@@ -195,7 +195,8 @@ public class LobbyManager : MonoBehaviour
             Debug.Log("Joined Lobby with code" + lobbyCode);
 
             PrintPlayers(JoinLobby);
-
+            PlayerPrefs.SetString("SelectedMapIndex", JoinLobby.Data["Map"].Value);
+            PlayerPrefs.Save();
             Debug.Log("Who is owner? " + IsLobbyHost());
 
             joinedlobby = JoinLobby;
