@@ -117,12 +117,22 @@ public class ThirdPersonMovement : NetworkBehaviour
 
     void Start()
     {
+        if(GameManager.instance!=null)
+        {
+            GameManager.instance.InitializeGameOverPanel();
+        }
         //GameManager.instance.gameOverPannel.SetActive(false);
         /*
         if(GameManager.instance==null)
         {
-            GameObject overpannel = GameObject.Find("GameOver");
-            overpannel.SetActive(false);
+            GameObject winpanel = GameObject.Find("WinPanel");
+            GameObject losepanel = GameObject.Find("LosePanel");
+            losepanel.SetActive(false);
+            winpanel.SetActive(false);
+        }
+        else
+        {
+            GameManager.instance.InitializeGameOverPanel();
         }
         */
     }
@@ -230,7 +240,7 @@ public class ThirdPersonMovement : NetworkBehaviour
             GameManager.instance.SetAlive(false);
             anim.SetTrigger("Death");
             GameManager.instance.GameOver();
-            if (GameManager.instance.gameOverPannel == null)
+            if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
             {
 
                 Debug.Log("없어!");
