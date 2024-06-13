@@ -87,9 +87,11 @@ public class ThirdPersonMovement : NetworkBehaviour
             yield return new WaitForSeconds(0.1f);
             if (IsHost)
             {
-                Transform hostSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(0).transform;
+                Transform hostSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(0).gameObject.transform;
                 if (hostSpawnTransform != null)
                 {
+                    Debug.Log(GameObject.Find("Map").transform.GetChild(mapcode).GetChild(0).gameObject.name);
+                    Debug.Log(hostSpawnTransform.position);
                     HostSpawnPoint = hostSpawnTransform;
                     this.gameObject.transform.position = HostSpawnPoint.position;
                     Debug.Log("host!!" + this.gameObject.transform.position);
@@ -98,9 +100,11 @@ public class ThirdPersonMovement : NetworkBehaviour
             }
             else if (IsClient)
             {
-                Transform clientSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(1).transform;
+                Transform clientSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(1).gameObject.transform;
                 if (clientSpawnTransform != null)
                 {
+                    Debug.Log(GameObject.Find("Map").transform.GetChild(mapcode).GetChild(1).gameObject.name);
+                    Debug.Log(clientSpawnTransform.position);
                     ClientSpawnPoint = clientSpawnTransform;
                     this.gameObject.transform.position = ClientSpawnPoint.position;
                     Debug.Log("Client!!" + this.gameObject.transform.position);
