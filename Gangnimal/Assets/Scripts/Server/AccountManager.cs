@@ -36,9 +36,9 @@ public class AccountManager : MonoBehaviour
         StartCoroutine(signInRequest());
     }
 
-    public void UpdateBattleRecord(string result)
+    public void UpdateBattleRecord()
     {
-        updateRecordUrl += UserInfo.Instance.userName + "/" + result;
+        updateRecordUrl += UserInfo.Instance.userName + "/win";  //later, bring the string that stored battle result.
         Debug.Log(updateRecordUrl);
         StartCoroutine(RecordUpdateRequest());
         updateRecordUrl = "http://localhost:7755/gangnimal/record/update/";
