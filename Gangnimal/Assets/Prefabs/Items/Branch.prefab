@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4511152981628570647}
   - component: {fileID: 178854161767077446}
   - component: {fileID: 8243003044357797687}
+  - component: {fileID: 1327188478195349096}
   m_Layer: 0
   m_Name: Branch
   m_TagString: Weapon
@@ -194,3 +195,34 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.58
   m_Center: {x: -0.007118225, y: 0.0049462835, z: 0.01702135}
+--- !u!114 &1327188478195349096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3858310578583261179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
