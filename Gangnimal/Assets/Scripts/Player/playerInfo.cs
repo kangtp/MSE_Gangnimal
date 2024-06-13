@@ -31,8 +31,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     //public gameObject myWeapon;
 
     public bool haveShield = false;
-    public GameObject shieldEffect;
-    public GameObject healingEffect;
 
     bool detect;
     bool iDown;
@@ -201,7 +199,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         {
             if (other.name == "Shield(Clone)")
             {
-                //GameManager.instance.PlayShieldSound();
+                GameManager.instance.PlayShieldSound();
                 haveShield = true;
                 items[0].SetActive(true);
 
@@ -210,7 +208,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             }
             if (other.name == "Healpack(Clone)")
             {
-                //GameManager.instance.PlayHpSound();
+                GameManager.instance.PlayHpSound();
                 items[1].SetActive(true);
                 if (IsServer) { RequestVisibleItemClientRpc(healIndex); }
                 if (!IsServer) { RequestVisibleItemServerRpc(healIndex); }

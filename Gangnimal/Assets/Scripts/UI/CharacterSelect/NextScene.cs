@@ -18,11 +18,7 @@ public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은
                 }
             
         }
-        if (gameObject.name == "Canvas")
-        {
-            winPannel.SetActive(false);
-            losePannel.SetActive(false);
-        }
+       
         
        
     }

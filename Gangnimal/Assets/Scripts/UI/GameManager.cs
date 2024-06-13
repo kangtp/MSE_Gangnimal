@@ -52,20 +52,20 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        isGameOver=false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
-        isAlive=true; // 위와 같은 이유
-        if(SceneManager.GetActiveScene().name =="ForestScene" || SceneManager.GetActiveScene().name =="Winter" || SceneManager.GetActiveScene().name =="Desert")
-        {// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
-            winPannel=GameObject.Find("WinPanel"); // 윈패널 찾기
-            losePannel = GameObject.Find("LosePanel");
-            if (winPannel != null && losePannel!=null)
-            {
-                winPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다.
-                losePannel.SetActive(false);
-            }
-            isGameOver=false;//혹시 모르니 한번 더 설정 해줌.
-            isAlive=true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
-        }
+        //isGameOver=false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
+        //isAlive=true; // 위와 같은 이유
+        //if(SceneManager.GetActiveScene().name =="ForestScene" || SceneManager.GetActiveScene().name =="Winter" || SceneManager.GetActiveScene().name =="Desert")
+        //{// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
+        //    winPannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
+        //    losePannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
+        //    if (winPannel != null && losePannel!=null)
+        //    {
+        //        winPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다.
+        //        losePannel.SetActive(false);
+        //    }
+        //    isGameOver=false;//혹시 모르니 한번 더 설정 해줌.
+        //    isAlive=true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
+        //}
     }
     // 게임 오버 처리
     public void GameOver()
@@ -92,14 +92,22 @@ public class GameManager : MonoBehaviour
     public void InitializeGameOverPanel()// 혹시라도 못찾을 경우를 대비해 다른 오브젝트에서도 게임 패널을 찾아준다. 
     {
 
-        winPannel = GameObject.Find("WinPanel"); // 윈패널 찾기
-        losePannel = GameObject.Find("LosePanel");
-        losePannel.SetActive(false);
-        winPannel.SetActive(false);
-        isAlive =true; 
-        isGameOver = false;
-        
-       
+        isGameOver = false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
+        isAlive = true; // 위와 같은 이유
+        if (SceneManager.GetActiveScene().name == "ForestScene" || SceneManager.GetActiveScene().name == "Winter" || SceneManager.GetActiveScene().name == "Desert")
+        {// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
+            winPannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
+            losePannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
+            if (winPannel != null && losePannel != null)
+            {
+                winPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다.
+                losePannel.SetActive(false);
+            }
+            isGameOver = false;//혹시 모르니 한번 더 설정 해줌.
+            isAlive = true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
+
+
+        }
     }
 
     // 오디오 관련 메소드

@@ -113,6 +113,10 @@ public class ThirdPersonMovement : NetworkBehaviour
 
     void Start()
     {
+        if(GameManager.instance!=null)
+        {
+            GameManager.instance.InitializeGameOverPanel();
+        }
         //GameManager.instance.gameOverPannel.SetActive(false);
         /*
         if(GameManager.instance==null)

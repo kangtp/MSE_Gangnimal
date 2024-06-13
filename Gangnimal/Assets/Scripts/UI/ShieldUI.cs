@@ -15,18 +15,10 @@ public class ShieldUI : MonoBehaviour
 
         if (playerinfo == null)
         {
-            Debug.LogError("PlayerInfo�� ã�� �� �����ϴ�.");
+            Debug.Log("PlayerInfo not created");
         }
 
-        //if (shield == null)
-        //{
-        //    Debug.LogError("Shield �̹����� ������� �ʾҽ��ϴ�.");
-        //}
-
-
         shield.gameObject.SetActive(false);
-
-
     }
 
     // Update is called once per frame
@@ -43,13 +35,5 @@ public class ShieldUI : MonoBehaviour
 
         }
 
-        //if (playerinfo.haveShield)
-        //{
-        //    shield.gameObject.SetActive(true);
-        //}
-        //else
-        //{
-        //    shield.gameObject.SetActive(false);
-        //}
     }
 }
