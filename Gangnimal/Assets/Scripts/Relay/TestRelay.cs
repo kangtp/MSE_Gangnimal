@@ -17,6 +17,8 @@ public class TestRelay : MonoBehaviour
     public GameObject[] turnOnobj;
     public TMP_InputField codeinput;
 
+    public GameObject LoadingObject;
+
     public static TestRelay Instance { get; private set; }
     bool condition;
 
@@ -36,6 +38,7 @@ public class TestRelay : MonoBehaviour
 
     IEnumerator turnOn()
     {
+        LoadingObject.SetActive(true);
         yield return new WaitForSeconds(4.0f);
         while (true)
         {
