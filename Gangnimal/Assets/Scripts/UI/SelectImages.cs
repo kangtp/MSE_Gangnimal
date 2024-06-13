@@ -9,7 +9,7 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
     private int select_index=0; // 초기값은 0 
     [SerializeField]
     private Sprite[] sprites; // 보여줄 이미지 스프라이트들
-    private Image background; // 뒷배경화면
+    //private Image background; // 뒷배경화면
     public GameObject[] characterSelects;
     // Start is called before the first frame update
     void Start()
@@ -21,11 +21,11 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
             images.Add(t.gameObject);
             t.gameObject.SetActive(false);
         }
-        background = GameObject.Find("BackGround").GetComponent<Image>();// 뒤에 배경사진
+        //background = GameObject.Find("Background").GetComponent<Image>();// 뒤에 배경사진
 
         
         images[select_index].SetActive(true); //초기에는 0번째 인덱스 보여줘야하니깐
-        background.sprite = sprites[select_index];//배경화면
+        //background.sprite = sprites[select_index];//배경화면
     }
     public void MapSelect(int index)// 맵 선택 버튼들에 들어가는 함수들 버튼마다 번호 존재 0 1 2 
     {
@@ -40,7 +40,7 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
         images[select_index].SetActive(false); // 기존 이미지 끄고
         select_index=index;
         images[select_index].SetActive(true);// 새로운 이미지 보여주고 
-        background.sprite = sprites[select_index];
+        //background.sprite = sprites[select_index];
         PlayerPrefs.SetString("SelectedMapIndex", select_index.ToString()); // 다음씬에 가져가기 위해 playerprefebs에 저장해준다. 
         PlayerPrefs.Save();
     }

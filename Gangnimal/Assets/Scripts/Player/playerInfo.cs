@@ -348,6 +348,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     [ServerRpc(RequireOwnership = false)]
     public void RequestNotVisibleItemServerRpc(int value)
     {
+        Debug.Log("RequestNotVisibleItemServerRpc" + value);
         if (value == shieldIndex)
         {
             items[0].SetActive(false);   //shield -> true
@@ -369,6 +370,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     [ClientRpc]
     public void RequestNotVisibleItemClientRpc(int value)
     {
+        Debug.Log("RequestNotVisibleItemClientRpc" + value);
         if (value == shieldIndex)
         {
             items[0].SetActive(false);   //shield -> true

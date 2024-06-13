@@ -10,6 +10,8 @@ public class HealthUI : MonoBehaviour, Observerinterface
     void Start()
     {
 
+        //healthText = GameObject.Find("HP").GetComponent<Text>();
+        GameObject.Find("Canvas").transform.GetChild(5).gameObject.SetActive(true);
         healthText = GameObject.Find("HP").GetComponent<Text>();
         healthText.text = "100";
     }

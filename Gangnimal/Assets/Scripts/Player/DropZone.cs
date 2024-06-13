@@ -19,17 +19,17 @@ public class DropZone : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) {
         CharacterController cc = other.GetComponent<CharacterController>();
-        if (cc != null)
+        if (cc != null && other.CompareTag("Player"))
         {
             cc.enabled = false; 
             other.transform.position = respawnPosition.position;
             cc.enabled = true; 
             return;
         }
-        else
+        else if(other.CompareTag("Item"))
         {
-            other.transform.position = respawnPosition.position;
+            other.gameObject.SetActive(false);
         }
-    }
     
+    }
 }

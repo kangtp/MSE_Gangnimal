@@ -13,62 +13,38 @@ public class explosion : NetworkBehaviour
     // 충돌이 발생했을 때 호출되는 메서드
     private void OnCollisionEnter(Collision collision)
     { 
-        
-
         //자신에 닿아서 터지는 경우 방지
         WaitCoroutine(1.0f);
 
         // 충돌한 오브젝트의 태그가 "Map"인지 확인
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Player") )
         {
-
-            if (gameObject.name == "BranchB")
+            
+            if (collision.gameObject.CompareTag("Player"))
             {
+                ApplyDamageToPlayer(collision.gameObject);
+            }
+
+            if (gameObject.name == "BranchB(Clone)")
+            {
+                Debug.Log("Branch");
                 GameManager.instance.PlayExplosionSound3();
             }
-            else if(gameObject.name == "StoneB"){
+            else if (gameObject.name == "StoneB(Clone)")
+            {
+                Debug.Log("stone");
                 GameManager.instance.PlayExplosionSound2();
             }
-            else if(gameObject.name == "BombB"){
+            else if (gameObject.name == "BombB(Clone)")
+            {
+                Debug.Log("BomB");
                 GameManager.instance.PlayExplosionSound1();
             }
-            //GameManager.instance.PlayExplosionSound1();
 
             PlayDestructionEffect();
             Destroy(gameObject);
         }
-        else if (collision.gameObject.CompareTag("Player"))
-        {
-            
-            if (gameObject.name == "BranchB")
-            {
-                GameManager.instance.PlayExplosionSound3();
-            }
-            else if(gameObject.name == "StoneB"){
-                GameManager.instance.PlayExplosionSound2();
-            }
-            else if(gameObject.name == "BombB"){
-                GameManager.instance.PlayExplosionSound1();
-            }
-            
-            ApplyDamageToPlayer(collision.gameObject);
 
-            PlayDestructionEffect();
-
-            // 자신을 삭제
-            Destroy(gameObject);
-        }
-/*
-        if (gameObject.name == "BranchB")
-        {
-            GameManager.instance.PlayExplosionSound3();
-        }
-        else if(gameObject.name == "StoneB"){
-            GameManager.instance.PlayExplosionSound2();
-        }
-        else if(gameObject.name == "BombB"){
-            GameManager.instance.PlayExplosionSound1();
-        }*/
     }
 
     private void PlayDestructionEffect()
