@@ -269,8 +269,6 @@ public class ThirdPersonMovement : NetworkBehaviour
                 GameManager.instance.SetAlive(false);
                 anim.SetTrigger("Death");
             }
-            
-            
             GameManager.instance.GameOver();
             if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
             {

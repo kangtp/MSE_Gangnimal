@@ -96,8 +96,8 @@ public class GameManager : MonoBehaviour
         isAlive = true; // 위와 같은 이유
         if (SceneManager.GetActiveScene().name == "ForestScene" || SceneManager.GetActiveScene().name == "Winter" || SceneManager.GetActiveScene().name == "Desert")
         {// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
-            winPannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
-            losePannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
+            winPannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
+            losePannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
             if (winPannel != null && losePannel != null)
             {
                 winPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다.
