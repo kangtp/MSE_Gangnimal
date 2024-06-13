@@ -29,7 +29,7 @@ public class TestRelay : MonoBehaviour
         canSpawn = false;
     }
 
-    public void JointheRelay()
+      public void JointheRelay()
     {
         JoinRelay(codeinput.text);
     }

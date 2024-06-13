@@ -90,10 +90,12 @@ public class explosion : NetworkBehaviour
         {
             if (player.GetComponent<NetworkObject>().OwnerClientId == 0)    //If Player that damaged is host, 
             {
+                Debug.Log("Server damaged");
                 playerInfo.TakeDamage(damageAmount);
             }
             else       //If Player that damaged is client,
-            {   
+            {
+                Debug.Log("client damaged");
                 playerInfo.ApplyDamageToClientRpc(damageAmount);
             }
         }

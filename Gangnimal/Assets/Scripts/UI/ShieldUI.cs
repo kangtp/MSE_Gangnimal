@@ -38,7 +38,7 @@ public class ShieldUI : MonoBehaviour
         }
         else if (playerinfo == null)
         {
-            playerinfo = FindObjectOfType<PlayerInfo>();
+            
             shield.gameObject.SetActive(false);
 
         }

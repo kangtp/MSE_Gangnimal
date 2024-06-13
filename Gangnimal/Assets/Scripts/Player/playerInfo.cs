@@ -17,6 +17,11 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     public GameObject[] weapons;
     public bool[] hasWeapons;
     public GameObject[] bullets;
+    public GameObject[] items;
+
+    private int shieldIndex = 5;
+    private int healIndex = 6;
+
     public float changeDelay=2f;
     //private GameObject bullet;
     //public static PlayerInfo instance;
@@ -54,7 +59,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     // Start is called before the first frame update
     private void Start()
     {
-        
+        FindObjectOfType<HealthUI>().RegisterObserver();
         firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
         StartCoroutine("awaitPowerGage");
 
@@ -99,9 +104,11 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             if (haveShield)
             {
                 damage -= 10;
+                Debug.Log("shield!!! " + damage);
                 haveShield = false;
+                RequestNotVisibleItemServerRpc(shieldIndex);
             }
-            Debug.Log("shield!!! " + damage);
+            
             HP -= damage;
             NotifyObservers();
             Debug.Log("Client HP is : " + HP);
@@ -114,6 +121,12 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         {
             damage -= 10;
             haveShield = false;
+            Debug.Log("shield!!! " + damage);
+            items[0].SetActive(false);
+            if(IsServer)
+                RequestNotVisibleItemClientRpc(shieldIndex);
+            if (!IsServer)
+                RequestNotVisibleItemServerRpc(shieldIndex);
         }
         HP -= damage;
         NotifyObservers();
@@ -178,6 +191,10 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         lineRenderer.SetPositions(points);
     }
 
+
+    /*
+     Pick Up the items
+     */
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
@@ -186,14 +203,18 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             {
                 //GameManager.instance.PlayShieldSound();
                 haveShield = true;
-                GameObject effect = Instantiate(shieldEffect, transform.position, Quaternion.identity);
-                effect.GetComponent<NetworkObject>().Spawn();
+                items[0].SetActive(true);
+
+                if (IsServer) { RequestVisibleItemClientRpc(shieldIndex); }
+                if (!IsServer) { RequestVisibleItemServerRpc(shieldIndex); }
             }
             if (other.name == "Healpack(Clone)")
             {
                 //GameManager.instance.PlayHpSound();
-                GameObject effect = Instantiate(healingEffect, transform.position, Quaternion.identity);
-                effect.GetComponent<NetworkObject>().Spawn();
+                items[1].SetActive(true);
+                if (IsServer) { RequestVisibleItemClientRpc(healIndex); }
+                if (!IsServer) { RequestVisibleItemServerRpc(healIndex); }
+
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
                 NotifyObservers();
@@ -261,11 +282,13 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestVisibleItemServerRpc(int value)
+
+    public void HealEffectOff()
     {
-        weapons[value].SetActive(true);
+        items[1].SetActive(false);
     }
+
+    
     
     [ServerRpc(RequireOwnership = false)]
     private void SpawnBulletServerRpc(int index, Vector3 position, Vector3 throw_D,float throw_p, float p_value)
@@ -286,22 +309,86 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         InstantiatedBullet.GetComponent<Rigidbody>().AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestVisibleItemServerRpc(int value)
+    {
+        if (value == shieldIndex)
+        {
+            items[0].SetActive(true);   //shield -> true
+        }
+        else if (value == healIndex)
+        {
+            items[1].SetActive(true);   //healing -> true
+            Invoke("HealEffectOff", 1f);    //after 1 sec, healing effect off
+            RequestHealingOffClientRpc();
+        }
+        else
+        {
+            weapons[value].SetActive(true);
+        }
+    }
+
     [ClientRpc]
     public void RequestVisibleItemClientRpc(int value)
     {
-        weapons[value].SetActive(true);
+        if(value == shieldIndex)
+        {
+            items[0].SetActive(true);   //shield -> true
+        }
+        else if(value == healIndex)
+        {
+            items[1].SetActive(true);   //healing -> true
+            Invoke("HealEffectOff", 2f);    //after 1 sec, healing effect off
+        }
+        else
+        {
+            weapons[value].SetActive(true);
+        }
+        
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void RequestNotVisibleItemServerRpc(int value)
     {
-        weapons[value].SetActive(false);
+        if (value == shieldIndex)
+        {
+            items[0].SetActive(false);   //shield -> true
+            RequestNotVisibleItemClientRpc(value);
+        }
+        else if (value == healIndex)
+        {
+            items[1].SetActive(false);   //healing -> true
+            RequestNotVisibleItemClientRpc(value);
+        }
+        else
+        {
+            weapons[value].SetActive(false);
+        }
     }
+
+
 
     [ClientRpc]
     public void RequestNotVisibleItemClientRpc(int value)
     {
-        weapons[value].SetActive(false);
+        if (value == shieldIndex)
+        {
+            items[0].SetActive(false);   //shield -> true
+        }
+        else if (value == healIndex)
+        {
+            items[1].SetActive(false);   //healing -> true
+        }
+        else
+        {
+            weapons[value].SetActive(false);
+        }
+    }
+
+    [ClientRpc]
+    public void RequestHealingOffClientRpc()
+    {
+        Invoke("HealEffectOff", 2f);
     }
 
     public void RegisterObserver(Observerinterface observer)
@@ -318,6 +405,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     {
         foreach (Observerinterface observer in observers)
         {
+            Debug.Log(observer.ToString());
             observer.InformationUpdate(HP);
         }
     }
