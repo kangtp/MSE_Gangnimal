@@ -34,22 +34,6 @@ public class TestRelay : MonoBehaviour
         JoinRelay(codeinput.text);
     }
 
-
-    private async void Start()
-    {
-        /*
-        await UnityServices.InitializeAsync();
-
-        AuthenticationService.Instance.SignedIn += () =>
-        {
-            Debug.Log("Signed in" + AuthenticationService.Instance.PlayerId);
-        };
-
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        */
-
-    }
-
     IEnumerator turnOn()
     {
         yield return new WaitForSeconds(4.0f);
@@ -58,9 +42,16 @@ public class TestRelay : MonoBehaviour
             if (condition)
             {
                 yield return new WaitForSeconds(0.1f);
+                Load_map.Instance.LoadMapFunction();
                 foreach (GameObject item in turnOnobj)
                 {
                     item.SetActive(true);
+                }
+                turnOnobj[3].SetActive(false);
+                turnOnobj[4].SetActive(false);
+                foreach (Transform child in turnOnobj[4].transform)
+                {
+                    child.gameObject.SetActive(false);
                 }
                 StopCoroutine("turnOn");
             }
@@ -80,7 +71,6 @@ public class TestRelay : MonoBehaviour
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-
 
             condition = NetworkManager.Singleton.StartHost();
             canSpawn = true;
