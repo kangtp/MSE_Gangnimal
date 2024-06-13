@@ -16,7 +16,7 @@ public class ThirdPersonMovement : NetworkBehaviour
     public float sprintSpeed;
     float truespeed;
     public float turnspeed;
-
+    bool oneDie=false;
     public float jumpHeight;
     public float gravity;
     bool isGrounded;
@@ -143,9 +143,18 @@ public class ThirdPersonMovement : NetworkBehaviour
         {
             PlayerMove3rd();
         }
-        else if (playerInfo.HP <= 0)
+        else if (playerInfo.HP <= 0 && !oneDie)
         {
-            WhenDead();
+            if(IsHost)
+            {
+                WhenDeadHostClientRpc();
+            }
+            else if(IsClient)
+            {
+
+                WhenDeadClientServerRpc();
+            }
+            oneDie=true;
         }
     }
 
@@ -224,16 +233,48 @@ public class ThirdPersonMovement : NetworkBehaviour
         }
     }
 
-    private void WhenDead()
+    [ClientRpc]
+    private void WhenDeadHostClientRpc()
     {
-
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
             {
                 anim.Play("idle");
             }
-            GameManager.instance.SetAlive(false);
+            if(playerInfo.HP<=0)
+            {
+                GameManager.instance.SetAlive(false);
+                anim.SetTrigger("Death");
+            }
+            GameManager.instance.GameOver();
+            if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
+            {
+
+                Debug.Log("없어!");
+            }
+            Debug.Log("게임오버패널 켜져야지!");
+        }
+
+    }
+
+    [ServerRpc]
+    private void WhenDeadClientServerRpc()
+    {
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
+            {
+                anim.Play("idle");
+            }
+            if(playerInfo.HP<=0)
+            {
+                GameManager.instance.SetAlive(false);
+            }
+            else
+            {
+                anim.SetTrigger("Death");
+            }
             anim.SetTrigger("Death");
             GameManager.instance.GameOver();
             if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)

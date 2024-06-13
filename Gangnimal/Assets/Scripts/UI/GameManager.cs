@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     private bool isAlive=true;// 누군가 오버이지만 자신은 살아있다면 이긴거임
 
     //public GameObject gameOverPannel; // 게임오버 패널
-    public GameObject winPannel; // 게임오버 패널
-    public GameObject losePannel;
+    public GameObject winPannel=null; // 게임오버 패널
+    public GameObject losePannel=null;
     private TextMeshProUGUI overText; // 승패를 알려줄 텍스트 
     
     // 각종 사운드 
@@ -80,12 +80,12 @@ public class GameManager : MonoBehaviour
             if(isAlive)// 게임오버 패널이 켜져있지만 살아있다면 
             {
                 winPannel.SetActive(true);
-                FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
+               
             }
             else
             {
                 losePannel.SetActive(true);
-                FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
+            
             }
         }
     }
