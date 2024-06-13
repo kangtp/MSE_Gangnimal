@@ -58,10 +58,16 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     private void Start()
     {
         FindObjectOfType<HealthUI>().RegisterObserver();
-        firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
+        StartCoroutine("awaitfirePos");
         StartCoroutine("awaitPowerGage");
-
     }
+
+    private IEnumerator awaitfirePos()
+    {
+        yield return new WaitForSeconds(1.0f);
+        firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
+    }
+
 
     private IEnumerator awaitPowerGage()
     {
