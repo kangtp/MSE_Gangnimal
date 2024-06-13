@@ -85,15 +85,12 @@ public class LobbyManager : MonoBehaviour
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedlobby.Id);
                 joinedlobby = lobby;
             }
-            
-            Debug.Log(joinedlobby.Data["KEY_START_GAME"].Value);
 
             if(joinedlobby.Data["KEY_START_GAME"].Value != "0")
             {
                
                 if(!IsLobbyHost())
                 {
-                    Debug.Log("한번만 되야되는데???????");
                     TestRelay.Instance.JoinRelay(joinedlobby.Data["KEY_START_GAME"].Value);
                 }
 
