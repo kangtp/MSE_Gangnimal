@@ -37,7 +37,7 @@ public class TestRelay : MonoBehaviour
 
     private async void Start()
     {
-        /*
+        
         await UnityServices.InitializeAsync();
 
         AuthenticationService.Instance.SignedIn += () =>
@@ -46,7 +46,7 @@ public class TestRelay : MonoBehaviour
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        */
+        
 
     }
 

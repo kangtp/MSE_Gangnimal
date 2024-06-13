@@ -11,7 +11,7 @@ public class HealthUI : MonoBehaviour, Observerinterface
     {
         //playerInfo = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent
         playerInfo = FindObjectOfType<PlayerInfo>();
-        //playerInfo.RegisterObserver(this);
+        playerInfo.RegisterObserver(this);
         healthText = GameObject.Find("HP").GetComponent<Text>();
         healthText.text = playerInfo.HP.ToString();
     }

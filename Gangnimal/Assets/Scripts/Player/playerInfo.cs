@@ -26,7 +26,9 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     //public gameObject myWeapon;
 
     public bool haveShield = false;
-    
+    public GameObject shieldEffect;
+    public GameObject healingEffect;
+
     bool detect;
     bool iDown;
     int weaponIndex = -1;
@@ -88,33 +90,34 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         ShootingBullet();
     }
 
-    //�߻� �� ���� ����
-    [ServerRpc(RequireOwnership = false)]
-    public void TakeDamageServerRpc(int damage)
-    {
-        HP -= damage;
-        NotifyObservers();
-        Debug.Log("Server HP is : " + HP);
-    }
-
-    [ServerRpc]
-    public void RequestDamageServerRpc(int damage)
-    {
-        ApplyDamageToClientRpc(damage);
-    }
-
+    
     [ClientRpc]
     public void ApplyDamageToClientRpc(int damage)
     {
-        HP -= damage;
-        NotifyObservers();
-        Debug.Log("Client HP is : " + HP);
+        if (!IsServer)
+        {
+            if (haveShield)
+            {
+                damage -= 10;
+                haveShield = false;
+            }
+            Debug.Log("shield!!! " + damage);
+            HP -= damage;
+            NotifyObservers();
+            Debug.Log("Client HP is : " + HP);
+        }
     }
+
     public void TakeDamage(int damage)
     {
+        if (haveShield)
+        {
+            damage -= 10;
+            haveShield = false;
+        }
         HP -= damage;
         NotifyObservers();
-        Debug.Log("HP is : " + HP);
+        Debug.Log("Server HP is : " + HP);
     }
 
 
@@ -126,11 +129,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             weapons[weaponIndex].SetActive(false);
             if (IsServer) { RequestNotVisibleItemClientRpc(weaponIndex); }
             if (!IsServer) { RequestNotVisibleItemServerRpc(weaponIndex); }
-            //Item item = go.GetComponent<Item>();
-            //if(item != null)
-            //{
-            //    item.RequestDespawnServerRpc();
-            //}
         }
     }
 
@@ -145,41 +143,17 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         if (Input.GetMouseButton(0))
         {
             DrawParabola();
-
         }
 
         if (Input.GetMouseButtonUp(0) && IsLocalPlayer)
         {
 
-            //GameObject bomb = null;
-
             if (weaponIndex != -1 && hasWeapons[weaponIndex])
-            {
-                //bomb = Instantiate(bullets[weaponIndex]);
-                //Debug.Log(firePosition.transform.position);
-                //NetworkObject networkObject = bomb.GetComponent<NetworkObject>();
-                //networkObject.Spawn(true);
                 SpawnBulletServerRpc(weaponIndex, firePosition.transform.position,firePosition.transform.forward.normalized,throwPower,powerGage.powerValue);
-                
-            }
-
-            //if (bomb != null)
-            //{
-
-            //    bomb.transform.position = firePosition.transform.position;
-            //    Rigidbody rb = bomb.GetComponent<Rigidbody>();
-            //    Vector3 throwDirection = firePosition.transform.forward.normalized;
-            //    //rb.AddForce(throwDirection * throwPower * powerGage.powerValue, ForceMode.Impulse);
-            //    bomb.GetComponent<Item>().AddForceServerRpc(throwDirection * throwPower * powerGage.powerValue);
-
-            //    lineRenderer.enabled = false;
-
 
             destroyWeapon(weaponIndex);
 
-            //}
             lineRenderer.enabled = false;
-
         }
     }
 
@@ -187,17 +161,19 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     void DrawParabola()
     {
-        //Debug.Log(NetworkManager.Singleton.LocalClientId);
         lineRenderer.enabled = true;
+
         Vector3[] points = new Vector3[numofDot];
         Vector3 startPosition = firePosition.transform.position;
         Vector3 startVelocity = throwPower * firePosition.transform.forward;
+
         float timeInterval = maxTime / numofDot;
         for (int i = 0; i < numofDot; i++)
         {
             float t = i * timeInterval;
             points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
         }
+
         lineRenderer.positionCount = numofDot;
         lineRenderer.SetPositions(points);
     }
@@ -210,10 +186,14 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             {
                 //GameManager.instance.PlayShieldSound();
                 haveShield = true;
+                GameObject effect = Instantiate(shieldEffect, transform.position, Quaternion.identity);
+                effect.GetComponent<NetworkObject>().Spawn();
             }
             if (other.name == "Healpack(Clone)")
             {
                 //GameManager.instance.PlayHpSound();
+                GameObject effect = Instantiate(healingEffect, transform.position, Quaternion.identity);
+                effect.GetComponent<NetworkObject>().Spawn();
                 HP += 10;
                 HP = Math.Clamp(HP, 0, 100);
                 NotifyObservers();
@@ -226,9 +206,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     void GetInput()
     {
         iDown = Input.GetKeyDown(KeyCode.E);
-
-
-        
     }
 
     void OnTriggerStay(Collider other)

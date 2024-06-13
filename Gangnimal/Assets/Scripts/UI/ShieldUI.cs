@@ -15,13 +15,13 @@ public class ShieldUI : MonoBehaviour
 
         if (playerinfo == null)
         {
-            //Debug.LogError("PlayerInfo�� ã�� �� �����ϴ�.");
+            Debug.LogError("PlayerInfo�� ã�� �� �����ϴ�.");
         }
 
-        if (shield == null)
-        {
-            Debug.LogError("Shield �̹����� ������� �ʾҽ��ϴ�.");
-        }
+        //if (shield == null)
+        //{
+        //    Debug.LogError("Shield �̹����� ������� �ʾҽ��ϴ�.");
+        //}
 
 
         shield.gameObject.SetActive(false);
@@ -42,5 +42,14 @@ public class ShieldUI : MonoBehaviour
             shield.gameObject.SetActive(false);
 
         }
+
+        //if (playerinfo.haveShield)
+        //{
+        //    shield.gameObject.SetActive(true);
+        //}
+        //else
+        //{
+        //    shield.gameObject.SetActive(false);
+        //}
     }
 }

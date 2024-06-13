@@ -282,6 +282,8 @@ MonoBehaviour:
   - {fileID: 1234798633183886030, guid: 84683417d055f3241bff09ad3c00e05b, type: 3}
   changeDelay: 2
   haveShield: 0
+  shieldEffect: {fileID: 8971582625283050629, guid: 058542c2bcc207346ad57646fa89c45c, type: 3}
+  healingEffect: {fileID: 1655450269578176881, guid: ca8e2a33e7248f647b7784f776ee1874, type: 3}
   lineRenderer: {fileID: 4616488144815108496}
   numofDot: 70
   timeInterval: 0.1
