@@ -23,8 +23,12 @@ public class ThirdPersonMovement : NetworkBehaviour
     Vector3 velocity;
 
     PlayerInfo playerInfo;
+
+    Transform HostSpawnPoint;
+    Transform ClientSpawnPoint;
+
     Vector3 firstPosition;
-    private bool isDead = false; 
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -34,21 +38,89 @@ public class ThirdPersonMovement : NetworkBehaviour
         playerInfo = GetComponentInChildren<PlayerInfo>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        StartCoroutine(awaitSpawn());
     }
 
     private IEnumerator awaitFindCamera()
     {
         yield return new WaitForSeconds(5.0f);
-        
+
     }
+
+    private bool isSpawned = false;
+
+    private string Mapname;
+    private int mapcode;
+
+    private IEnumerator awaitSpawn()
+    {
+        switch (PlayerPrefs.GetString("SelectedMapIndex"))
+        {
+            case "0":
+            {
+                Mapname = "ForestMap";
+                mapcode = 0;
+            }
+
+            break;
+
+            case "1":
+            {
+                Mapname = "DesertMap";
+                mapcode = 1;
+            }
+
+            break;
+
+            case "2":
+            {
+                Mapname = "WinterMap";
+                mapcode = 2;
+            }
+
+            break;
+            default:
+            break;
+        }
+        while (!isSpawned)
+        {
+            yield return new WaitForSeconds(0.1f);
+            if (IsHost)
+            {
+                Transform hostSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(0).transform;
+                if (hostSpawnTransform != null)
+                {
+                    HostSpawnPoint = hostSpawnTransform;
+                    this.gameObject.transform.position = HostSpawnPoint.position;
+                    Debug.Log("host!!" + this.gameObject.transform.position);
+                    isSpawned = true;
+                }
+            }
+            else if (IsClient)
+            {
+                Transform clientSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(1).transform;
+                if (clientSpawnTransform != null)
+                {
+                    ClientSpawnPoint = clientSpawnTransform;
+                    this.gameObject.transform.position = ClientSpawnPoint.position;
+                    Debug.Log("Client!!" + this.gameObject.transform.position);
+                    isSpawned = true;
+                }
+            }
+        }
+    }
+
+
     void Start()
     {
         //GameManager.instance.gameOverPannel.SetActive(false);
+        /*
         if(GameManager.instance==null)
         {
             GameObject overpannel = GameObject.Find("GameOver");
             overpannel.SetActive(false);
         }
+        */
     }
     void Update()
     {
@@ -57,11 +129,11 @@ public class ThirdPersonMovement : NetworkBehaviour
             playerInfo.HP -= 100;
         }
 
-        if (playerInfo.HP > 0 && IsLocalPlayer)
+        if (playerInfo.HP > 0 && IsOwner)
         {
             PlayerMove3rd();
         }
-        else if(playerInfo.HP <= 0)
+        else if (playerInfo.HP <= 0)
         {
             WhenDead();
         }
@@ -70,7 +142,7 @@ public class ThirdPersonMovement : NetworkBehaviour
     public void PlayerMove3rd()
     {
         CheckGroundStatus();
-        
+
 
         if (isGrounded && velocity.y < 0)
         {
@@ -144,24 +216,24 @@ public class ThirdPersonMovement : NetworkBehaviour
 
     private void WhenDead()
     {
-       
+
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            if(anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
             {
                 anim.Play("idle");
             }
             GameManager.instance.SetAlive(false);
             anim.SetTrigger("Death");
             GameManager.instance.GameOver();
-            if(GameManager.instance.gameOverPannel==null)
+            if (GameManager.instance.gameOverPannel == null)
             {
-                
+
                 Debug.Log("없어!");
             }
             Debug.Log("게임오버패널 켜져야지!");
         }
-       
+
     }
 
     private void OnDrawGizmos()
@@ -169,6 +241,6 @@ public class ThirdPersonMovement : NetworkBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
     }
-   
-    
+
+
 }
