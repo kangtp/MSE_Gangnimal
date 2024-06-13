@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 4938275916486807079, guid: 8c8776f99fb3d2d4f82e938431a3051f, type: 3}
-  damageAmount: 30
+  damageAmount: 20
 --- !u!114 &2292707583721748903
 MonoBehaviour:
   m_ObjectHideFlags: 0

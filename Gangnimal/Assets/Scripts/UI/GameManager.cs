@@ -10,9 +10,7 @@ public class GameManager : MonoBehaviour
     public bool isGameOver = false; // 게임이 안끝난 상태 , true가 게임이 끝난상태 
     private bool isAlive=true;// 누군가 오버이지만 자신은 살아있다면 이긴거임
 
-    //public GameObject gameOverPannel; // 게임오버 패널
-    public GameObject winPannel; // 게임오버 패널
-    public GameObject losePannel;
+    public GameObject gameOverPannel; // 게임오버 패널
     private TextMeshProUGUI overText; // 승패를 알려줄 텍스트 
     
     // 각종 사운드 
@@ -52,20 +50,18 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //isGameOver=false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
-        //isAlive=true; // 위와 같은 이유
-        //if(SceneManager.GetActiveScene().name =="ForestScene" || SceneManager.GetActiveScene().name =="Winter" || SceneManager.GetActiveScene().name =="Desert")
-        //{// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
-        //    winPannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
-        //    losePannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
-        //    if (winPannel != null && losePannel!=null)
-        //    {
-        //        winPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다.
-        //        losePannel.SetActive(false);
-        //    }
-        //    isGameOver=false;//혹시 모르니 한번 더 설정 해줌.
-        //    isAlive=true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
-        //}
+        isGameOver=false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
+        isAlive=true; // 위와 같은 이유
+        if(SceneManager.GetActiveScene().name =="ForestScene" || SceneManager.GetActiveScene().name =="Winter" || SceneManager.GetActiveScene().name =="Desert")
+        {// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
+            gameOverPannel=GameObject.Find("GameOver"); // 오버패널을 찾는 코드 
+            if (gameOverPannel != null)
+            {
+                gameOverPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다. 
+            }
+            isGameOver=false;//혹시 모르니 한번 더 설정 해줌.
+            isAlive=true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
+        }
     }
     // 게임 오버 처리
     public void GameOver()
@@ -75,38 +71,32 @@ public class GameManager : MonoBehaviour
             Cursor.visible = true; // 게임이 끝난 순간 버튼을 클릭하기 위해 커서를 보이게 한다. 
             Cursor.lockState = CursorLockMode.Confined;// 잠금을 푼다.
             isGameOver = true; // 게임오버 true
-            
+            gameOverPannel.SetActive(true); // 게임 패널 창 띄우기
             
             if(isAlive)// 게임오버 패널이 켜져있지만 살아있다면 
             {
-                winPannel.SetActive(true);
-                FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
+                overText.text = "You Win"; // 승자
             }
             else
             {
-                losePannel.SetActive(true);
-                FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
+                overText.text = "You Lose";//패자
             }
+           
+            
         }
     }
     public void InitializeGameOverPanel()// 혹시라도 못찾을 경우를 대비해 다른 오브젝트에서도 게임 패널을 찾아준다. 
-    {
-
-        isGameOver = false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
-        isAlive = true; // 위와 같은 이유
-        if (SceneManager.GetActiveScene().name == "ForestScene" || SceneManager.GetActiveScene().name == "Winter" || SceneManager.GetActiveScene().name == "Desert")
-        {// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
-            winPannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
-            losePannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
-            if (winPannel != null && losePannel != null)
-            {
-                winPannel.SetActive(false); // 만약에 찾았다면 처음에는 이 패널이 꺼져있어야 한다.
-                losePannel.SetActive(false);
-            }
-            isGameOver = false;//혹시 모르니 한번 더 설정 해줌.
-            isAlive = true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
-
-
+    {   
+        if(gameOverPannel !=null) // 게임 오버패널이 존재하면 이전 정보값들을 가진 구 패널일수 있으니 다시 null로 바꿔주고 다시 찾아옴.
+        {                         //isAlive나 isGameOver 같은 값들이 유지될 수 있기 때문 
+            gameOverPannel = null;
+        }
+        isAlive=true;
+        gameOverPannel = GameObject.Find("GameOver");// 기존에 존재했다면 다시 찾아준다. 
+        if (gameOverPannel != null)
+        {
+            overText =gameOverPannel.transform.GetChild(0).GetComponent<TextMeshProUGUI>(); // 이것은 승패를 알리기 위한 텍스트를 찾아주기 위함. 
+            gameOverPannel.SetActive(false); // 모든 찾기 작업이 끝나면 끔
         }
     }
 
