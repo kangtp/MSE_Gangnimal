@@ -42,6 +42,7 @@ public class TestRelay : MonoBehaviour
             if (condition)
             {
                 yield return new WaitForSeconds(0.1f);
+                Load_map.Instance.LoadMapFunction();
                 foreach (GameObject item in turnOnobj)
                 {
                     item.SetActive(true);

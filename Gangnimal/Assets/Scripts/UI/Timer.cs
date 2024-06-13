@@ -20,6 +20,7 @@ public class Timer : MonoBehaviour
     {
         oneTime = false;
         currentTime = endTime;
+        timerText.text = "waiting for user";
     }
 
     // Update is called once per frame
@@ -31,8 +32,8 @@ public class Timer : MonoBehaviour
             {
                 timerText.text = "waiting for user";
             }
-            else
-            {
+            else if(LobbyManager.Instance.StartCondition())
+            {                
                 Timer_Show();
             }
         }

@@ -14,7 +14,7 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
     // Start is called before the first frame update
     void Start()
     {
-        PlayerPrefs.SetInt("SelectedMapIndex", select_index);// 초기값 저장
+         PlayerPrefs.SetString("SelectedMapIndex", select_index.ToString());// 초기값 저장
         images =new List<GameObject>();// 중간에 띄어져있는 맵사진들
         foreach(Transform t in transform)// 이게임오브젝트의 자식들에 존재하니 넣어준다. 
         {
@@ -41,7 +41,7 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
         select_index=index;
         images[select_index].SetActive(true);// 새로운 이미지 보여주고 
         background.sprite = sprites[select_index];
-        PlayerPrefs.SetInt("SelectedMapIndex", select_index); // 다음씬에 가져가기 위해 playerprefebs에 저장해준다. 
+        PlayerPrefs.SetString("SelectedMapIndex", select_index.ToString()); // 다음씬에 가져가기 위해 playerprefebs에 저장해준다. 
         PlayerPrefs.Save();
     }
   
