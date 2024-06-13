@@ -9,8 +9,6 @@ public class explosion : NetworkBehaviour
     public GameObject explosionEffect;
     public int damageAmount; 
 
-    
-
 
     // 충돌이 발생했을 때 호출되는 메서드
     private void OnCollisionEnter(Collision collision)
@@ -84,17 +82,21 @@ public class explosion : NetworkBehaviour
 
     private void ApplyDamageToPlayer(GameObject player)
     {
-        Debug.Log("isServer? " + IsServer + " isClient? " + IsClient + " IsHost? "+IsHost);
+
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
+
+        
         if (playerInfo != null)
         {
-            if (IsServer)
+            if (player.GetComponent<NetworkObject>().OwnerClientId == 0)    //If Player that damaged is host, 
             {
-                playerInfo.TakeDamageServerRpc(damageAmount);
+                Debug.Log("Server damaged");
+                playerInfo.TakeDamage(damageAmount);
             }
-            else if (IsClient)
+            else       //If Player that damaged is client,
             {
-                playerInfo.RequestDamageServerRpc(damageAmount);
+                Debug.Log("client damaged");
+                playerInfo.ApplyDamageToClientRpc(damageAmount);
             }
         }
 
