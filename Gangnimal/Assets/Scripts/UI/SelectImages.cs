@@ -21,7 +21,7 @@ public class SelectImages : MonoBehaviour //이건 맵선택창때 뒤에 배경
             images.Add(t.gameObject);
             t.gameObject.SetActive(false);
         }
-        background = GameObject.Find("BackGround").GetComponent<Image>();// 뒤에 배경사진
+        background = GameObject.Find("Background").GetComponent<Image>();// 뒤에 배경사진
 
         
         images[select_index].SetActive(true); //초기에는 0번째 인덱스 보여줘야하니깐
