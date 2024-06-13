@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은 클래스
 {
-    public GameObject winPannel;
-    public GameObject losePannel;
     [SerializeField] List<GameObject> characters;
     void Start()
     {
@@ -18,8 +16,6 @@ public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은
                 }
             
         }
-       
-        
        
     }
     

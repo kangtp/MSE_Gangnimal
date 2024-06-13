@@ -28,7 +28,7 @@ public class LoadingSlider : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("RelayInfo") == 0)
             {
-                hostButton.onClick.Invoke();
+                //hostButton.onClick.Invoke();
                 clicked = true;
             }
         }
