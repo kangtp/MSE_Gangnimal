@@ -30,6 +30,8 @@ public class ThirdPersonMovement : NetworkBehaviour
     Vector3 firstPosition;
     private bool isDead = false;
 
+    private bool startOnetime;
+
     private void Awake()
     {
         truespeed = walkSpeed;
@@ -38,6 +40,11 @@ public class ThirdPersonMovement : NetworkBehaviour
         playerInfo = GetComponentInChildren<PlayerInfo>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        startOnetime = true;
+    }
+
+    public void startAwaitSpawn()
+    {
         StartCoroutine(awaitSpawn());
     }
 
@@ -150,6 +157,12 @@ public class ThirdPersonMovement : NetworkBehaviour
         else if (playerInfo.HP <= 0)
         {
             WhenDead();
+        }
+
+        if(IsOwner && startOnetime)
+        {
+            startAwaitSpawn();
+            startOnetime = false;
         }
     }
 
