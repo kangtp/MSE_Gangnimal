@@ -169,8 +169,17 @@ public class AccountManager : MonoBehaviour
     public void ParseResult(string json)
     {
         Account a = JsonUtility.FromJson<Account>(json);
-        Debug.Log(UserInfo.Instance.userName + " battle record: " + "win " + a.win + " / lose " + a.lose);
-        Debug.Log(UserInfo.Instance.userName + " win rate: " + (float)( int.Parse(a.win) * 100 / (int.Parse(a.win) + int.Parse(a.lose)) ) + "%");
+        int winCount = int.Parse(a.win);
+        int loseCount = int.Parse(a.lose);
+
+        Debug.Log(UserInfo.Instance.userName + " battle record: " + "win: " + a.win + " / lose: " + a.lose);
+
+        if(winCount == 0 && loseCount == 0)
+        {
+            Debug.Log("No record");
+            return;
+        }
+
         win.text = a.win;
         lose.text = a.lose;
         winRate.text = ""+(int.Parse(a.win) * 100.0 / (int.Parse(a.win) + int.Parse(a.lose))) + "%";
