@@ -123,6 +123,7 @@ public class AccountManager : MonoBehaviour
                     Debug.Log("Success! Login...");
                     start();
                     UserInfo.Instance.userName = a.nickName;
+                    PlayerPrefs.SetString("name",UserInfo.Instance.userName);
                     Debug.Log("Hi! "+ UserInfo.Instance.userName);
                     SceneManager.LoadScene("MainMenu");
                 }
