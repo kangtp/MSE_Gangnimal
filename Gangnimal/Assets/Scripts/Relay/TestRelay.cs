@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Services.Core;
-using Unity.Services.Authentication;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Netcode;
@@ -10,6 +7,8 @@ using Unity.Networking.Transport.Relay;
 using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class TestRelay : MonoBehaviour
 {
@@ -134,5 +133,29 @@ public class TestRelay : MonoBehaviour
         {
             Debug.Log(e);
         }
+    }
+
+    IEnumerator EndGameCor()
+    {
+        yield return new WaitForSeconds(3.0f);
+         // 서버나 호스트인 경우
+        if (NetworkManager.Singleton.IsServer)
+        {
+            Debug.Log("호스트가 꺼짐");
+            NetworkManager.Singleton.Shutdown();
+        }
+        // 서버가 아닐 경우
+        else if (!NetworkManager.Singleton.IsServer)
+        {
+            Debug.Log("클라이언트가 꺼짐");
+            NetworkManager.Singleton.Shutdown();
+        }
+        // 씬 전환
+        NetworkManager.Singleton.SceneManager.LoadScene("MainMenu",LoadSceneMode.Single);
+    }
+
+    public void EndGame()
+    {
+        StartCoroutine("EndGameCor");
     }
 }

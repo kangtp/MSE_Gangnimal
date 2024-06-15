@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 losePannel.SetActive(true);
-            
+                TestRelay.Instance.EndGame();
             }
         }
     }
@@ -105,8 +105,6 @@ public class GameManager : MonoBehaviour
             }
             isGameOver = false;//혹시 모르니 한번 더 설정 해줌.
             isAlive = true;// 막 시작했으니 캐릭터는 전부 살아있어야 하기 때문에 설정 해줌 
-
-
         }
     }
 
