@@ -135,29 +135,22 @@ public class TestRelay : MonoBehaviour
         }
     }
 
-    IEnumerator EndGameCor()
+    public void EndGame()
     {
-        yield return new WaitForSeconds(3.0f);
-         // 서버나 호스트인 경우
+        // 서버나 호스트인 경우
         if (NetworkManager.Singleton.IsServer)
         {
             Debug.Log("호스트가 꺼짐");
-            NetworkManager.Singleton.Shutdown();
+            //NetworkManager.Singleton.Shutdown();
             NetworkManager.Singleton.SceneManager.LoadScene("MainMenu",LoadSceneMode.Single);
         }
         // 서버가 아닐 경우
         else if (!NetworkManager.Singleton.IsServer)
         {
             Debug.Log("클라이언트가 꺼짐");
-            NetworkManager.Singleton.Shutdown();
+            //NetworkManager.Singleton.Shutdown();
             NetworkManager.Singleton.SceneManager.LoadScene("MainMenu",LoadSceneMode.Single);
         }
         // 씬 전환
-        
-    }
-
-    public void EndGame()
-    {
-        StartCoroutine("EndGameCor");
     }
 }

@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour
             else
             {
                 losePannel.SetActive(true);
-                TestRelay.Instance.EndGame();
             }
         }
     }

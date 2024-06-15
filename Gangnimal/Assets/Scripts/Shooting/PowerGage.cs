@@ -50,8 +50,11 @@ public class PowerGage : MonoBehaviour
     IEnumerator Wait_Change()
     {
         yield return new WaitForSeconds(0.3f);
+        if(fire != null)
+        {
         Vector3 currentRotation = fire.rotation.eulerAngles;
         fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
+        }
     }
     IEnumerator ResetClickTime()
     {
@@ -106,7 +109,7 @@ public class PowerGage : MonoBehaviour
             {
                 fire.Rotate(clickTime * 30 * Time.deltaTime, 0, 0);
             }
-
+            
             StartCoroutine(Wait_Change());
         }
 

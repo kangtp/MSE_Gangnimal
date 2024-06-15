@@ -48,8 +48,7 @@ public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은
     
     public void ToMainMenu()
     {
-        TologOut();
-        SceneManager.LoadScene("MainMenu");
+        TestRelay.Instance.EndGame();
     } 
     public void ToMainMenuToLooby()
     {
@@ -60,9 +59,5 @@ public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은
     public void ToLoginScene()
     {
         SceneManager.LoadScene("LoginScene");
-    }
-    public void TologOut()
-    {
-        LobbyManager.Instance.SignOut();
     }
 }
