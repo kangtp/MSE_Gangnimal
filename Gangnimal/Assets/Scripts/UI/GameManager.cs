@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
 
         isGameOver = false; // 이것을 다시 해준이유는 GameManager가 don't destroy로 있기때문에 메인메뉴로 돌아가면 다시 업데이트를 해줘야 한다. 
         isAlive = true; // 위와 같은 이유
-        if (SceneManager.GetActiveScene().name == "ForestScene" || SceneManager.GetActiveScene().name == "Winter" || SceneManager.GetActiveScene().name == "Desert")
+        if (SceneManager.GetActiveScene().name == "IngameScene")
         {// 전투씬인 경우에만 over 패널을 쓰기 때문에 조건문을 넣어줌. 
             winPannel = GameObject.Find("Canvas").transform.GetChild(7).gameObject;
             losePannel = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
