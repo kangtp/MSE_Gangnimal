@@ -14,19 +14,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MapScene/ForestScene.unity
     guid: 3e4c234ad1676d145af2b71ec20f701f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: aff078db07bbe4f5e836e9fbda5145ac
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SelectScene/CharacterSelect.unity
     guid: d659f89c90b47c4469d7cce37a6e737e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SelectScene/MapSelect.unity
     guid: 72e79c5e0ee21d64b9449000b8807b24
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MapScene/Desert.unity
     guid: 2479792fe1a4b0b4fad484503b1a21f8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MapScene/Winter.unity
     guid: 37672d2784d4cb04c8f5536d4126805e
   m_configObjects: {}
