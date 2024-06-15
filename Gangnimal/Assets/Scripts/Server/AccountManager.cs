@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 
 public class AccountManager : MonoBehaviour
 {
@@ -25,6 +27,15 @@ public class AccountManager : MonoBehaviour
     public TMP_Text lose;
     public TMP_Text winRate;
 
+    private async void start() {
+        await UnityServices.InitializeAsync(); //request
+
+        AuthenticationService.Instance.SignedIn += () =>
+        {
+            Debug.Log("sigend in  " + AuthenticationService.Instance.PlayerId);
+        };
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+    }
 
     public void SignUp()
     {
@@ -110,6 +121,7 @@ public class AccountManager : MonoBehaviour
                 if (www.downloadHandler.text == "true")
                 {
                     Debug.Log("Success! Login...");
+                    start();
                     UserInfo.Instance.userName = a.nickName;
                     Debug.Log("Hi! "+ UserInfo.Instance.userName);
                     SceneManager.LoadScene("MainMenu");
