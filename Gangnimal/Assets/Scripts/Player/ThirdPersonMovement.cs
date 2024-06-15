@@ -152,8 +152,8 @@ public class ThirdPersonMovement : NetworkBehaviour
             }
             else if(!IsServer)
             {
-                FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
-                WhenDeadClientServerRpc();
+                //FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
+                RequestKillClient_ServerRpc();
             }
             oneDie=true;
         }
@@ -237,17 +237,22 @@ public class ThirdPersonMovement : NetworkBehaviour
     [ClientRpc]
     private void WhenDeadHostClientRpc()
     {
-        FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
+        if (!IsServer)
+        {
+            FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
+        }
+
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            
-            if(playerInfo.HP<=0)
+
+            if (playerInfo.HP <= 0)
             {
                 GameManager.instance.SetAlive(false);
                 anim.SetTrigger("Death");
             }
+
             GameManager.instance.GameOver();
-            if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
+            if (GameManager.instance.losePannel == null && GameManager.instance.winPannel == null)
             {
 
                 Debug.Log("없어!");
@@ -255,32 +260,63 @@ public class ThirdPersonMovement : NetworkBehaviour
             Debug.Log("게임오버패널 켜져야지!");
         }
 
+
     }
 
     [ServerRpc]
-    private void WhenDeadClientServerRpc()
+    private void RequestKillClient_ServerRpc()
     {
-        FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
+        FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
+        //if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        //{
+        //    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
+        //    {
+        //        anim.Play("idle");
+        //    }
+        //    if(playerInfo.HP<=0)
+        //    {
+        //        GameManager.instance.SetAlive(false);
+        //        anim.SetTrigger("Death");
+        //    }
+        //    GameManager.instance.GameOver();
+        //    if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
+        //    {
+
+        //        Debug.Log("없어!");
+        //    }
+        //    Debug.Log("게임오버패널 켜져야지!");
+        //}
+        KillClientRpc();
+    }
+
+    [ClientRpc]
+    private void KillClientRpc()
+    {
+        if (!IsServer)
+        {
+            FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
+        }
+
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
             {
                 anim.Play("idle");
             }
-            if(playerInfo.HP<=0)
+            if (playerInfo.HP <= 0)
             {
                 GameManager.instance.SetAlive(false);
                 anim.SetTrigger("Death");
             }
             GameManager.instance.GameOver();
-            if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
+            if (GameManager.instance.losePannel == null && GameManager.instance.winPannel == null)
             {
 
                 Debug.Log("없어!");
             }
             Debug.Log("게임오버패널 켜져야지!");
         }
-        WhenDeadHostClientRpc();
+
     }
 
     private void OnDrawGizmos()
