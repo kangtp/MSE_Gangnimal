@@ -143,15 +143,17 @@ public class TestRelay : MonoBehaviour
         {
             Debug.Log("호스트가 꺼짐");
             NetworkManager.Singleton.Shutdown();
+            NetworkManager.Singleton.SceneManager.LoadScene("MainMenu",LoadSceneMode.Single);
         }
         // 서버가 아닐 경우
         else if (!NetworkManager.Singleton.IsServer)
         {
             Debug.Log("클라이언트가 꺼짐");
             NetworkManager.Singleton.Shutdown();
+            NetworkManager.Singleton.SceneManager.LoadScene("MainMenu",LoadSceneMode.Single);
         }
         // 씬 전환
-        NetworkManager.Singleton.SceneManager.LoadScene("MainMenu",LoadSceneMode.Single);
+        
     }
 
     public void EndGame()
