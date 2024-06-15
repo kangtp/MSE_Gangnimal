@@ -111,6 +111,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                 Debug.Log("shield!!! " + damage);
                 haveShield = false;
                 RequestNotVisibleItemServerRpc(shieldIndex);
+                FindObjectOfType<ShieldUI>().ShieldOff();
             }
             
             HP -= damage;
@@ -127,7 +128,8 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             haveShield = false;
             Debug.Log("shield!!! " + damage);
             items[0].SetActive(false);
-            if(IsServer)
+            FindObjectOfType<ShieldUI>().ShieldOff();
+            if (IsServer)
                 RequestNotVisibleItemClientRpc(shieldIndex);
             if (!IsServer)
                 RequestNotVisibleItemServerRpc(shieldIndex);
@@ -208,6 +210,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                 GameManager.instance.PlayShieldSound();
                 haveShield = true;
                 items[0].SetActive(true);
+                FindObjectOfType<ShieldUI>().ShieldOn();
 
                 if (IsServer) { RequestVisibleItemClientRpc(shieldIndex); }
                 if (!IsServer) { RequestVisibleItemServerRpc(shieldIndex); }

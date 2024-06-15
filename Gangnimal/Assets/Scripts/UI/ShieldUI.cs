@@ -5,42 +5,32 @@ using UnityEngine.UI;
 
 public class ShieldUI : MonoBehaviour
 {
-    public Image shield;
+    public GameObject shield;
     private PlayerInfo playerinfo;
 
     void Start()
     {
         playerinfo = FindObjectOfType<PlayerInfo>();
-
+        GameObject.Find("Canvas").transform.GetChild(5).gameObject.SetActive(true);
+        shield = GameObject.Find("StateUI").transform.GetChild(2).gameObject;
 
         if (playerinfo == null)
         {
-            //Debug.LogError("PlayerInfo�� ã�� �� �����ϴ�.");
+            Debug.Log("PlayerInfo not yet");
         }
 
         if (shield == null)
         {
-            Debug.LogError("Shield �̹����� ������� �ʾҽ��ϴ�.");
+            Debug.Log("Shield not yet");
         }
-
-
-        shield.gameObject.SetActive(false);
-
-
+    }
+    public void ShieldOn()
+    {
+        shield.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShieldOff()
     {
-        if (playerinfo != null)
-        {
-            shield.gameObject.SetActive(playerinfo.haveShield);
-        }
-        else if (playerinfo == null)
-        {
-            playerinfo = FindObjectOfType<PlayerInfo>();
-            shield.gameObject.SetActive(false);
-
-        }
+        shield.SetActive(false);
     }
 }

@@ -27,6 +27,8 @@ public class AccountManager : MonoBehaviour
     public TMP_Text lose;
     public TMP_Text winRate;
 
+    public GameObject message;
+
     private async void start() {
         await UnityServices.InitializeAsync(); //request
 
@@ -86,11 +88,12 @@ public class AccountManager : MonoBehaviour
                 if (www.downloadHandler.text == "true")
                 {
                     Debug.Log("Create Account Success!");
-                    //UserInfo.Instance.userName = a.nickName;
+                    StartCoroutine(MessageWindow(1));
                 }
                 else
                 {
                     Debug.Log("Account creation Failed! The nickname you entered already exists.");
+                    StartCoroutine(MessageWindow(2));
                 }
                     
                 break;
@@ -129,6 +132,7 @@ public class AccountManager : MonoBehaviour
                 else
                 {
                     Debug.Log("Failed! Invalid Account");
+                    StartCoroutine(MessageWindow(0));
                 }
                     
                 break;
@@ -197,4 +201,10 @@ public class AccountManager : MonoBehaviour
         winRate.text = ""+(int.Parse(a.win) * 100.0 / (int.Parse(a.win) + int.Parse(a.lose))) + "%";
     }
 
+    IEnumerator MessageWindow(int num)
+    {
+        message.transform.GetChild(num).gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        message.transform.GetChild(num).gameObject.SetActive(false);
+    }
 }
