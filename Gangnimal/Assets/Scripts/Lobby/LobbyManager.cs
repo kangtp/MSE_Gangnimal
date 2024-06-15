@@ -21,7 +21,7 @@ public class LobbyManager : MonoBehaviour
 
     private bool joinCondtiion;
     public TMP_InputField codeinput;
-
+    public TMP_Text joinCode_Text;
     public static LobbyManager Instance;
 
 
@@ -357,6 +357,13 @@ public class LobbyManager : MonoBehaviour
         {
             child.gameObject.SetActive(true);
         }
+        StartCoroutine("Delaycreatecode");
+    }
+
+    IEnumerator Delaycreatecode()
+    {
+        yield return new WaitForSeconds(1.0f);
+        joinCode_Text.text = "Code: " + hostlobby.LobbyCode;
     }
 
     public void CharacterSelectActiveClient()
