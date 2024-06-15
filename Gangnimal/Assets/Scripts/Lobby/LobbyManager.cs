@@ -190,9 +190,20 @@ public class LobbyManager : MonoBehaviour
                 if (JoinLobby != null)
                 {
                     joinCondtiion = true;
+                    foreach (GameObject canvas in canvasobj)
+                    {
+                        canvas.SetActive(false);
+                    }
+                    canvasobj[2].SetActive(true);
+                    foreach (Transform child in canvasobj[2].transform)
+                    {
+                        child.gameObject.SetActive(true);
+                    }
                 }
                 else
+                {
                     joinCondtiion = false;
+                }
 
                 Debug.Log("Joined Lobby with code" + lobbyCode);
 
@@ -351,18 +362,6 @@ public class LobbyManager : MonoBehaviour
     public void CharacterSelectActiveClient()
     {
         JoinLobby(codeinput.text);
-        if (joinCondtiion)
-        {
-            foreach (GameObject canvas in canvasobj)
-            {
-                canvas.SetActive(false);
-            }
-            canvasobj[2].SetActive(true);
-            foreach (Transform child in canvasobj[2].transform)
-            {
-                child.gameObject.SetActive(true);
-            }
-        }
     }
 
     public void CreateLobbyButton()
