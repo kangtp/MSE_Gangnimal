@@ -23,6 +23,7 @@ public class AccountManager : MonoBehaviour
     public TMP_InputField passwordInputSU;
 
     //for record
+    public TMP_Text name;
     public TMP_Text win;
     public TMP_Text lose;
     public TMP_Text winRate;
@@ -191,12 +192,15 @@ public class AccountManager : MonoBehaviour
 
         Debug.Log(UserInfo.Instance.userName + " battle record: " + "win: " + a.win + " / lose: " + a.lose);
 
-        if(winCount == 0 && loseCount == 0)
+        name.text = UserInfo.Instance.userName;
+
+        if (winCount == 0 && loseCount == 0)
         {
             Debug.Log("No record");
             return;
         }
 
+        
         win.text = a.win;
         lose.text = a.lose;
         winRate.text = ""+(int.Parse(a.win) * 100.0 / (int.Parse(a.win) + int.Parse(a.lose))) + "%";
