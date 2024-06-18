@@ -94,6 +94,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             {
                 damage -= 10;   //Reduced damage by 10
                 haveShield = false;
+                FindObjectOfType<ShieldUI>().ShieldOff();
                 RequestNotVisibleItemServerRpc(shieldIndex);
             }
             
