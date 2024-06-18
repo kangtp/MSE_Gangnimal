@@ -9,25 +9,33 @@ using Unity.Services.Core;
 
 public class AccountManager : MonoBehaviour
 {
+    //url for sign up
     private string signUpUrl = "http://localhost:7755/gangnimal/signup";
+
+    //url for sign in
     private string signInUrl = "http://localhost:7755/gangnimal/signin";
+
+    //url for update record
     private string updateRecordUrl = "http://localhost:7755/gangnimal/record/update/";
+
+    //url for find record
     private string findRecordUrl = "http://localhost:7755/gangnimal/record/";
 
-    //for Sign In
+    //Input field for Sign In
     public TMP_InputField nickNameInput;
     public TMP_InputField passwordInput;
 
-    //for Sign Up
+    //Input field for Sign Up
     public TMP_InputField nickNameInputSU;
     public TMP_InputField passwordInputSU;
 
-    //for record
+    //Text for show record
     public TMP_Text name;
     public TMP_Text win;
     public TMP_Text lose;
     public TMP_Text winRate;
 
+    //message ui. ex)invalid account, fail sign up, etc...
     public GameObject message;
 
     private async void start() {
@@ -50,10 +58,11 @@ public class AccountManager : MonoBehaviour
         StartCoroutine(signInRequest());
     }
 
+    //Update wins and losses based on results.
+    //result : "win" or "lose"
     public void UpdateBattleRecord(string result)
     {
         updateRecordUrl += UserInfo.Instance.userName + "/" + result;
-        Debug.Log(updateRecordUrl);
         StartCoroutine(RecordUpdateRequest());
         updateRecordUrl = "http://localhost:7755/gangnimal/record/update/";
     }
@@ -86,17 +95,18 @@ public class AccountManager : MonoBehaviour
                 Debug.Log("HTTP Error: " + www.error);
                 break;
             case UnityWebRequest.Result.Success:
+                //sign up success
                 if (www.downloadHandler.text == "true")
                 {
                     Debug.Log("Create Account Success!");
-                    StartCoroutine(MessageWindow(1));
+                    StartCoroutine(MessageWindow(1));   //show success message ui
                 }
+                //sign up fail
                 else
                 {
                     Debug.Log("Account creation Failed! The nickname you entered already exists.");
-                    StartCoroutine(MessageWindow(2));
-                }
-                    
+                    StartCoroutine(MessageWindow(2));   //show fail message ui
+                }   
                 break;
         }
     }
@@ -122,6 +132,7 @@ public class AccountManager : MonoBehaviour
                 Debug.Log("HTTP Error: " + www.error);
                 break;
             case UnityWebRequest.Result.Success:
+                //sign in success
                 if (www.downloadHandler.text == "true")
                 {
                     Debug.Log("Success! Login...");
@@ -131,10 +142,11 @@ public class AccountManager : MonoBehaviour
                     Debug.Log("Hi! "+ UserInfo.Instance.userName);
                     SceneManager.LoadScene("MainMenu");
                 }
+                //sign in fail
                 else
                 {
                     Debug.Log("Failed! Invalid Account");
-                    StartCoroutine(MessageWindow(0));
+                    StartCoroutine(MessageWindow(0));   //show fail message ui
                 }
                     
                 break;
@@ -179,7 +191,7 @@ public class AccountManager : MonoBehaviour
                 break;
             case UnityWebRequest.Result.Success:
                 string json = www.downloadHandler.text;
-                ParseResult(json);
+                ParseResult(json);  //show user's battle record in UI
                 break;
         }
     }
@@ -194,22 +206,25 @@ public class AccountManager : MonoBehaviour
 
         name.text = UserInfo.Instance.userName;
 
+        //If there is no record, return
         if (winCount == 0 && loseCount == 0)
         {
             Debug.Log("No record");
             return;
         }
 
-        
+        //If there is record, show the record
         win.text = a.win;
         lose.text = a.lose;
         winRate.text = ""+(int.Parse(a.win) * 100.0 / (int.Parse(a.win) + int.Parse(a.lose))) + "%";
     }
 
+    //Show message in UI
+    //num == 0, sign in fail / num == 1, sign up success / num == 2, sign up fail
     IEnumerator MessageWindow(int num)
     {
         message.transform.GetChild(num).gameObject.SetActive(true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.2f);
         message.transform.GetChild(num).gameObject.SetActive(false);
     }
 }

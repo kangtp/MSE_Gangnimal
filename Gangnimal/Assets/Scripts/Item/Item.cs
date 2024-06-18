@@ -16,7 +16,7 @@ public class Item : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-
+    //Function that the client asks the server to remove the object
     [ServerRpc(RequireOwnership = false)]
     public void RequestDespawnServerRpc()
     {

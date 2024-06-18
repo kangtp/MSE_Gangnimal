@@ -5,64 +5,55 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Networking;
 using Unity.VisualScripting;
+using Unity.Services.Lobbies.Models;
 
 
 public class PlayerInfo : NetworkBehaviour, SubjectInterface
 {
-    public int HP = 100;
-    public float movingTime = 10.0f;
-    public bool myTurn = true;
-    private int allDamage;// 적에게 가한 데미지
+    public int HP;
+    public float movingTime;
 
     public GameObject[] weapons;
     public bool[] hasWeapons;
+
     public GameObject[] bullets;
     public GameObject[] items;
 
-    private int shieldIndex = 5;
-    private int healIndex = 6;
-
-    public float changeDelay=2f;
-    //private GameObject bullet;
-    //public static PlayerInfo instance;
-    PowerGage powerGage;
-
-
-    //public gameObject myWeapon;
+    private const int shieldIndex = 5;
+    private const int healIndex = 6;
 
     public bool haveShield = false;
 
-    bool detect;
-    bool iDown;
-    int weaponIndex = -1;
+    private bool pickUp;
+    private int weaponIndex = -1;
 
-    GameObject nearObject;//Weapon => Item : Association
-    
-    //line
+    private GameObject nearObject;  //Weapon => Item : Association
+    private PowerGage powerGage;
+
+    //to show Parabola
     [SerializeField]
     public LineRenderer lineRenderer;
     public int numofDot;
     public float timeInterval;
     public float maxTime;
 
-    GameObject firePosition;
-    //public GameObject bombFactory;
+    private GameObject firePosition;
 
     public float throwPower;
 
     private List<Observerinterface> observers = new List<Observerinterface>();
 
-    private string playerId;
-
     // Start is called before the first frame update
     private void Start()
     {
         FindObjectOfType<HealthUI>().RegisterObserver();
-        StartCoroutine("awaitfirePos");
+
+        //Run after player prefab is created
+        StartCoroutine("awaitFirePos");
         StartCoroutine("awaitPowerGage");
     }
 
-    private IEnumerator awaitfirePos()
+    private IEnumerator awaitFirePos()
     {
         yield return new WaitForSeconds(1.0f);
         firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
@@ -71,44 +62,47 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     private IEnumerator awaitPowerGage()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(1.0f);
-            if (GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>() != null)
-            {
-                powerGage = GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>();
-                if (powerGage == null)
-                {
-                    Debug.Log("powergage is no");
-                }
-                else
-                {
-                    StopCoroutine("awaitPowerGage");
-                }
-            }
-        }
-        GameManager.instance.isGameOver=false;
+        //while (true)
+        //{
+        //    yield return new WaitForSeconds(1.0f);
+        //    if (GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>() != null)
+        //    {
+        //        powerGage = GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>();
+        //        if (powerGage == null)
+        //        {
+        //            Debug.Log("powergage is no");
+        //        }
+        //        else
+        //        {
+        //            StopCoroutine("awaitPowerGage");
+        //        }
+        //    }
+        //}
+        yield return new WaitForSeconds(1.0f);
+        powerGage = GameObject.Find("PowerManager").transform.GetChild(0).GetComponent<PowerGage>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!IsLocalPlayer) { return; }
+        if (!IsLocalPlayer)
+            return;
+
         GetInput();
         Interaction();
         ShootingBullet();
     }
 
-    
+    //Function that damages the client player
     [ClientRpc]
     public void ApplyDamageToClientRpc(int damage)
     {
+        //
         if (!IsServer)
         {
             if (haveShield)
             {
                 damage -= 10;
-                Debug.Log("shield!!! " + damage);
                 haveShield = false;
                 RequestNotVisibleItemServerRpc(shieldIndex);
                 FindObjectOfType<ShieldUI>().ShieldOff();
@@ -126,9 +120,9 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         {
             damage -= 10;
             haveShield = false;
-            Debug.Log("shield!!! " + damage);
             items[0].SetActive(false);
             FindObjectOfType<ShieldUI>().ShieldOff();
+
             if (IsServer)
                 RequestNotVisibleItemClientRpc(shieldIndex);
             if (!IsServer)
@@ -233,7 +227,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     void GetInput()
     {
-        iDown = Input.GetKeyDown(KeyCode.E);
+        pickUp = Input.GetKeyDown(KeyCode.E);
     }
 
     void OnTriggerStay(Collider other)
@@ -258,7 +252,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         {
             return;
         }
-        if (iDown && nearObject != null)
+        if (pickUp && nearObject != null)
         {
             if (nearObject.tag == "Weapon")
             {

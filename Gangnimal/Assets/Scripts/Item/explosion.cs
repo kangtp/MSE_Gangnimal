@@ -10,43 +10,38 @@ public class explosion : NetworkBehaviour
     public int damageAmount; 
 
 
-    // 충돌이 발생했을 때 호출되는 메서드
     private void OnCollisionEnter(Collision collision)
-    { 
-        //자신에 닿아서 터지는 경우 방지
-        WaitCoroutine(1.0f);
-
-        // 충돌한 오브젝트의 태그가 "Map"인지 확인
+    {
+        //The weapon explodes when it touches a player or the ground.
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Player") )
         {
-            
+            //If the weapon touch the player, player will get damage.
             if (collision.gameObject.CompareTag("Player"))
             {
                 ApplyDamageToPlayer(collision.gameObject);
             }
 
+            PlayDestructionEffect();
+
+            //different explosion sounds depending on the weapon.
             if (gameObject.name == "BranchB(Clone)")
             {
-                Debug.Log("Branch");
                 GameManager.instance.PlayExplosionSound3();
             }
             else if (gameObject.name == "StoneB(Clone)")
             {
-                Debug.Log("stone");
                 GameManager.instance.PlayExplosionSound2();
             }
             else if (gameObject.name == "BombB(Clone)")
             {
-                Debug.Log("BomB");
                 GameManager.instance.PlayExplosionSound1();
             }
 
-            PlayDestructionEffect();
             Destroy(gameObject);
         }
-
     }
 
+    //Show Explosion Effect
     private void PlayDestructionEffect()
     {
         if (explosionEffect != null)
@@ -60,29 +55,19 @@ public class explosion : NetworkBehaviour
     {
 
         PlayerInfo playerInfo = player.GetComponent<PlayerInfo>();
-
         
         if (playerInfo != null)
         {
-            if (player.GetComponent<NetworkObject>().OwnerClientId == 0)    //If Player that damaged is host, 
+            //If the person who received the damage is the host
+            if (player.GetComponent<NetworkObject>().OwnerClientId == 0)
             {
-                Debug.Log("Server damaged");
                 playerInfo.TakeDamage(damageAmount);
             }
-            else       //If Player that damaged is client,
+            //If the person who received the damage is the client
+            else
             {
-                Debug.Log("client damaged");
                 playerInfo.ApplyDamageToClientRpc(damageAmount);
             }
         }
-
     }
-
-    IEnumerator WaitCoroutine(float t)
-    {
-        //Debug.Log("MySecondCoroutine;" + t);
-        yield return new WaitForSeconds(t);
-    }
-
-
 }
