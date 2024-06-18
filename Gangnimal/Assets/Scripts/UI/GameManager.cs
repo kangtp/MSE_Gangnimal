@@ -75,17 +75,15 @@ public class GameManager : MonoBehaviour
             Cursor.visible = true; // 게임이 끝난 순간 버튼을 클릭하기 위해 커서를 보이게 한다. 
             Cursor.lockState = CursorLockMode.Confined;// 잠금을 푼다.
             isGameOver = true; // 게임오버 true
-            
-            
             if(isAlive)// 게임오버 패널이 켜져있지만 살아있다면 
             {
                 winPannel.SetActive(true);
-               
             }
             else
             {
                 losePannel.SetActive(true);
             }
+            TestRelay.Instance.EndGame();
         }
     }
     public void InitializeGameOverPanel()// 혹시라도 못찾을 경우를 대비해 다른 오브젝트에서도 게임 패널을 찾아준다. 
