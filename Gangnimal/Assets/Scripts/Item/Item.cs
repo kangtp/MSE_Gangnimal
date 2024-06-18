@@ -9,13 +9,6 @@ public class Item : NetworkBehaviour
     public Type type;
     public int value;
 
-    private Rigidbody rb;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-
     //Function that the client asks the server to remove the object
     [ServerRpc(RequireOwnership = false)]
     public void RequestDespawnServerRpc()

@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3077728867
+  GlobalObjectIdHash: 2399066709
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -304,7 +304,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 150
   movingTime: 10
-  myTurn: 1
   weapons:
   - {fileID: 4141775962237424568}
   - {fileID: 2109094245194362672}
@@ -317,7 +316,6 @@ MonoBehaviour:
   items:
   - {fileID: 1614043929014108772}
   - {fileID: 9003266864882610467}
-  changeDelay: 2
   haveShield: 0
   lineRenderer: {fileID: 4616488144815108496}
   numofDot: 70
@@ -523,6 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthText: {fileID: 0}
+  startHp: 150
 --- !u!114 &-3414803632801682598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,7 +545,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3922502621957086138, guid: 231d711f8f3c55544b923a65603b0cb8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3077728867
+      value: 765757560
       objectReference: {fileID: 0}
     - target: {fileID: 5879868982310121949, guid: 231d711f8f3c55544b923a65603b0cb8, type: 3}
       propertyPath: m_Name
@@ -633,7 +632,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2807344223986363610, guid: 44a2b21607a54d149b144bc22d9bd290, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3077728867
+      value: 3833999086
       objectReference: {fileID: 0}
     - target: {fileID: 3866176519568089870, guid: 44a2b21607a54d149b144bc22d9bd290, type: 3}
       propertyPath: m_Name
@@ -995,7 +994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4924260909249503909, guid: e13bfa0b9e4e2014797c7a16274a2531, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3077728867
+      value: 97780442
       objectReference: {fileID: 0}
     - target: {fileID: 5696776178347299147, guid: e13bfa0b9e4e2014797c7a16274a2531, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1062,7 +1061,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2605565879255554227, guid: ca8e2a33e7248f647b7784f776ee1874, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3077728867
+      value: 64532249
       objectReference: {fileID: 0}
     - target: {fileID: 1655450269578176881, guid: ca8e2a33e7248f647b7784f776ee1874, type: 3}
       propertyPath: m_Name
@@ -1137,7 +1136,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4038730231665722266, guid: 1776b0a88770af0439488d6cf1a8e23a, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3077728867
+      value: 4007064622
       objectReference: {fileID: 0}
     - target: {fileID: 7889481747060661130, guid: 1776b0a88770af0439488d6cf1a8e23a, type: 3}
       propertyPath: m_LocalScale.x

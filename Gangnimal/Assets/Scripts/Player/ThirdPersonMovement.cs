@@ -96,7 +96,7 @@ public class ThirdPersonMovement : NetworkBehaviour
                     isSpawned = true;
                 }
             }
-            else if (IsClient)
+            else if (!IsHost)
             {
                 Transform clientSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(1).transform;
                 if (clientSpawnTransform != null)
@@ -117,20 +117,6 @@ public class ThirdPersonMovement : NetworkBehaviour
         {
             GameManager.instance.InitializeGameOverPanel();
         }
-        //GameManager.instance.gameOverPannel.SetActive(false);
-        /*
-        if(GameManager.instance==null)
-        {
-            GameObject winpanel = GameObject.Find("WinPanel");
-            GameObject losepanel = GameObject.Find("LosePanel");
-            losepanel.SetActive(false);
-            winpanel.SetActive(false);
-        }
-        else
-        {
-            GameManager.instance.InitializeGameOverPanel();
-        }
-        */
     }
     void Update()
     {
@@ -139,20 +125,24 @@ public class ThirdPersonMovement : NetworkBehaviour
             playerInfo.HP -= 100;
         }
 
+        //If the player is alive, he moves
         if (playerInfo.HP > 0 && IsOwner)
         {
             PlayerMove3rd();
         }
+
+        //If the player is dead
         else if (playerInfo.HP <= 0 && !oneDie)
         {
-            if(IsServer)
+            //If the server player is dead, record the result(lose) and notify the client.
+            if (IsServer)
             {
                 FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
                 WhenDeadHostClientRpc();
             }
-            else if(!IsServer)
+            //If the client player is dead, Ask the server to kill the client.
+            else if (!IsServer)
             {
-                //FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
                 RequestKillClient_ServerRpc();
             }
             oneDie=true;
@@ -234,14 +224,17 @@ public class ThirdPersonMovement : NetworkBehaviour
         }
     }
 
+    //When the host dies
     [ClientRpc]
     private void WhenDeadHostClientRpc()
     {
+        // the client records a win.
         if (!IsServer)
         {
             FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
         }
 
+        //shows a dying animation
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
 
@@ -263,40 +256,28 @@ public class ThirdPersonMovement : NetworkBehaviour
 
     }
 
+    //A request to kill the client enters the server
     [ServerRpc]
     private void RequestKillClient_ServerRpc()
     {
+        //Server records win
         FindObjectOfType<AccountManager>().UpdateBattleRecord("win");
-        //if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-        //{
-        //    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))
-        //    {
-        //        anim.Play("idle");
-        //    }
-        //    if(playerInfo.HP<=0)
-        //    {
-        //        GameManager.instance.SetAlive(false);
-        //        anim.SetTrigger("Death");
-        //    }
-        //    GameManager.instance.GameOver();
-        //    if(GameManager.instance.losePannel==null &&GameManager.instance.winPannel==null)
-        //    {
 
-        //        Debug.Log("없어!");
-        //    }
-        //    Debug.Log("게임오버패널 켜져야지!");
-        //}
+        //Kill Client
         KillClientRpc();
     }
 
+    //Kill Client
     [ClientRpc]
     private void KillClientRpc()
     {
+        //Client records lose
         if (!IsServer)
         {
             FindObjectOfType<AccountManager>().UpdateBattleRecord("lose");
         }
 
+        //Death animation
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Falling Idle"))

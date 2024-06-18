@@ -271,7 +271,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 80
   movingTime: 10
-  myTurn: 1
   weapons:
   - {fileID: 4141775962237424568}
   - {fileID: 2109094245194362672}
@@ -284,7 +283,6 @@ MonoBehaviour:
   items:
   - {fileID: 7134024211844041036}
   - {fileID: 2877133372338689404}
-  changeDelay: 2
   haveShield: 0
   lineRenderer: {fileID: 4616488144815108496}
   numofDot: 70
@@ -490,6 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthText: {fileID: 0}
+  startHp: 80
 --- !u!114 &-789695190760834804
 MonoBehaviour:
   m_ObjectHideFlags: 0
