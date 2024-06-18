@@ -60,8 +60,9 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     {
         yield return new WaitForSeconds(1.0f);
         firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
-    }
+        StartCoroutine("awaitPowerGage");
 
+    }
 
     private IEnumerator awaitPowerGage()
     {
@@ -78,6 +79,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         GetInput();
         Interaction();
         ShootingBullet();
+        
     }
 
     //Function that damages the client player
@@ -93,7 +95,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                 damage -= 10;   //Reduced damage by 10
                 haveShield = false;
                 RequestNotVisibleItemServerRpc(shieldIndex);
-                FindObjectOfType<ShieldUI>().ShieldOff();
             }
             
             HP -= damage;

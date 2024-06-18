@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DropZone : MonoBehaviour
 {
-    public Transform respawnPosition;
+    public Transform respawnPosition; // RespawnPosition Because Sometimes when spawn character , drop Characet through map
     // Start is called before the first frame update
     void Start()
     {
@@ -17,16 +17,16 @@ public class DropZone : MonoBehaviour
     {
         
     }
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other) { // when trigger dropzone 
         CharacterController cc = other.GetComponent<CharacterController>();
-        if (cc != null && other.CompareTag("Player"))
+        if (cc != null && other.CompareTag("Player")) // if player then respawn player 
         {
             cc.enabled = false; 
             other.transform.position = respawnPosition.position;
             cc.enabled = true; 
             return;
         }
-        else if(other.CompareTag("Item"))
+        else if(other.CompareTag("Item")) // when item then set active false
         {
             other.gameObject.SetActive(false);
         }

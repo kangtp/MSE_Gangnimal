@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은 클래스
+public class NextScene : MonoBehaviour // Classe that collect button functions
 {
-    [SerializeField] List<GameObject> characters;
+    [SerializeField] List<GameObject> characters; // When CharacterSelect , just set false character object
     void Start()
     {
         if(gameObject.name == "MapSelectCanvas")
@@ -36,7 +36,7 @@ public class NextScene : MonoBehaviour // 씬넘어가는 함수들 모아넣은
                 
         }
     }
-    public void Characters()
+    public void Characters() // Just SetActicve False because hide object
     {
         foreach(GameObject characgers in characters)
         {
