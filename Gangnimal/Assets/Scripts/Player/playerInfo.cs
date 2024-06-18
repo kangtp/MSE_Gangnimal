@@ -12,7 +12,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     public int HP = 100;
     public float movingTime = 10.0f;
     public bool myTurn = true;
-    private int allDamage;// 적에게 가한 데미지
+    
 
     public GameObject[] weapons;
     public bool[] hasWeapons;
@@ -32,7 +32,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     public bool haveShield = false;
 
-    bool detect;
+    
     bool iDown;
     int weaponIndex = -1;
 
@@ -52,22 +52,16 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
     private List<Observerinterface> observers = new List<Observerinterface>();
 
-    private string playerId;
+    
 
     // Start is called before the first frame update
     private void Start()
     {
         FindObjectOfType<HealthUI>().RegisterObserver();
-        StartCoroutine("awaitfirePos");
-        StartCoroutine("awaitPowerGage");
-    }
-
-    private IEnumerator awaitfirePos()
-    {
-        yield return new WaitForSeconds(1.0f);
         firePosition = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.transform.GetChild(0).gameObject;
-    }
+        StartCoroutine("awaitPowerGage");
 
+    }
 
     private IEnumerator awaitPowerGage()
     {
@@ -97,6 +91,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
         GetInput();
         Interaction();
         ShootingBullet();
+        
     }
 
     
@@ -111,7 +106,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                 Debug.Log("shield!!! " + damage);
                 haveShield = false;
                 RequestNotVisibleItemServerRpc(shieldIndex);
-                FindObjectOfType<ShieldUI>().ShieldOff();
             }
             
             HP -= damage;
@@ -128,8 +122,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
             haveShield = false;
             Debug.Log("shield!!! " + damage);
             items[0].SetActive(false);
-            FindObjectOfType<ShieldUI>().ShieldOff();
-            if (IsServer)
+            if(IsServer)
                 RequestNotVisibleItemClientRpc(shieldIndex);
             if (!IsServer)
                 RequestNotVisibleItemServerRpc(shieldIndex);
@@ -210,7 +203,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                 GameManager.instance.PlayShieldSound();
                 haveShield = true;
                 items[0].SetActive(true);
-                FindObjectOfType<ShieldUI>().ShieldOn();
 
                 if (IsServer) { RequestVisibleItemClientRpc(shieldIndex); }
                 if (!IsServer) { RequestVisibleItemServerRpc(shieldIndex); }
@@ -357,7 +349,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     [ServerRpc(RequireOwnership = false)]
     public void RequestNotVisibleItemServerRpc(int value)
     {
-        Debug.Log("RequestNotVisibleItemServerRpc" + value);
         if (value == shieldIndex)
         {
             items[0].SetActive(false);   //shield -> true
@@ -379,7 +370,6 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
     [ClientRpc]
     public void RequestNotVisibleItemClientRpc(int value)
     {
-        Debug.Log("RequestNotVisibleItemClientRpc" + value);
         if (value == shieldIndex)
         {
             items[0].SetActive(false);   //shield -> true

@@ -4,16 +4,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Timer : MonoBehaviour
+public class Timer : MonoBehaviour // Timer class
 {
     [SerializeField]
-    private TextMeshProUGUI timerText;
+    private TextMeshProUGUI timerText; // timer text
     [SerializeField]
-    private Button startButton;
-    public int endTime;
-    private float currentTime;
+    private Button startButton; // start button
+    public int endTime; // endtime
+    private float currentTime;//current time
 
-    private bool oneTime;
+    private bool oneTime; // becasuse just click one time
 
     // Start is called before the first frame update
     void Start()
@@ -26,15 +26,15 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LobbyManager.Instance.IsLobbyHost())
+        if (LobbyManager.Instance.IsLobbyHost()) 
         {
-            if (LobbyManager.Instance.StartCondition() == false)
+            if (LobbyManager.Instance.StartCondition() == false)// when client not come in room
             {
                 timerText.text = "waiting for user";
             }
-            else if(LobbyManager.Instance.StartCondition())
+            else if(LobbyManager.Instance.StartCondition()) // when come client in room 
             {                
-                Timer_Show();
+                Timer_Show(); //update timer
             }
         }
         else if (LobbyManager.Instance.IsLobbyHost() == false)
@@ -42,17 +42,17 @@ public class Timer : MonoBehaviour
             Timer_Show();
         }
     }
-    void Timer_Show()
+    void Timer_Show() //Show timer
     {
         if (currentTime > 0)
         {
-            currentTime -= Time.deltaTime;
+            currentTime -= Time.deltaTime; // update time
             if (currentTime < 5)
             {
-                timerText.color = Color.red;
+                timerText.color = Color.red; // when current time is < 5 then color is red
             }
         }
-        else
+        else // when time is 0 then start game
         {
             if (!oneTime && LobbyManager.Instance.IsLobbyHost())
             {
@@ -63,6 +63,6 @@ public class Timer : MonoBehaviour
             //startButton.onClick.Invoke();
         }
 
-        timerText.text = Mathf.CeilToInt(currentTime).ToString();
+        timerText.text = Mathf.CeilToInt(currentTime).ToString(); // update text
     }
 }
