@@ -53,6 +53,7 @@ public class TestRelay : MonoBehaviour
                 {
                     child.gameObject.SetActive(false); // Deactivate the child object
                 }
+                HealthUI.instance.loadHpcanvas(); // Load helathUI
                 StopCoroutine("turnOn"); // Stop this coroutine
             }
         }
