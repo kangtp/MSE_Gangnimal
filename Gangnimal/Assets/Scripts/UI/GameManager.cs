@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
             {
                 losePannel.SetActive(true);//false
             }
+            TestRelay.Instance.EndGame();
         }
     }
     public void InitializeGameOverPanel()// Initialize panel because Don't be destroy load is just execute {start,awake} once
