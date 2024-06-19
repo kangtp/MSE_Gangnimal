@@ -22,6 +22,7 @@ public class RandomWinter : MonoBehaviour
         {
             for (int j = 0; j < spawnNumber; j++) 
             {
+                //Specify the area in which the item is to be randomly spawned for Winter Map
                 Vector3 randomSpawnPosition = new Vector3(Random.Range(-50, 0), 13, Random.Range(-10, 40));
                 Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
             }

@@ -23,6 +23,8 @@ public class RandomSpawner : NetworkBehaviour
             {
                 for (int j = 0; j < spawnNumber; j++)
                 {
+                    //Specify the area in which the item is to be randomly spawned for Forest Map
+
                     Vector3 randomSpawnPosition = new Vector3(Random.Range(-10, 30), 3, Random.Range(0, 50));
                     Transform spawn = Instantiate(objects[i], randomSpawnPosition, Quaternion.identity);
                     NetworkObject networkObject = spawn.GetComponent<NetworkObject>();

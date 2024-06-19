@@ -8,89 +8,96 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 using System;
+
 public class LobbyManager : MonoBehaviour
 {
-    private Lobby hostlobby; // The lobby created by this player if they are the host
-    private Lobby joinedlobby; // The lobby this player has joined
-    private float heartbeatTimer; // Timer for sending heartbeat pings to the lobby
-    private float lobbyUpdateTimer; // Timer for polling lobby updates
-    private string PlayerName; // Name of the player
 
-    private bool joinCondtiion; // Condition to check if the player has successfully joined a lobby
-    public TMP_InputField codeinput; // Input field for entering the join code
-    public TMP_Text joinCode_Text; // Text field to display the join code
-    public static LobbyManager Instance; // Singleton instance of this class
+    private Lobby hostlobby;
+    private Lobby joinedlobby;
+    private float heartbeatTimer;
+    private float lobbyUpdateTimer;
+    private float lobbyPollTimer;
+    private string PlayerName;
+
+    private bool joinCondtiion;
+    public TMP_InputField codeinput;
+    public TMP_Text joinCode_Text;
+    public static LobbyManager Instance;
+
 
     [SerializeField]
-    private GameObject[] canvasobj; // Array of canvases: 0 = Lobby Canvas, 1 = MapSelectCanvas, 2 = CharSelectCanvas
+    private GameObject[] canvasobj; // 0 = Lobby Canvas // 1 = MapSelectCanvas // 2 = CharSelectCanvas
 
     private void Start()
     {
-        Instance = this; // Set the singleton instance to this object
-        start(); // Call the start method
+        Instance = this;
+        start();
     }
-
     private void start()
     {
-        foreach (GameObject canvas in canvasobj) // Disable all canvases initially
+
+        foreach (GameObject canvas in canvasobj)
         {
             canvas.SetActive(false);
         }
-        canvasobj[0].SetActive(true); // Enable the lobby canvas
+        canvasobj[0].SetActive(true);
     }
 
     private void Update()
     {
-        HandleLobbyPollForUpdates(); // Call method to handle lobby updates
+        //HandleLobbyHeartbeat();
+        HandleLobbyPollForUpdates();
     }
 
-    private async void HandleLobbyHeartbeat() // Function to send heartbeat pings to the lobby
+    private async void HandleLobbyHeartbeat() // 로비 호스트가 나가면 15초뒤에 사라지게하는 함수
     {
-        if (hostlobby != null) // If this player is the host
+        if (hostlobby != null)
         {
-            heartbeatTimer -= Time.deltaTime; // Decrement the timer
-            if (heartbeatTimer < 0f) // If the timer has expired
+            heartbeatTimer -= Time.deltaTime;
+            if (heartbeatTimer < 0f)
             {
                 float heartbeatTimerMax = 15;
-                heartbeatTimer = heartbeatTimerMax; // Reset the timer
+                heartbeatTimer = heartbeatTimerMax;
 
-                await LobbyService.Instance.SendHeartbeatPingAsync(hostlobby.Id); // Send a heartbeat ping to keep the lobby alive
+                await LobbyService.Instance.SendHeartbeatPingAsync(hostlobby.Id);
+
             }
         }
     }
 
-    private async void HandleLobbyPollForUpdates() // Function to poll for lobby updates
+    private async void HandleLobbyPollForUpdates()
     {
-        if (joinedlobby != null) // If this player has joined a lobby
+        if (joinedlobby != null)
         {
-            lobbyUpdateTimer -= Time.deltaTime; // Decrement the timer
-            if (lobbyUpdateTimer < 0f) // If the timer has expired
+            lobbyUpdateTimer -= Time.deltaTime;
+            if (lobbyUpdateTimer < 0f)
             {
                 float lobbyUpdateTimerMax = 1.1f;
-                lobbyUpdateTimer = lobbyUpdateTimerMax; // Reset the timer
+                lobbyUpdateTimer = lobbyUpdateTimerMax;
 
-                Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedlobby.Id); // Get the latest lobby information
-                joinedlobby = lobby; // Update the joined lobby
+                Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedlobby.Id);
+                joinedlobby = lobby;
             }
 
-            if (joinedlobby.Data["KEY_START_GAME"].Value != "0") // Check if the game has started
+            if (joinedlobby.Data["KEY_START_GAME"].Value != "0")
             {
-                if (!IsLobbyHost()) // If this player is not the host
+
+                if (!IsLobbyHost())
                 {
-                    TestRelay.Instance.JoinRelay(joinedlobby.Data["KEY_START_GAME"].Value); // Join the relay with the start game key
+                    TestRelay.Instance.JoinRelay(joinedlobby.Data["KEY_START_GAME"].Value);
                 }
 
-                joinedlobby = null; // Clear the joined lobby
+                joinedlobby = null;
             }
         }
     }
 
-    public bool IsLobbyHost() // Check if this player is the host of the lobby
+    public bool IsLobbyHost()
     {
         return joinedlobby != null && joinedlobby.HostId == AuthenticationService.Instance.PlayerId;
     }
 
-    public bool IsPlayerInLobby() // Check if this player is in the lobby
+    public bool IsPlayerInLobby()
     {
         if (joinedlobby != null && joinedlobby.Players != null)
         {
@@ -98,139 +105,177 @@ public class LobbyManager : MonoBehaviour
             {
                 if (player.Id == AuthenticationService.Instance.PlayerId)
                 {
-                    return true; // This player is in the lobby
+                    // This player is in this lobby
+                    return true;
                 }
             }
         }
-        return false; // This player is not in the lobby
+        return false;
     }
 
-    public async void CreateLobby() // Function to create a new lobby
+    public async void CreateLobby()
     {
         try
         {
-            string lobbyName = "MyLobby"; // Name of the lobby
-            int maxPlayers = 2; // Maximum number of players
+            string lobbyName = "MyLobby";
+
+            int maxPlayers = 2;
 
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions
             {
                 IsPrivate = false,
-                Player = GetPlayer(), // Get the player data
+                Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>{
                     {"Map", new DataObject(DataObject.VisibilityOptions.Public,  PlayerPrefs.GetString("SelectedMapIndex"))},
                     {"KEY_START_GAME", new DataObject(DataObject.VisibilityOptions.Member, "0")}
                 }
             };
 
-            Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, createLobbyOptions); // Create the lobby
+            Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, createLobbyOptions);
 
-            hostlobby = lobby; // Set the host lobby
-            joinedlobby = hostlobby; // Set the joined lobby
+            hostlobby = lobby;
+            joinedlobby = hostlobby;
 
-            Debug.Log("Who is owner? " + IsLobbyHost() + ", " + lobby.LobbyCode); // Log the host status and lobby code
+            Debug.Log("Who is owner? " + IsLobbyHost() + ", " + lobby.LobbyCode);
+
+
         }
         catch (LobbyServiceException e)
         {
-            Debug.Log(e); // Log any exceptions
+            Debug.Log(e);
         }
     }
 
-    private async void JoinLobby(string lobbyCode) // Function to join a lobby using a code
+    private async void ListLobbies()
     {
-        if (lobbyCode.Length > 0) // Check if the code is valid
+        try
+        {
+            QueryLobbiesOptions queryLobbiesOptions = new QueryLobbiesOptions
+            {
+                Count = 25,
+                Filters = new List<QueryFilter>{
+                    new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0" , QueryFilter.OpOptions.GT)
+                    //new QueryFilter(QueryFilter.FieldOptions.S1, "CaptureTheFlag", QueryFilter.OpOptions.EQ)
+                },
+                Order = new List<QueryOrder>{
+                    new QueryOrder(false,QueryOrder.FieldOptions.Created)
+                }
+            };
+            QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
+
+            Debug.Log("Lobbies found : " + queryResponse.Results.Count);
+            foreach (Lobby lobby in queryResponse.Results)
+            {
+                Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Data["Map"].Value);
+            }
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    private async void JoinLobby(string lobbyCode) // 로비코드로 들어오기
+    {
+        if (lobbyCode.Length > 0)
         {
             try
             {
                 JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions
                 {
-                    Player = GetPlayer() // Get the player data
+                    Player = GetPlayer()
                 };
-                Lobby JoinLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions); // Join the lobby using the code
+                Lobby JoinLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
 
                 if (JoinLobby != null)
                 {
-                    joinCondtiion = true; // Set the join condition to true
+                    joinCondtiion = true;
                     foreach (GameObject canvas in canvasobj)
                     {
-                        canvas.SetActive(false); // Disable all canvases
+                        canvas.SetActive(false);
                     }
-                    canvasobj[2].SetActive(true); // Enable the character select canvas
+                    canvasobj[2].SetActive(true);
                     foreach (Transform child in canvasobj[2].transform)
                     {
-                        child.gameObject.SetActive(true); // Enable all children of the character select canvas
+                        child.gameObject.SetActive(true);
                     }
                 }
                 else
                 {
-                    joinCondtiion = false; // Set the join condition to false
+                    joinCondtiion = false;
                 }
 
-                Debug.Log("Joined Lobby with code" + lobbyCode); // Log the join code
+                Debug.Log("Joined Lobby with code" + lobbyCode);
 
-                PrintPlayers(JoinLobby); // Print the players in the lobby
-                PlayerPrefs.SetString("SelectedMapIndex", JoinLobby.Data["Map"].Value); // Save the selected map index
-                PlayerPrefs.Save(); // Save the player preferences
-                Debug.Log("Who is owner? " + IsLobbyHost()); // Log the host status
+                PrintPlayers(JoinLobby);
+                PlayerPrefs.SetString("SelectedMapIndex", JoinLobby.Data["Map"].Value);
+                PlayerPrefs.Save();
+                Debug.Log("Who is owner? " + IsLobbyHost());
 
-                joinedlobby = JoinLobby; // Set the joined lobby
+                joinedlobby = JoinLobby;
+
+
+
             }
             catch (LobbyServiceException e)
             {
-                Debug.Log(e); // Log any exceptions
+                Debug.Log(e);
             }
         }
     }
 
-    private async void QuickJoinLobby() // Function to quickly join a lobby
+    private async void QuickJoinLobby() // 빠른참가 <- 이거 사용할거임
     {
         try
         {
             QuickJoinLobbyOptions quickJoinLobby = new QuickJoinLobbyOptions
             {
-                Player = GetPlayer() // Get the player data
+                Player = GetPlayer()
             };
-            Lobby lobby = await LobbyService.Instance.QuickJoinLobbyAsync(quickJoinLobby); // Quickly join a lobby
-            joinedlobby = lobby; // Set the joined lobby
-            PrintPlayers(lobby); // Print the players in the lobby
+            Lobby lobby = await LobbyService.Instance.QuickJoinLobbyAsync(quickJoinLobby);
+            joinedlobby = lobby;
+            PrintPlayers(lobby);
         }
         catch (LobbyServiceException e)
         {
-            Debug.Log(e); // Log any exceptions
+            Debug.Log(e);
         }
+
     }
 
-    private Player GetPlayer() // Function to get the player data
+    private Player GetPlayer()
     {
         return new Player
         {
             Data = new Dictionary<string, PlayerDataObject>
             {
-                {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, PlayerName)}
+                {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member,
+                PlayerName)}
             }
         };
     }
 
-    public void PrintPlayers() // Function to print the players in the joined lobby
+    public void PrintPlayers()
     {
-        PrintPlayers(joinedlobby); // Call the overloaded function
+        PrintPlayers(joinedlobby);
     }
 
-    private void PrintPlayers(Lobby lobby) // Function to print the players in a specified lobby
+    private void PrintPlayers(Lobby lobby)
     {
-        Debug.Log("Players in Lobby" + lobby.Name + " " + lobby.Data["Map"].Value); // Log the lobby name and map
+        Debug.Log("Players in Lobby" + lobby.Name + " " + lobby.Data["Map"].Value);
         foreach (Player player in lobby.Players)
         {
-            Debug.Log(player.Id + " " + player.Data["PlayerName"].Value); // Log each player's ID and name
+            Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
         }
     }
 
-    public async void StartGame() // Function to start the game
+    public async void StartGame()
     {
-        if (IsLobbyHost()) // If this player is the host
+        if (IsLobbyHost())
         {
             try
             {
-                string relaycode = await TestRelay.Instance.CreateRelay(); // Create a relay and get the relay code
+                string relaycode = await TestRelay.Instance.CreateRelay();
 
                 Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinedlobby.Id, new UpdateLobbyOptions
                 {
@@ -239,62 +284,109 @@ public class LobbyManager : MonoBehaviour
                     }
                 });
 
-                joinedlobby = lobby; // Update the joined lobby
+                joinedlobby = lobby;
             }
             catch (LobbyServiceException e)
             {
-                Debug.Log(e); // Log any exceptions
+                Debug.Log(e);
             }
         }
+
     }
 
-    public void MapSelectActive() // Function to activate the map select canvas
+    private async void UpdateGameMode(string map)
     {
-        canvasobj[0].SetActive(false); // Disable the lobby canvas
-        canvasobj[1].SetActive(true); // Enable the map select canvas
+        try
+        {
+            hostlobby = await Lobbies.Instance.UpdateLobbyAsync(hostlobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>{
+                {"Map", new DataObject(DataObject.VisibilityOptions.Public, map)}
+            }
+            });
+            joinedlobby = hostlobby;
+
+            PrintPlayers(hostlobby);
+
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
     }
 
-    public void CharacterSelectActiveHost() // Function to activate the character select canvas as host
+    private async void LeaveLobby()
     {
-        CreateLobby(); // Create the lobby
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(joinedlobby.Id, AuthenticationService.Instance.PlayerId);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    private async void DeleteLobby()
+    {
+        try
+        {
+            await LobbyService.Instance.DeleteLobbyAsync(joinedlobby.Id);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    public void MapSelectActive()
+    {
+        canvasobj[0].SetActive(false);
+        canvasobj[1].SetActive(true);
+    }
+
+    public void CharacterSelectActiveHost()
+    {
+        CreateLobby();
         foreach (GameObject canvas in canvasobj)
         {
-            canvas.SetActive(false); // Disable all canvases
+            canvas.SetActive(false);
         }
-        canvasobj[2].SetActive(true); // Enable the character select canvas
+        canvasobj[2].SetActive(true);
         foreach (Transform child in canvasobj[2].transform)
         {
-            child.gameObject.SetActive(true); // Enable all children of the character select canvas
+            child.gameObject.SetActive(true);
         }
-        StartCoroutine("Delaycreatecode"); // Start the coroutine to delay creating the code
+        StartCoroutine("Delaycreatecode");
     }
 
-    IEnumerator Delaycreatecode() // Coroutine to delay creating the join code
+    IEnumerator Delaycreatecode()
     {
-        yield return new WaitForSeconds(1.0f); // Wait for 1 second
-        joinCode_Text.text = "Code: " + hostlobby.LobbyCode; // Display the join code
+        yield return new WaitForSeconds(1.0f);
+        joinCode_Text.text = "Code: " + hostlobby.LobbyCode;
     }
 
-    public void CharacterSelectActiveClient() // Function to activate the character select canvas as client
+    public void CharacterSelectActiveClient()
     {
-        JoinLobby(codeinput.text); // Join the lobby using the code from the input field
+        JoinLobby(codeinput.text);
     }
 
-    public void CreateLobbyButton() // Function to create a lobby when a button is pressed
+    public void CreateLobbyButton()
     {
-        CreateLobby(); // Create the lobby
+        CreateLobby();
     }
 
-    public bool StartCondition() // Function to check if the game can start
+    public bool StartCondition()
     {
         int count = 0;
         foreach (Player player in joinedlobby.Players)
         {
-            count++; // Count the number of players in the lobby
+            count++;
         }
         if (count == 2)
-            return true; // If there are 2 players, return true
+            return true;
         else
-            return false; // Otherwise, return false
+            return false;
     }
+
 }

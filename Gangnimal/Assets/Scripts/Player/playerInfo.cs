@@ -277,7 +277,7 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                 }
                 weaponIndex = item.value;
 
-
+                // Check the weapon you currently have and disable it
                 for (int i = 0; i < 3; i++)
                 {
                     if (hasWeapons[i])
@@ -287,7 +287,8 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
                         weapons[i].SetActive(false);
                     }
                 }
-                
+
+                //Activate the weapon you just picked up
                 hasWeapons[weaponIndex] = true;
                 weapons[weaponIndex].SetActive(true);
 
