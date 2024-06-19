@@ -3,15 +3,15 @@ using UnityEngine.UI;
 
 public class LoadingSlider : MonoBehaviour
 {
-    public Slider slider; // 로딩 슬라이드바
-    public float loadTime = 5f; // 대기시간
-    public Button hostButton;
+    public Slider slider; // Loading Slider
+    public float loadTime = 5f; // Wating time
+    public Button hostButton; // host Button
     private float timer = 0f;
-    bool clicked = false;//중복클릭 방지용으로 false
+    bool clicked = false;//Prevent Twice Click
 
     void Start()
     {
-        // 초기화
+        // Initialize
         slider.value = 0f;
 
         //테스트용
@@ -20,19 +20,19 @@ public class LoadingSlider : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
+        timer += Time.deltaTime;//Count time
 
-        slider.value = Mathf.Clamp01(timer / loadTime);
+        slider.value = Mathf.Clamp01(timer / loadTime); // Slider Gage up 
 
-        if (timer > 1f && !clicked) // 딱 1번만 
+        if (timer > 1f && !clicked) //justOnce 
         {
             if (PlayerPrefs.GetInt("RelayInfo") == 0)
             {
-                //hostButton.onClick.Invoke();
+                
                 clicked = true;
             }
         }
-        if (slider.value >= 1f)
+        if (slider.value >= 1f) // when Slide is full
         {
 
             OnLoadingComplete();
@@ -40,9 +40,9 @@ public class LoadingSlider : MonoBehaviour
         }
     }
 
-    void OnLoadingComplete()
+    void OnLoadingComplete() // Set active false canvas
     {
-        // 캔바스 끄기
+        
         gameObject.SetActive(false);
     }
 }

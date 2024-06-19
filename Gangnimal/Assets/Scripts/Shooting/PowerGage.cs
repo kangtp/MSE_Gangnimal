@@ -7,10 +7,10 @@ using Unity.Netcode;
 
 public class PowerGage : MonoBehaviour
 {
-    private float clickTime = 0;
-    public float powerValue = 0;
+    private float clickTime = 0;//Click time while click
+    public float powerValue = 0; // slider value
     private bool isClick = false;
-    private float maxClickTime = 1f;
+    private float maxClickTime = 1f; // max click time
     private bool timeUp = true;
     Transform fire;
     Slider powerSlider;
@@ -47,7 +47,7 @@ public class PowerGage : MonoBehaviour
         ChargingGage();
     }
 
-    IEnumerator Wait_Change()
+    IEnumerator Wait_Change()//The mouse is placed when it is launched to prevent it from becoming zero
     {
         yield return new WaitForSeconds(0.3f);
         if(fire != null)
@@ -56,67 +56,79 @@ public class PowerGage : MonoBehaviour
         fire.transform.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
         }
     }
-    IEnumerator ResetClickTime()
+    IEnumerator ResetClickTime() 
     {
         yield return new WaitForSeconds(0.5f);
         clickTime = 0;
     }
     void ChargingGage()
     {
+        // Check if the left mouse button is pressed down.
         if (Input.GetMouseButtonDown(0))
-
         {
-            isClick = true;
+            isClick = true; // Set the click state to true.
         }
 
+        // Check if the left mouse button is released.
         if (Input.GetMouseButtonUp(0))
         {
-            isClick = false;
+            isClick = false; // Set the click state to false.
         }
 
+        // If the mouse button is held down.
         if (isClick)
         {
+            // Determine if the charge time has reached its maximum.
             if (clickTime >= maxClickTime)
             {
-                timeUp = false;
+                timeUp = false; // Stop increasing the time.
             }
+            // Determine if the charge time has reached zero.
             else if (clickTime <= 0)
             {
-                timeUp = true;
+                timeUp = true; // Start increasing the time.
             }
+
+            // If the charge time should increase.
             if (timeUp)
             {
-                clickTime += Time.deltaTime;
+                clickTime += Time.deltaTime; // Increase the click time.
 
-
+                // Rotate the 'fire' object based on the increasing click time.
                 fire.Rotate(clickTime * -60 * Time.deltaTime, 0, 0);
-
             }
+            // If the charge time should decrease.
             else
             {
-                clickTime -= Time.deltaTime;
+                clickTime -= Time.deltaTime; // Decrease the click time.
 
+                // Rotate the 'fire' object based on the decreasing click time.
                 fire.Rotate(clickTime * 60 * Time.deltaTime, 0, 0);
-
             }
-            //Debug.Log(clickTime);
+            // Debugging statement to show the current click time.
+            // Debug.Log(clickTime);
         }
-        else
+        else // If the mouse button is released.
         {
+            // Start coroutine to reset the click time.
             StartCoroutine(ResetClickTime());
 
-            if(fire!=null)
+            // If the 'fire' object is not null, apply a rotation.
+            if (fire != null)
             {
                 fire.Rotate(clickTime * 30 * Time.deltaTime, 0, 0);
             }
-            
+
+            // Start coroutine to wait and then change the state or perform an action.
             StartCoroutine(Wait_Change());
         }
 
+        // If the power slider UI component exists.
         if (powerSlider != null)
         {
-            powerValue = clickTime / maxClickTime;
-            powerSlider.value = powerValue;
+            powerValue = clickTime / maxClickTime; // Calculate the current power value as a ratio.
+            powerSlider.value = powerValue; // Update the slider to reflect the current power value.
         }
     }
+
 }

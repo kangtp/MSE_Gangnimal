@@ -172,23 +172,34 @@ public class PlayerInfo : NetworkBehaviour, SubjectInterface
 
 
     void DrawParabola()
+{
+    // Enable the LineRenderer to start drawing the parabola.
+    lineRenderer.enabled = true;
+
+    // Create an array to store the points of the parabola.
+    Vector3[] points = new Vector3[numofDot];
+
+    // Get the starting position and the initial velocity.
+    Vector3 startPosition = firePosition.transform.position; // The position where the projectile is fired from.
+    Vector3 startVelocity = throwPower * firePosition.transform.forward; // The initial velocity of the projectile based on throw power and direction.
+
+    // Calculate the time interval between each point along the parabola.
+    float timeInterval = maxTime / numofDot;
+    
+    // Calculate each point's position along the parabola.
+    for (int i = 0; i < numofDot; i++)
     {
-        lineRenderer.enabled = true;
-
-        Vector3[] points = new Vector3[numofDot];
-        Vector3 startPosition = firePosition.transform.position;
-        Vector3 startVelocity = throwPower * firePosition.transform.forward;
-
-        float timeInterval = maxTime / numofDot;
-        for (int i = 0; i < numofDot; i++)
-        {
-            float t = i * timeInterval;
-            points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
-        }
-
-        lineRenderer.positionCount = numofDot;
-        lineRenderer.SetPositions(points);
+        float t = i * timeInterval; // The current time for the i-th point.
+        // Calculate the position of the point at time t using the formula:
+        // position = start position + initial velocity * time + 0.5 * gravity * time^2
+        points[i] = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
     }
+
+    // Set the number of positions in the LineRenderer and apply the calculated points.
+    lineRenderer.positionCount = numofDot; // Set the number of points to be drawn.
+    lineRenderer.SetPositions(points); // Update the LineRenderer with the calculated points.
+}
+
 
 
     /*
