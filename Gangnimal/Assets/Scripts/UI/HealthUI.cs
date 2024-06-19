@@ -9,20 +9,14 @@ public class HealthUI : MonoBehaviour, Observerinterface
 
     void Start()
     {
-
-        //healthText = GameObject.Find("HP").GetComponent<Text>();
         GameObject.Find("Canvas").transform.GetChild(5).gameObject.SetActive(true);
         healthText = GameObject.Find("HP").GetComponent<Text>();
-        healthText.text = "100";
+
+        //Indicates the HP value of the local player
+        healthText.text = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.GetComponent<PlayerInfo>().HP.ToString();
     }
 
-
-    void OnDestroy()
-    {
-        //playerInfo.RemoveObserver(this);
-    }
-
-
+    //Modify text with changed HP
     public void InformationUpdate(int health)
     {
         Debug.Log(health);
@@ -31,7 +25,6 @@ public class HealthUI : MonoBehaviour, Observerinterface
 
     public void RegisterObserver()
     {
-        Debug.Log("register observer" );
         playerInfo = FindObjectOfType<PlayerInfo>();
         playerInfo.RegisterObserver(this);
     }

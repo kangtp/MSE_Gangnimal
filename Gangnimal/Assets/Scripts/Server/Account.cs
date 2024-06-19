@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
+
+//account information 
 [Serializable]
 public class Account
 {

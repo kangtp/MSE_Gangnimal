@@ -98,7 +98,7 @@ public class ThirdPersonMovement : NetworkBehaviour
                     isSpawned = true; // Set the flag to true indicating the player is spawned
                 }
             }
-            else if (IsClient) // Check if the player is a client
+            else if (!IsHost)
             {
                 // Find the client spawn point based on the selected map
                 Transform clientSpawnTransform = GameObject.Find("Map").transform.GetChild(mapcode).GetChild(1).transform;
