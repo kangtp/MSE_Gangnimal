@@ -71,8 +71,9 @@ Gangnimal은 귀여운 동물들이 무기와 아이템을 주워 던지며 싸�
 <br/>
 
 ### 2. Unity Relay를 이용한 Lobby 시스템 구현
--
--
+- unity에서 지원하는 Lobby system 라이브러리를 사용하여서 매칭 시스템을 구현하였습니다.
+- 처음 방을 만들게 되면 그사람은 Host가 되어서 다른 플레이어가 로비에 접속할때까지 기다립니다. 그리고 joinCode를 입력한 다른 플레이어는 로비에 접속하게 되고 Client로 지정해줍니다.
+- 로비에 접속한 Host와 Client를 동시에 게임을 시작해주기 위해서는 Unity에서 지원하는 Relay를 사용하여서 같은 GameScene안에 Host와 Client Prefab을 생성해주었습니다. 이렇게 해서 각 플레이어는 게임을 시작할 준비가 되었습니다.
 
 <br/>
 
