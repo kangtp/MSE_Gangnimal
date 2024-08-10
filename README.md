@@ -74,6 +74,7 @@ Gangnimal은 귀여운 동물들이 무기와 아이템을 주워 던지며 싸�
 - Unity에서 지원하는 멀티플레이어 게임용 Relay 서비스를 이용하여 Lobby 시스템을 구현했습니다.
 - Lobby를 생성한 사람은 Host가 되고, 다른 플레이어가 Lobby에 입장할 때까지 대기합니다. 해당 Lobby의 JoinCode를 입력한 다른 플레이어는 같은 Lobby에 접속하게 되고 Client가 됩니다.
 - 같은 Lobby에 있는 Host와 Client는 게임이 시작되고 같은 GameScene안에 Host Prefab, Client Prefab이 생성됩니다.
+- 이제 게임을 플레이할 수 있습니다!
 
 <br/>
 
